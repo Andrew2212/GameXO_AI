@@ -1,5 +1,5 @@
 package org.hexlet.gamexo.ai.gardnerway;
-//Проверка
+
 
 
 import org.hexlet.gamexo.ai.IBrainAI;
@@ -9,6 +9,18 @@ import java.util.HashSet;
 /**
  * Date: 03.09.13
  * Time: 15:33
+ * Вычисления ходов данного ИИ основываются на принципе
+ * коробочных самообучающихся машин.
+ * Обучение ИИ состоит в том, что проигрышные позиции
+ * запоминаются и при следующей партии ходы, приводящие
+ * к тем же позициям, блокируются.
+ * Таким образом накапливается опыт ИИ и сила его игры
+ * постепенно возрастает.
+ * Проигрышные позиции хранятся в файлах, и извлекются
+ * на момент проверки. Для уменьшения количества записанных
+ * позиций, доска ,при проверке, поворачивается, зеркалится
+ * и снова поворачивается. Этим достигается проверка всех
+ * перевернутых и зеркальных вариантов.
  */
 public class Gardner implements IBrainAI {
 
@@ -19,7 +31,7 @@ public class Gardner implements IBrainAI {
     private int numInTheRow;
     private int column;
     private int row;
-    private int coordC, coordR;
+    private int coordX, coordY;
 
     private final int[] MOVE = new int[2];
     private static final int X = 0;
@@ -75,7 +87,7 @@ public class Gardner implements IBrainAI {
 
 	// Проверка на победу
 	public boolean isWin(int x, int y, char chip) {
-		HashSet<Integer[]> win = new HashSet<>();
+		HashSet<Integer[]> win = new HashSet<Integer[]>();
 		/*
 		Проход победных рядов по четырем направлениям
 		 */
@@ -122,8 +134,8 @@ public class Gardner implements IBrainAI {
 	 */
 	public HashSet<Integer[]> checkRow(int xx, int yy, char chip, int direction) {
 		int x = 0, y = 0;
-		HashSet<Integer[]> emptySell = new HashSet<>();   //сборщик пустых полей от прохода ряда
-		HashSet<Integer[]> emptySum = new HashSet<>();    //сборщик пустых полей от всех проходов
+		HashSet<Integer[]> emptySell = new HashSet<Integer[]>();   //сборщик пустых полей от прохода ряда
+		HashSet<Integer[]> emptySum = new HashSet<Integer[]>();    //сборщик пустых полей от всех проходов
 		Integer[] xy = new Integer[2];
 
 		start:
@@ -198,12 +210,12 @@ public class Gardner implements IBrainAI {
 		return emptySum;
 	}
 
-    public int getCoordC() {
-        return coordC;
+    public int getCoordX() {
+        return coordX;
     }
 
-    public int getCoordR() {
-        return coordR;
+    public int getCoordY() {
+        return coordY;
     }
 
     public class CellIsNotEmptyException extends Exception{
