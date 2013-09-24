@@ -1,9 +1,11 @@
-package hqup.game;
+package org.hexlet.gamexo.blackbox;
 
-import hqup.PlayStationXO;
-import hqup.gamers.GamerBot;
-import hqup.gamers.GamerMan;
-import hqup.gamers.IGamer;
+import org.hexlet.gamexo.blackbox.game.GameField;
+import org.hexlet.gamexo.blackbox.game.GameFieldMatrixChecker;
+import org.hexlet.gamexo.blackbox.game.GameFieldPainter;
+import org.hexlet.gamexo.blackbox.players.PlayerBot;
+import org.hexlet.gamexo.blackbox.players.IPlayer;
+import org.hexlet.gamexo.blackbox.players.PlayerMan;
 
 /**
  * Realises pattern Singleton
@@ -12,15 +14,15 @@ public class Game {
 
     private static Game uniqueInstance;
 
-    private IGamer gamerMan;
-    private IGamer gamerBot;
+    private IPlayer gamerMan;
+    private IPlayer gamerBot;
     private GameFieldMatrixChecker gameFieldMatrixChecker;
 
     private Game() {
         GameField.getNewGameField();
         gameFieldMatrixChecker = new GameFieldMatrixChecker();
-        gamerMan = new GamerMan();
-        gamerBot = new GamerBot();
+        gamerMan = new PlayerMan();
+        gamerBot = new PlayerBot(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
     }
 
 //----------Public Methods------------------

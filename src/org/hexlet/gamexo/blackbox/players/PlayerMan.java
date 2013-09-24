@@ -1,17 +1,15 @@
-package hqup.gamers;
+package org.hexlet.gamexo.blackbox.players;
 
-
-import hqup.game.GameHistoric;
 
 import java.util.Scanner;
 
-public class GamerMan implements IGamer {
+public class PlayerMan implements IPlayer {
 
     private static final int X = 0;
     private static final int Y = 1;
 
 
-    public int[] moveSign() {
+    public int[] doMove() {
 
         int[] position = new int[2];
 

@@ -1,8 +1,7 @@
-package hqup;
+package org.hexlet.gamexo.blackbox;
 
-import hqup.game.Game;
-import hqup.game.GameField;
-import hqup.game.GameHistoric;
+import org.hexlet.gamexo.blackbox.game.GameField;
+import org.hexlet.gamexo.blackbox.game.GameHistoric;
 
 import java.util.Scanner;
 

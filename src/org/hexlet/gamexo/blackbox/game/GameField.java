@@ -1,8 +1,7 @@
-package hqup.game;
+package org.hexlet.gamexo.blackbox.game;
 
 
-import hqup.PlayStationXO;
-import hqup.gamers.IGamer;
+import org.hexlet.gamexo.blackbox.players.IPlayer;
 
 public class GameField {
 
@@ -36,16 +35,16 @@ public class GameField {
         }
     }
 
-    public static boolean setSignToCell(IGamer gamer) {
+    public static boolean setSignToCell(IPlayer gamer) {
 
-        int[] cellPosition = gamer.moveSign();
+        int[] cellPosition = gamer.doMove();
         int x = cellPosition[X];
         int y = cellPosition[Y];
 
         if (!isCellValid(x, y)) {
 
             while (true) {
-                cellPosition = gamer.moveSign();
+                cellPosition = gamer.doMove();
                 x = cellPosition[X];
                 y = cellPosition[Y];
                 if (isCellValid(x, y))

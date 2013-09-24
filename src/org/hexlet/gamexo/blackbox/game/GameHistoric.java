@@ -1,4 +1,4 @@
-package hqup.game;
+package org.hexlet.gamexo.blackbox.game;
 
 
 import java.util.ArrayList;
