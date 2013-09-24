@@ -1,4 +1,4 @@
-package HardVersion;
+package org.hexlet.gamexo.ai.hardway;
 
 public class Minimax {
 
