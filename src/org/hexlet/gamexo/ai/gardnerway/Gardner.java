@@ -46,6 +46,7 @@ public class Gardner implements IBrainAI {
      */
     public int[]  findMove(char[][] fieldMatrix) {
 
+        System.out.println("Gardner::findMove()");
 //            throws CellIsNotEmptyException{
 
 //        if (!isCellEmpty(x, y)){

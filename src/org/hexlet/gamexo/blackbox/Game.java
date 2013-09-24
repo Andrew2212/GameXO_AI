@@ -3,8 +3,9 @@ package org.hexlet.gamexo.blackbox;
 import org.hexlet.gamexo.blackbox.game.GameField;
 import org.hexlet.gamexo.blackbox.game.GameFieldMatrixChecker;
 import org.hexlet.gamexo.blackbox.game.GameFieldPainter;
-import org.hexlet.gamexo.blackbox.players.PlayerBot;
 import org.hexlet.gamexo.blackbox.players.IPlayer;
+import org.hexlet.gamexo.blackbox.players.PlayerBot;
+import org.hexlet.gamexo.blackbox.players.PlayerBotEnemy;
 import org.hexlet.gamexo.blackbox.players.PlayerMan;
 
 /**
@@ -16,6 +17,7 @@ public class Game {
 
     private IPlayer gamerMan;
     private IPlayer gamerBot;
+    private IPlayer gamerBotEnemy;
     private GameFieldMatrixChecker gameFieldMatrixChecker;
 
     private Game() {
@@ -23,6 +25,7 @@ public class Game {
         gameFieldMatrixChecker = new GameFieldMatrixChecker();
         gamerMan = new PlayerMan();
         gamerBot = new PlayerBot(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
+        gamerBotEnemy = new PlayerBotEnemy(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
     }
 
 //----------Public Methods------------------
@@ -83,6 +86,14 @@ public class Game {
 
         while (true) {
             GameField.setSignToCell(gamerBot);
+            GameFieldPainter.showFields();
+            System.out.println("--------------------------------\n");
+
+            if (gameFieldMatrixChecker.isGameOver()) {
+                break;
+            }
+
+            GameField.setSignToCell(gamerBotEnemy);
             GameFieldPainter.showFields();
             System.out.println("--------------------------------\n");
 

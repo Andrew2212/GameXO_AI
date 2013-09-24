@@ -23,6 +23,8 @@ public class Minimax implements IBrainAI {
      */
     public int[] findMove(char[][] fieldMatrix) {
 
+        System.out.println("Minimax::findMove()");
+
         MOVE[X] = (int) Math.floor(Math.random() * fieldMatrix.length);
         MOVE[Y] = (int) Math.floor(Math.random() * fieldMatrix.length);
 
