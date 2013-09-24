@@ -1,4 +1,5 @@
 package org.hexlet.gamexo.ai.gardnerway;
+//Проверка
 
 
 import org.hexlet.gamexo.ai.IBrainAI;
