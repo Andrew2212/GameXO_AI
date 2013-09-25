@@ -15,14 +15,19 @@ public class Game {
 
     private static Game uniqueInstance;
 
-    private IPlayer gamerMan;
-    private IPlayer gamerBot;
-    private IPlayer gamerBotEnemy;
-    private GameFieldMatrixChecker gameFieldMatrixChecker;
+    private static IPlayer gamerMan;
+    private static IPlayer gamerBot;
+    private static IPlayer gamerBotEnemy;
+    private static GameFieldMatrixChecker gameFieldMatrixChecker;
 
     private Game() {
-        GameField.getNewGameField();
         gameFieldMatrixChecker = new GameFieldMatrixChecker();
+        init();
+    }
+
+    private static void init() {
+
+        GameField.getNewGameField();
         gamerMan = new PlayerMan();
         gamerBot = new PlayerBot(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
         gamerBotEnemy = new PlayerBotEnemy(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
@@ -34,6 +39,8 @@ public class Game {
         if (uniqueInstance == null) {
             uniqueInstance = new Game();
         }
+
+        init();
         return uniqueInstance;
     }
 

@@ -6,13 +6,19 @@ Opus magnum of Hexlet_TeamAI
 Консольный клиент для разработки и тестирования ИИ
 - рисует поле любого размера
 - проверяет любое количество символов (длина победной строки)
-- mode Human_vs_Human, Human_vs_Bot, Bot_vs_Bot
+- mode Human_vs_Human, Human_vs_Bot, Bot_vs_BotEnemy
+
+Выбор ИИ для Bot & BotEnemy - в конструкторах PlayerBot & PlayerBotEnemy 
+пакета blackbox.players (хардкодно выбрать WayEnum (GARDNER/MINIMAX/SPARE))
+По дефолту 
+- PlayerBotEnemy:: iBrainAI = new Spare(fieldSize,numChecked);
+- PlayerBotEnemy:: iBrainAI = new Minimax(fieldSize,numChecked)
 
 Пакеты
 - 'blackbox' - черный ящик с игрой (можно не заглядывать)
 - 'ai.gardnerway' - пакет для ИИ по Гарднеру
-- 'ai.minimaxway' - пакет для ИИ на основе MiniMax
-- 'ai.hardway' - пакет для ИИ на основе MiniMax
+- 'ai.minimax' - пакет для ИИ на основе MiniMax
+- 'ai.spare' - пакет для ИИ на основе random (or dokwork - maybe later)
 
 Все варианты ИИ реализуют интерфейс IBrainAI
 
@@ -26,8 +32,14 @@ char[][] fieldMatrix
 чтобы обращаться к PlayerBot & AI только в одном месте кода
 (там где бот дожен совершать ход)
 
-Все PlayerBot implements IPlayer инициализируют 
-private IBrainAI iBrainAI 
-в своем конструкторе. 
+Класс GetterLastEnemyMove - костыль, позволяющий из char[][] fieldMatrix
+выдрать координаты последнего хода противника ИИ (т.е. того с кем ИИ играет).
+- public int[] getLastEnemyMove(char[][] fieldMatrix) {...}
+
+PlayerBot & PlayerBotEnemy implements IPlayer инициализируют 
+IBrainAI iBrainAI в своем конструкторе.
+-  iBrainAI = new Gardner/Minimax/Spare(fieldSize,numChecked); 
 И методом public int[] doMove() возвращают 
 координаты наилучшего хода, просчитанного ИИ 
+
+Все работает и пишет и рисует в консоль.

@@ -8,5 +8,5 @@ package org.hexlet.gamexo.blackbox.players;
  * To change this template use File | Settings | File Templates.
  */
 public enum WayEnum {
-    GARDNER, MINIMAX
+    GARDNER, MINIMAX, SPARE
 }

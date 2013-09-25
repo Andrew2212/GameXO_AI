@@ -24,10 +24,10 @@ public class GameField {
 
     public static void getNewGameField() {
         fieldMatrix = new char[FIELD_SIZE][FIELD_SIZE];
-        fillDefaultGameMatrix();
+        fillDefaultGameMatrix(fieldMatrix);
     }
 
-    public static void fillDefaultGameMatrix() {
+    public static void fillDefaultGameMatrix(char[][] fieldMatrix) {
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
                 fillDefaultCurrentCell(i, j);
@@ -36,7 +36,7 @@ public class GameField {
     }
 
     public static boolean setSignToCell(IPlayer gamer) {
-
+        char sign = chooseSignForNextMove();
         int[] cellPosition = gamer.doMove();
         int x = cellPosition[X];
         int y = cellPosition[Y];
@@ -52,7 +52,6 @@ public class GameField {
             }
         }
 
-        char sign = chooseSignForNextMove();
         fieldMatrix[x][y] = sign;
 
         //Record Steps History
@@ -88,12 +87,10 @@ public class GameField {
     public static void resetGameFieldMatrix() {
 
         System.out.println("\n--------------------------------\n");
-        fillDefaultGameMatrix();
+        fillDefaultGameMatrix(fieldMatrix);
     }
 
-//---------Private Methods---------------------
-
-    private static boolean isCellValid(int x, int y) {
+    public static boolean isCellValid(int x, int y) {
 
         if (!isValueValid(x, y)) {
             return false;
@@ -103,16 +100,18 @@ public class GameField {
             return true;
         }
 
-        System.out.println("Caution! The cell x=" + x + " y=" + y + " is filled! Try again!");
+//        System.out.println("Caution! The cell x=" + x + " y=" + y + " is filled! Try again!");
         return false;
     }
+
+    //---------Private Methods---------------------
 
     private static boolean isValueValid(int x, int y) {
 
         if ((0 <= x && x < FIELD_SIZE) && (0 <= y && y < FIELD_SIZE)) {
             return true;
         }
-        System.out.println("Invalid entry!");
+//        System.out.println("Invalid entry!");
         return false;
     }
 
