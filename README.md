@@ -39,9 +39,8 @@ char[][] fieldMatrix
 PlayerBot & PlayerBotEnemy implements IPlayer инициализируют 
 IBrainAI iBrainAI в своем конструкторе (подключают разный мозг).
 -  iBrainAI = new Gardner/Minimax/Spare(fieldSize,numChecked); 
-iBrainAI находит лучший ход методом  
-- findMove(char[][] fieldMatrix)
+Мозг iBrainAI находит лучший ход методом  findMove(char[][] fieldMatrix)
+
 И Plaeyr методом int[] doMove() вводит ход в игру
-возвращают координаты наилучшего хода, просчитанного ИИ 
 
 Все работает и пишет и рисует в консоль.
