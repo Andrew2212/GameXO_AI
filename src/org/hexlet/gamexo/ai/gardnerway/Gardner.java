@@ -21,7 +21,7 @@ import java.lang.Exception;
  * и снова поворачивается. Этим достигается проверка всех
  * перевернутых и зеркальных вариантов.
  */
-public class Gardner {
+public class Gardner implements IBrainAI{
 
     private char[][] gameBoard;
     private char[][] oldGameBoard;

@@ -30,16 +30,18 @@ public interface IBrainAI {
 char[][] fieldMatrix 
 а не координаты последнего хода противника,
 чтобы обращаться к PlayerBot & AI только в одном месте кода
-(там где бот дожен совершать ход)
+(там где бот должен совершать ход)
 
 Класс GetterLastEnemyMove - костыль, позволяющий из char[][] fieldMatrix
 выдрать координаты последнего хода противника ИИ (т.е. того с кем ИИ играет).
 - public int[] getLastEnemyMove(char[][] fieldMatrix) {...}
 
 PlayerBot & PlayerBotEnemy implements IPlayer инициализируют 
-IBrainAI iBrainAI в своем конструкторе.
+IBrainAI iBrainAI в своем конструкторе (подключают разный мозг).
 -  iBrainAI = new Gardner/Minimax/Spare(fieldSize,numChecked); 
-И методом public int[] doMove() возвращают 
-координаты наилучшего хода, просчитанного ИИ 
+iBrainAI находит лучший ход методом  
+- findMove(char[][] fieldMatrix)
+И Plaeyr методом int[] doMove() вводит ход в игру
+возвращают координаты наилучшего хода, просчитанного ИИ 
 
 Все работает и пишет и рисует в консоль.
