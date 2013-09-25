@@ -1,4 +1,4 @@
-package org.hexlet.gamexo.ai.hardway;
+package org.hexlet.gamexo.ai.minimaxway;
 
 import java.util.Scanner;
 // клиент для тестирования
