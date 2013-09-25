@@ -78,23 +78,39 @@ public class Minimax {
      * @return                                 true, если длинна достигнута, иначе - false
      * @throws ArrayIndexOutOfBoundsException  кидаем исключение при попытке вылезти за пределы поля
      */
-    //TODO можно добавить возврат false, в случае, когда количество оставшихся клеток в данном направлении заведомо меньше
-    //TODO чем значение длинны выйгрышной линии  и убрать исключение
+    //TODO люто, бешенно рефакторить!
     private boolean isEnoughLength(int x, int y, int sign, int direction) throws ArrayIndexOutOfBoundsException{
         int cntLine = 1;
         int a = x;
         int b = y;
-        while (cntLine < LENGTH) {
-            a +=  OFFSET[direction][0];
-            b +=  OFFSET[direction][1];
+        try {
+            while (cntLine < LENGTH) {                                 //здесь может вылетить   ArrayIndexOutOfBoundsException
+                a +=  OFFSET[direction][0];                            // что помешает нам проверить противополжное направление
+                b +=  OFFSET[direction][1];
+                if (this.field[a][b] != sign){
+                    break;
+                }
+                cntLine++;
+            }
+        } catch (ArrayIndexOutOfBoundsException e){
+            // мы его перехватываем, и тупо ничего не делаем
+        }
+
+        a = x;
+        b = y;
+        while (cntLine < LENGTH){
+            a += OFFSET[(direction + 4) % 8][0];
+            b += OFFSET[(direction + 4) % 8][1];
             if (this.field[a][b] != sign){
-                return false;
+                break;
             }
             cntLine++;
         }
-        return true;
-
-
+        if (cntLine == LENGTH){
+            return true;
+        }  else {
+            return false;
+        }
     }
     //TODO проверяем наличие пустых ячеек тупо перебором, что не есть хорошо
     private boolean hasEmptyCell(){
