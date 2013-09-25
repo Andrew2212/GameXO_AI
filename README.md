@@ -11,7 +11,7 @@ Opus magnum of Hexlet_TeamAI
 Выбор ИИ для Bot & BotEnemy - в конструкторах PlayerBot & PlayerBotEnemy 
 пакета blackbox.players (хардкодно выбрать WayEnum (GARDNER/MINIMAX/SPARE))
 По дефолту 
-- PlayerBotEnemy:: iBrainAI = new Spare(fieldSize,numChecked);
+- PlayerBot:: iBrainAI = new Spare(fieldSize,numChecked);
 - PlayerBotEnemy:: iBrainAI = new Minimax(fieldSize,numChecked)
 
 Пакеты

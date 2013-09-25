@@ -2,7 +2,6 @@ package org.hexlet.gamexo.ai.gardnerway;
 
 import org.hexlet.gamexo.ai.IBrainAI;
 
-import java.lang.reflect.Array;
 import java.util.HashSet;
 import java.lang.Exception;
 
@@ -22,7 +21,7 @@ import java.lang.Exception;
  * и снова поворачивается. Этим достигается проверка всех
  * перевернутых и зеркальных вариантов.
  */
-public class Gardner implements IBrainAI {
+public class Gardner {
 
     private char[][] gameBoard;
     private char[][] oldGameBoard;
@@ -57,35 +56,59 @@ public class Gardner implements IBrainAI {
         /*
         Выбор фишки будет валидным при условии, что
         крестики всегда играют первыми.
+
+        ***************************Maybe it needs to get sign from rest part of 'Game' ? *********************
          */
+        myChip = isFirst ? 'X' : 'O';
+        chip = isFirst ? 'O' : 'X';
     }
 
 //    public int[]  letsPlay(int x, int y)
 
     /**
-     * Пока что метод выискивает последний ход, проверяет в соответствии
-     * с ним возможность выигра противником, и делает простой рандомный
-     * ход. Если противник может выиграть следующим ходом, то он занимает
-     * победное поле своей фишкой.
+     * Пока что метод выискивает последний ход, и передает дальше, для
+     * вычисления следующего хода. Перегрузка методов получилась из
+     * желания как можно меньше переделывать код, и иметь более гибкий
+     * интерфейс для тестирования.
      * @param fieldMatrix матрица поля, переданная ядром.
      * @return массив координат клетки, куда выполняется ход.
      */
-    public int[]  findMove(char[][] fieldMatrix) /*throws Exception*/{
+    public int[]  findMove(char[][] fieldMatrix) {
 
-//            throws CellIsNotEmptyException{
+        setMoveCell(fieldMatrix);   // возвращаем координаты хода противника
+
+        try {
+            return findMove(columnX, rowY);
+        } catch (CellIsNotEmptyException ex){
+            return  MOVE;    // в случае исключения  пока что получится падение программы
+        }
+    }
+
+    /**
+     * проверяет в соответствии с входящими координатами
+     * возможность выигрыша противником, и делает простой рандомный
+     * ход. Если противник может выиграть следующим ходом, то он занимает
+     * победное поле своей фишкой.
+     * @param x координата по X
+     * @param y координата по Y
+     * @return массив кординаты со значениями x и y
+     * @throws CellIsNotEmptyException  кидется, если пришли координаты
+     * уже занятой клетки
+     */
+    public int[] findMove(int x, int y) throws CellIsNotEmptyException{
 
 //        if (!isCellEmpty(x, y)){
 //            String ex = x + " " + y;
 //            throw new  CellIsNotEmptyException(ex);
 //        }
-        setMoveCell(fieldMatrix);   // возвращаем координаты хода противника
-        coordX = 25; // обнуляем потенциально выигрышную клетку
+        coordX = 25;              // обнуляем потенциально выигрышную клетку
         coordY = 25;
-        if (isWin(columnX, rowY, chip)) {
+        gameBoard[x][y] = chip;
+
+        if (isWin(x, y, chip)) {
 		    /*
 		    Изврат с возвратом победы,
 		    надо будет прописать исключение победы
-		    и прописать его же в интерфейсе
 		     */
             MOVE[X] = 25;
             MOVE[Y] = 25;
@@ -102,18 +125,20 @@ public class Gardner implements IBrainAI {
                 if (coordX != 25 && coordY != 25){
                     MOVE[X] = coordX;
                     MOVE[Y] = coordY;
+                    gameBoard[MOVE[X]][MOVE[Y]] = myChip;
                     return MOVE;
                 }
-                MOVE[X] = (int) Math.floor(Math.random() * fieldMatrix.length);
-                MOVE[Y] = (int) Math.floor(Math.random() * fieldMatrix.length);
-            } while (isCellEmpty(MOVE[X], MOVE[Y]));
+                MOVE[X] = (int) Math.floor(Math.random() * gameBoard.length);
+                MOVE[Y] = (int) Math.floor(Math.random() * gameBoard.length);
+            } while (!isCellEmpty(MOVE[X], MOVE[Y]));     //мы должны походить в пустую клетку
         }
 
+        gameBoard[MOVE[X]][MOVE[Y]] = myChip;
         return MOVE;
     }
 
     /**
-     * Сверяет новуюя матрицу доски с матрицей доски
+     * Сверяет новую матрицу доски с матрицей доски
      * предыдущего хода. Определяет клетку последнего
      * хода и фишку, поставленную в нее. За свою фишку
      * ИИ принимает фишку противоположную походившей
@@ -131,12 +156,11 @@ public class Gardner implements IBrainAI {
 			     */
 
                 if (fieldMatrix[x][y] != fieldMatrix[x][y]){
+  //****************************We'll never arrive at here************************************************
                     columnX = x;
                     rowY = y;
                     chip = fieldMatrix[x][y];
                     myChip = (chip == 'X') ? 'O' : 'X';
-
-                    gameBoard = BoardModifier.copyBoard(fieldMatrix);
                 }
             }
         }
@@ -149,7 +173,9 @@ public class Gardner implements IBrainAI {
 
     // Проверка на победу
     public boolean isWin(int x, int y, char chip) {
-        HashSet<Integer[]> win = new HashSet<Integer[]>();
+        HashSet<Integer> win = new HashSet<Integer>();
+        int number;
+
 		/*
 		Проход победных рядов по четырем направлениям
 		 */
@@ -169,9 +195,16 @@ public class Gardner implements IBrainAI {
 		/*
 		Получаем координату потенциалной победной клетки
 		 */
-        for (Integer[] integers : win){
-            coordX = integers[0];
-            coordY = integers[1];
+        if (win.size() > 0){
+            for (Integer integers : win){
+				/*
+				Преобразование порядкового номера клетки
+				в ее координаты.
+				 */
+                int[] coordinate = getCoordinateFromIndex(integers);
+                coordX = coordinate[X];
+                coordY = coordinate[Y];
+            }
         }
         return false;
     }
@@ -194,11 +227,10 @@ public class Gardner implements IBrainAI {
      * @exception IndexOutOfBoundsException выкидывается при попадании
      * проверочных координат за границы массива.
      */
-    public HashSet<Integer[]> checkRow(int xx, int yy, char chip, int direction) {
+    public HashSet<Integer> checkRow(int xx, int yy, char chip, int direction) {
         int x = 0, y = 0;
-        HashSet<Integer[]> emptySell = new HashSet<Integer[]>();   //сборщик пустых полей от прохода ряда
-        HashSet<Integer[]> emptySum = new HashSet<Integer[]>();    //сборщик пустых полей от всех проходов
-        Integer[] xy = new Integer[2];
+        HashSet<Integer> emptySell = new HashSet<Integer>();   //сборщик пустых полей от прохода ряда
+        HashSet<Integer> emptySum = new HashSet<Integer>();    //сборщик пустых полей от всех проходов
 
         start:
         for (int i = 0; i < numInTheRow; i++) {
@@ -231,12 +263,12 @@ public class Gardner implements IBrainAI {
                         continue start;
                     }
 			        /*
-			         Здесь мы закидываем пустую клетку в Set
+			         Здесь мы закидываем порядковый номер пустой
+			         клетки в Set, который получаем из координат.
 			         */
                     if (gameBoard[x][y] == '\u0000') {
-                        xy[0] = x;
-                        xy[1] = y;
-                        emptySell.add(xy);
+                        Integer number = getIndexOfCell(x, y);
+                        emptySell.add(number); 	         //делаем преобразование
                     }
 		        /*
 		         Если проверка попала за границы массива, то обнуляем
@@ -254,7 +286,7 @@ public class Gardner implements IBrainAI {
             if (emptySell.size() == 0) {
                 System.out.println(emptySell.size());
                 for (int g = 0; g < 3; g++) {
-                    emptySum.add(xy);
+                    emptySum.add(50);
                 }
                 return emptySum;
             }
@@ -272,12 +304,30 @@ public class Gardner implements IBrainAI {
         return emptySum;
     }
 
-    public int getCoordX() {
-        return coordX;
+    /**
+     * Переводим координаты в порядковый номер ячейки
+     * массива считая слева сверху.
+     * @param x  координата по Х
+     * @param y  координата по У
+     * @return порядковый номер ячейки массива.
+     */
+    public Integer getIndexOfCell(Integer x, Integer y) {
+        Integer number;
+        number = y * gameBoard.length + x;
+        return number;
     }
 
-    public int getCoordY() {
-        return coordY;
+    /**
+     * Переводим порядковый номер ячейки массива в
+     * координаты этой ячейки по Х и У.
+     * @param number порядковый номер ячейки
+     * @return массив координат
+     */
+    public int[] getCoordinateFromIndex(int number) {
+        int[] num = new int[2];
+        num[X] = number % gameBoard.length;
+        num[Y] = number / gameBoard.length;
+        return num;
     }
 
     public class CellIsNotEmptyException extends Exception{
