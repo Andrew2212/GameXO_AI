@@ -12,7 +12,9 @@ public class PlayStationXO {
     private static final int COMP_TO_COMP = 3;
     private static final String NEW_GAME = "N";
     private static final String REVERSE_HISTORY = "R";
+    public static final String QUIT = "Q";
     private static boolean isGameFirst = true;
+    private static boolean isQuitPressed = false;
 
 
     public static void setGameOptions() {
@@ -35,12 +37,14 @@ public class PlayStationXO {
         if (isGameFirst) {
             startNewGame(selectWhoVsWho());
         }
-        chooseNewGameOrReverseHistory();
+        if (!isQuitPressed) {
+            chooseNewGameReverseHistoryOrQuit();
+        }
     }
 
     //    --------------Private Methods----------------------
 
-    private static void chooseNewGameOrReverseHistory() {
+    private static void chooseNewGameReverseHistoryOrQuit() {
         //Enter the choice  New or History
         String strEnter = initiateChooseString();
 
@@ -51,12 +55,12 @@ public class PlayStationXO {
             return;
         }
 
-        if (strEnter.equalsIgnoreCase(REVERSE_HISTORY)) {
+        else if (strEnter.equalsIgnoreCase(REVERSE_HISTORY)) {
 
             if (!GameHistoric.isListHistoryEmty()) {
 
                 GameHistoric.removePreviousStep();
-                chooseNewGameOrReverseHistory();
+                chooseNewGameReverseHistoryOrQuit();
 
             } else {
                 System.out.println("Step History is terminated!");
@@ -64,6 +68,10 @@ public class PlayStationXO {
             startNewGame(selectWhoVsWho());
         }
 
+        else if (strEnter.equalsIgnoreCase(QUIT)) {
+            isQuitPressed = true;
+            return;
+        }
     }
 
     private static String initiateChooseString() {
@@ -71,7 +79,7 @@ public class PlayStationXO {
         while (true) {
             printGameChoice();
             strEnter = new Scanner(System.in).next();
-            if (isChoiceNewGame(strEnter) || isChoiceReverseHistory(strEnter)) break;
+            if (isChoiceNewGame(strEnter) || isChoiceReverseHistory(strEnter) || isChoiceQuit(strEnter)) break;
             System.out.println("That'll never fly! Try again!\n");
         }
 
@@ -82,7 +90,8 @@ public class PlayStationXO {
     private static void printGameChoice() {
         System.out.println("\n***Let's choose:\n" +
                 "New Game (press '" + NEW_GAME + "')\n" +
-                "Reverse History (press '" + REVERSE_HISTORY + "')");
+                "Reverse History (press '" + REVERSE_HISTORY + "')\n" +
+                "Quit (press '" + QUIT + "')");
     }
 
     private static boolean isChoiceNewGame(String strEnter) {
@@ -91,6 +100,10 @@ public class PlayStationXO {
 
     private static boolean isChoiceReverseHistory(String strEnter) {
         return (strEnter.equalsIgnoreCase(REVERSE_HISTORY));
+    }
+
+    private static boolean isChoiceQuit(String strEnter) {
+        return (strEnter.equalsIgnoreCase(QUIT));
     }
 
     private static int selectWhoVsWho() {
