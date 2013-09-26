@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class ClassForTestMethods{
     public static void main(String[] args) {
-
         Minimax mx = new Minimax(3,3,3);
         int cnt = 0;
         int res = 0;
