@@ -22,7 +22,6 @@ public class Minimax implements IBrainAI{
     private final int LENGTH; //длинна линии, необходимая для победы
     private final int X_SIZE; // количество строк поля
     private final int Y_SIZE; // количество столбцов поля
-
     private int[][] field; //используется для хранения поля
 
 //*************REMAKE************************************
