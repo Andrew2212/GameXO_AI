@@ -1,4 +1,4 @@
-package virtuals.gardner;
+package org.hexlet.gamexo.ai.gardnerway;
 
 /**
  * User: KOlegA
@@ -11,14 +11,14 @@ public class BoardModifier {
     public static char[][] copyBoard(char[][] board) {
         char[][] cBoard = new char[board.length][board[1].length];
         for (int i = 0; i < board.length; i++) {
-            System.arraycopy(board[i], 0, cBoard[i], 0, board.length);
+            System.arraycopy(board[i], 0, cBoard[i], 0, board[i].length);
         }
         return cBoard;
     }
 
 
     // поворачивает доску на заданный угол
-    public static char[][] rotate(char[][] board, String degrees) {
+    public static char[][] rotate(char[][] board, int degrees) {
         char[][] rBoard = new char[board.length][board[1].length];
         int[] xy = new int[2];
         for (int yy = 0; yy < board.length; yy++) {
@@ -35,28 +35,28 @@ public class BoardModifier {
     }
 
     // поворачивает координату на заданный угол
-    public static int[] rotateXY(int x, int y, int size, String degree) {
+    public static int[] rotateXY(int x, int y, int size, int degree) {
         int[] xy = new int[2];
         switch (degree) {
-            case "90"  :
+            case 90  :
                 xy[0] = y;
                 xy[1] = (size - 1) - x;
                 break;
-            case "180" :
+            case 180 :
                 xy[0] = (size - 1) - x;
                 xy[1] = (size - 1) - y;
                 break;
-            case "270" :
+            case 270 :
                 xy[0] = (size - 1) - y;
                 xy[1] = x;
                 break;
-	        case "vmir" :
-		        xy[0] = (size - 1) - x;
-		        xy[1] = y;
-		        break;
-	        case "hmir" :
-		        xy[0] = x;
-		        xy[1] = (size - 1) - y;
+            case 11 :
+                xy[0] = (size - 1) - x;
+                xy[1] = y;
+                break;
+            case 22 :
+                xy[0] = x;
+                xy[1] = (size - 1) - y;
         }
         return xy;
     }

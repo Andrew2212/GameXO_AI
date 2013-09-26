@@ -1,6 +1,10 @@
 package org.hexlet.gamexo.ai.minimaxway;
 
-public class Minimax {
+import org.hexlet.gamexo.ai.IBrainAI;
+import org.hexlet.gamexo.ai.utils.GetterLastEnemyMove;
+import org.hexlet.gamexo.blackbox.game.GameField;
+
+public class Minimax implements IBrainAI{
 
     // массив смещений адресов ячеек по направлениям
     private static final int[][] OFFSET = {
@@ -20,6 +24,49 @@ public class Minimax {
     private final int Y_SIZE; // количество столбцов поля
 
     private int[][] field; //используется для хранения поля
+
+//*************REMAKE************************************
+    private final int[] MOVE = new int[2];
+    private static final int X = 0;
+    private static final int Y = 1;
+    private GetterLastEnemyMove getterLastEnemyMove;
+    private char signBot;
+
+    public Minimax(int fieldSize,int numChecked){
+        this.LENGTH = numChecked;
+        this.X_SIZE = fieldSize;
+        this.Y_SIZE = fieldSize;
+
+        getterLastEnemyMove = new GetterLastEnemyMove(fieldSize);
+
+    }
+
+    /**
+     * @param fieldMatrix char[][]
+     * @return MOVE i.e. int[2] - coordinates of cell
+     */
+    public int[] findMove(char[][] fieldMatrix) {
+
+        signBot = GameField.getSignForNextMove();
+        //        This is what you calculate
+        MOVE[X] = (int) Math.floor(Math.random() * fieldMatrix.length);
+        MOVE[Y] = (int) Math.floor(Math.random() * fieldMatrix.length);
+
+        //        checkout for random - it isn't needed for real AI
+        if (GameField.isCellValid(MOVE[X], MOVE[Y])) {
+            int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
+            if (null != lastEnemyMove) {
+                //do something
+            }
+
+            System.out.println("Spare::findMove MOVE[X] = " + MOVE[X] + " findMove MOVE[Y] = " + MOVE[Y] + " signBot = " + signBot);
+            getterLastEnemyMove.setMyOwnMove(MOVE[X], MOVE[Y], signBot);
+        }
+        return MOVE;
+    }
+
+
+//    ****************************************************
 
     /**
      * конструктор, инициализирует все клетки нулями
@@ -78,39 +125,23 @@ public class Minimax {
      * @return                                 true, если длинна достигнута, иначе - false
      * @throws ArrayIndexOutOfBoundsException  кидаем исключение при попытке вылезти за пределы поля
      */
-    //TODO люто, бешенно рефакторить!
+    //TODO можно добавить возврат false, в случае, когда количество оставшихся клеток в данном направлении заведомо меньше
+    //TODO чем значение длинны выйгрышной линии  и убрать исключение
     private boolean isEnoughLength(int x, int y, int sign, int direction) throws ArrayIndexOutOfBoundsException{
         int cntLine = 1;
         int a = x;
         int b = y;
-        try {
-            while (cntLine < LENGTH) {                                 //здесь может вылетить   ArrayIndexOutOfBoundsException
-                a +=  OFFSET[direction][0];                            // что помешает нам проверить противополжное направление
-                b +=  OFFSET[direction][1];
-                if (this.field[a][b] != sign){
-                    break;
-                }
-                cntLine++;
-            }
-        } catch (ArrayIndexOutOfBoundsException e){
-            // мы его перехватываем, и тупо ничего не делаем
-        }
-
-        a = x;
-        b = y;
-        while (cntLine < LENGTH){
-            a += OFFSET[(direction + 4) % 8][0];
-            b += OFFSET[(direction + 4) % 8][1];
+        while (cntLine < LENGTH) {
+            a +=  OFFSET[direction][0];
+            b +=  OFFSET[direction][1];
             if (this.field[a][b] != sign){
-                break;
+                return false;
             }
             cntLine++;
         }
-        if (cntLine == LENGTH){
-            return true;
-        }  else {
-            return false;
-        }
+        return true;
+
+
     }
     //TODO проверяем наличие пустых ячеек тупо перебором, что не есть хорошо
     private boolean hasEmptyCell(){

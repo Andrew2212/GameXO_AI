@@ -3,8 +3,9 @@ package org.hexlet.gamexo.blackbox;
 import org.hexlet.gamexo.blackbox.game.GameField;
 import org.hexlet.gamexo.blackbox.game.GameFieldMatrixChecker;
 import org.hexlet.gamexo.blackbox.game.GameFieldPainter;
-import org.hexlet.gamexo.blackbox.players.PlayerBot;
 import org.hexlet.gamexo.blackbox.players.IPlayer;
+import org.hexlet.gamexo.blackbox.players.PlayerBot;
+import org.hexlet.gamexo.blackbox.players.PlayerBotEnemy;
 import org.hexlet.gamexo.blackbox.players.PlayerMan;
 
 /**
@@ -14,15 +15,22 @@ public class Game {
 
     private static Game uniqueInstance;
 
-    private IPlayer gamerMan;
-    private IPlayer gamerBot;
-    private GameFieldMatrixChecker gameFieldMatrixChecker;
+    private static IPlayer gamerMan;
+    private static IPlayer gamerBot;
+    private static IPlayer gamerBotEnemy;
+    private static GameFieldMatrixChecker gameFieldMatrixChecker;
 
     private Game() {
-        GameField.getNewGameField();
         gameFieldMatrixChecker = new GameFieldMatrixChecker();
+        init();
+    }
+
+    private static void init() {
+
+        GameField.getNewGameField();
         gamerMan = new PlayerMan();
         gamerBot = new PlayerBot(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
+        gamerBotEnemy = new PlayerBotEnemy(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
     }
 
 //----------Public Methods------------------
@@ -31,6 +39,8 @@ public class Game {
         if (uniqueInstance == null) {
             uniqueInstance = new Game();
         }
+
+        init();
         return uniqueInstance;
     }
 
@@ -83,6 +93,14 @@ public class Game {
 
         while (true) {
             GameField.setSignToCell(gamerBot);
+            GameFieldPainter.showFields();
+            System.out.println("--------------------------------\n");
+
+            if (gameFieldMatrixChecker.isGameOver()) {
+                break;
+            }
+
+            GameField.setSignToCell(gamerBotEnemy);
             GameFieldPainter.showFields();
             System.out.println("--------------------------------\n");
 

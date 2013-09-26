@@ -102,9 +102,9 @@ public class PlayStationXO {
         System.out.println("***Number of the checked signs = " + GameField.NUM_CHECKED);
 
         System.out.println("\n***SELECT GAME:");
-        System.out.println("*Man vs Man: press 1");
-        System.out.println("*Man vs Bot: press 2");
-        System.out.println("*Bot vs Bot: press 3");
+        System.out.println("*Human vs Human: press 1");
+        System.out.println("*Human vs Bot: press 2");
+        System.out.println("*Bot vs BotEnemy: press 3");
 
         String strEnter = new Scanner(System.in).next();
         return setGameOptionValue(strEnter);
@@ -148,6 +148,7 @@ public class PlayStationXO {
     }
 
     private static Game insertGame() {
+
         return Game.getInstance();
     }
 }

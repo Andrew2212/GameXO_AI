@@ -16,9 +16,9 @@ public class Main {
             int y = scan.nextInt();
             int move;
             if (cnt % 2 == 0){
-                 move = 1;
+                move = 1;
             } else {
-                 move = -1;
+                move = -1;
             }
             res = mx.heuristic(x,y,move);
             System.out.println(res);
