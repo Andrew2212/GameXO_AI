@@ -12,7 +12,7 @@ public class PlayStationXO {
     private static final int COMP_TO_COMP = 3;
     private static final String NEW_GAME = "N";
     private static final String REVERSE_HISTORY = "R";
-    public static final String QUIT = "Q";
+    private static final String QUIT = "Q";
     private static boolean isGameFirst = true;
     private static boolean isQuitPressed = false;
 
@@ -33,7 +33,6 @@ public class PlayStationXO {
     }
 
     public static void startGame() {
-
         if (isGameFirst) {
             startNewGame(selectWhoVsWho());
         }
@@ -82,7 +81,6 @@ public class PlayStationXO {
             if (isChoiceNewGame(strEnter) || isChoiceReverseHistory(strEnter) || isChoiceQuit(strEnter)) break;
             System.out.println("That'll never fly! Try again!\n");
         }
-
         return strEnter;
     }
 
@@ -107,7 +105,6 @@ public class PlayStationXO {
     }
 
     private static int selectWhoVsWho() {
-
         isGameFirst = false;
 
         System.out.println("\n***Game OPTIONS:");
@@ -132,12 +129,10 @@ public class PlayStationXO {
     }
 
     private static boolean isEnterGameOptionValid(String strEnter) {
-
         return (strEnter.matches("[0-9]+"));
     }
 
     private static void startNewGame(int kindOfGame) {
-
         switch (kindOfGame) {
 
             case MAN_TO_MAN:
@@ -157,11 +152,9 @@ public class PlayStationXO {
                 startGame();
                 break;
         }
-
     }
 
     private static Game insertGame() {
-
         return Game.getInstance();
     }
 }
