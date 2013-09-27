@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class ClassForTestMethods{
     public static void main(String[] args) {
-        Minimax mx = new Minimax(3,3,3);
+        Heuristic heuristic = Heuristic.createInstance(3,3,3);
         int cnt = 0;
         int res = 0;
         Scanner scan = new Scanner(System.in);
@@ -24,9 +24,9 @@ public class ClassForTestMethods{
             } else {
                 move = -1;
             }
-            res = mx.heuristic(x,y,move);
+            res = heuristic.heuristicRating(x, y, move);
             System.out.println(res);
-            mx.showField();
+            heuristic.showField();
             cnt++;
         }
 
