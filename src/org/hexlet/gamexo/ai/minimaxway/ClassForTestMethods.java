@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class ClassForTestMethods{
     public static void main(String[] args) {
-        Heuristic heuristic = Heuristic.createInstance(3,3,3);
+        Heuristic heuristic = Heuristic.createInstance(3,4,4);
         int cnt = 0;
         int res = 0;
         Scanner scan = new Scanner(System.in);
