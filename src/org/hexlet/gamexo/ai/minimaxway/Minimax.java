@@ -84,13 +84,15 @@ public class Minimax implements IBrainAI{
     // Begin
     public int[] findMoveMiniMax(char[][] fieldMatrix) {
         int[] curBestMove = {0, 0};
-        maxMinStrategy(2, 2, fieldMatrix, 0, curBestMove); // maxMin on depth 2. Only for X!!!
+        weightOfBestMove = MINUSINFINITY;
+        maxMinStrategy(3, 3, fieldMatrix, 0, curBestMove); // maxMin on depth 2. Only for X!!!
         //  best move didn't find. Will use random
         // TODO add check if the cell is not empty.
-        if  (weightOfBestMove == MINUSINFINITY)  {
-            MOVE[X] = (int) Math.floor(Math.random() * fieldMatrix.length);
-            MOVE[Y] = (int) Math.floor(Math.random() * fieldMatrix.length);
+        if  (weightOfBestMove == 0)  {
+            MOVE[X] = 2; //(int) Math.floor(Math.random() * fieldMatrix.length);
+            MOVE[Y] = 2; //(int) Math.floor(Math.random() * fieldMatrix.length);
         }
+        System.out.println("Weight = " + weightOfBestMove);
         return MOVE;  // returns garbage. Need to return to this, when will finish findMove procedure
     }
 
@@ -121,6 +123,18 @@ public class Minimax implements IBrainAI{
          лучший ход. Здесь проиходит завершение рекурсивной функции, делается следующая итерация, поле и все веса
          возвращаются на шаг назад.
          TODO протестировать, отладить и сделать возможным работу для O
+
+         есть косяк, что постоянно на пустом поле эвристика выдает 12, если сделать ход x в {0,0},
+         а О куда-то еще поставить. хотя вообще по идее на пустом поле при глубине 2, на которой я тестировал
+         веса всех ходов должны быть 0.
+         [x][][]
+         [][o][]
+         [][][]
+
+         Причем дальше, если продолжать играть все равно он упорно считает, что лучший ход в левый верхний угол
+         с весом 12.
+
+         Короче надо все вместе с эвристикой смотреть.
      */
 
     // search in the depth
@@ -128,9 +142,9 @@ public class Minimax implements IBrainAI{
         if (depth != 0) {
             for (int j = 0; j < X_SIZE; j++) {  // looking for empty cell. Maybe it will be the best step.
                 for (int k = 0; k < Y_SIZE; k++) {
-                    if (field[j][k] == DEFAULT_CELL_VALUE) {
-                        int deltaWeight;
-                        if (depthMax - depth % 2 == 0) {
+                    if (curField[j][k] == DEFAULT_CELL_VALUE) {
+                        int deltaWeight = 0;
+                        if ( (depthMax - depth) % 2 == 0) {
                             curField[j][k] = VALUE_X;
                             if (depth == 2) {
                                 curBestMove[X] = j; // save temp best step
