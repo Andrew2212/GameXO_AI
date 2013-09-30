@@ -7,9 +7,12 @@ package org.hexlet.gamexo.ai.gardnerway;
  */
 public class BoardModifier {
 
+    private final static int X = 0;
+    private final static int Y = 1;
+
     // копирует доску(поле)
     public static char[][] copyBoard(char[][] board) {
-        char[][] cBoard = new char[board.length][board[1].length];
+        char[][] cBoard = new char[board.length][board[X].length];
         for (int i = 0; i < board.length; i++) {
             System.arraycopy(board[i], 0, cBoard[i], 0, board[i].length);
         }
@@ -19,13 +22,12 @@ public class BoardModifier {
 
     // поворачивает доску на заданный угол
     public static char[][] rotate(char[][] board, int degrees) {
-        char[][] rBoard = new char[board.length][board[1].length];
-        int[] xy = new int[2];
-        for (int yy = 0; yy < board.length; yy++) {
-            for (int xx = 0; xx < board.length; xx++) {
-                if (board[xx][yy] != '\u0000') {
-                    xy = rotateXY(xx, yy, board.length, degrees);
-                    rBoard[xy[0]][xy[1]] = board[xx][yy];
+        char[][] rBoard = new char[board.length][board[X].length];
+        for (int y = 0; y < board.length; y++) {
+            for (int x = 0; x < board.length; x++) {
+                if (board[x][y] != '\u0000') {
+                    int[] xy = rotateXY(x, y, board.length, degrees);
+                    rBoard[xy[X]][xy[Y]] = board[x][y];
                 }
 
             }
@@ -39,24 +41,24 @@ public class BoardModifier {
         int[] xy = new int[2];
         switch (degree) {
             case 90  :
-                xy[0] = y;
-                xy[1] = (size - 1) - x;
+                xy[X] = y;
+                xy[Y] = (size - 1) - x;
                 break;
             case 180 :
-                xy[0] = (size - 1) - x;
-                xy[1] = (size - 1) - y;
+                xy[X] = (size - 1) - x;
+                xy[Y] = (size - 1) - y;
                 break;
             case 270 :
-                xy[0] = (size - 1) - y;
-                xy[1] = x;
+                xy[X] = (size - 1) - y;
+                xy[Y] = x;
                 break;
             case 11 :
-                xy[0] = (size - 1) - x;
-                xy[1] = y;
+                xy[X] = (size - 1) - x;
+                xy[Y] = y;
                 break;
             case 22 :
-                xy[0] = x;
-                xy[1] = (size - 1) - y;
+                xy[X] = x;
+                xy[Y] = (size - 1) - y;
         }
         return xy;
     }
