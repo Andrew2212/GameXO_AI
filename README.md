@@ -11,13 +11,16 @@ Opus magnum of Hexlet_TeamAI
 Выбор ИИ для Bot & BotEnemy - в конструкторах PlayerBot & PlayerBotEnemy 
 пакета blackbox.players (хардкодно выбрать WayEnum (GARDNER/MINIMAX/SPARE))
 По дефолту 
-- PlayerBot:: iBrainAI = new Spare(fieldSize,numChecked);
-- PlayerBotEnemy:: iBrainAI = new Minimax(fieldSize,numChecked)
+- PlayerBot:: iBrainAI = new BrutforceAI(fieldSize,numChecked);
+- PlayerBotEnemy:: iBrainAI = new Spare(fieldSize,numChecked);
+- //ACHTUNG!!! FIRST TOURNEY of AI in the teamAI!!! 
+- //              BRUTFORCE vs RANDOM
 
 Пакеты
 - 'blackbox' - черный ящик с игрой (можно не заглядывать)
 - 'ai.gardnerway' - пакет для ИИ по Гарднеру
 - 'ai.minimax' - пакет для ИИ на основе MiniMax
+- 'ai.brutforceway' - пакет для ИИ на основе весовых коэффициентов (имхо)
 - 'ai.spare' - пакет для ИИ на основе random (or dokwork - maybe later)
 
 Все варианты ИИ реализуют интерфейс IBrainAI
