@@ -25,7 +25,7 @@ public class PlayerBot implements IPlayer {
 //        wayEnum = WayEnum.GARDNER;
 //        wayEnum = WayEnum.MINIMAX;
 //        wayEnum = WayEnum.SPARE;
-        wayEnum = WayEnum.BRUTFORCE;
+	    wayEnum = WayEnum.BRUTFORCE;
 
         switch (wayEnum) {
 

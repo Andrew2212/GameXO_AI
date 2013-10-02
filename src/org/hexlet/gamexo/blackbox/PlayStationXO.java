@@ -128,6 +128,7 @@ public class PlayStationXO {
         return GameField.FIELD_SIZE;
     }
 
+
     private static int setGameOptionNumChecked(String enter) {
 
         int numChecked;
@@ -152,6 +153,7 @@ public class PlayStationXO {
             return numChecked;
         }
     }
+
 
     private static boolean isEnterGameOptionValid(String strEnter) {
         return (strEnter.matches("[0-9]+"));
