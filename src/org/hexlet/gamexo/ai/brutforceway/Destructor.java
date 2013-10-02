@@ -31,9 +31,9 @@ public class Destructor {
     private ArrayList<int[]> listCellsNearLastEnemyMove = new ArrayList<int[]>();
 
     public Destructor() {
-        System.out.println("*************************** public Destructor()************************************************");
+
         NEAR_WIN_ENEMY_1 = GameOptions.numCheckedSigns * 10;
-        NEAR_WIN_ENEMY_2 = GameOptions.numCheckedSigns;
+        NEAR_WIN_ENEMY_2 = GameOptions.numCheckedSigns * 2;
 
         weightMap = new HashMap<int[], Integer>();
     }
@@ -235,7 +235,7 @@ public class Destructor {
                     if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
                         Integer cellNewWeight = NEAR_WIN_ENEMY_1;
                         if (weightMap.containsKey(keyCell)) {
-//                            cellNewWeight = NEAR_WIN_ENEMY_1 + (Integer) weightMap.get(keyCell);
+                            cellNewWeight = NEAR_WIN_ENEMY_1 + (Integer) weightMap.get(keyCell);
 //                            weightMap.put(keyCell, NEAR_WIN_ENEMY_1 + (Integer) weightMap.get(keyCell));
                         }
                         weightMap.put(keyCell, cellNewWeight);
@@ -259,7 +259,7 @@ public class Destructor {
      */
     private void setWeightToNearWin_2() {
         for (int j = 0; j < GameOptions.listStringNearWinEnemy_2.size(); j++) {
-//            System.out.println("W2*** " + j + " strWin_2 = " + GameOptions.listStringNearWinEnemy_2.get(j));
+            System.out.println("W2*** " + j + " strWin_2 = " + GameOptions.listStringNearWinEnemy_2.get(j));
 //            System.out.println("W2*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
 
 //            Check condition 'contains' for each string from 'listStringNearWinEnemy_2'
