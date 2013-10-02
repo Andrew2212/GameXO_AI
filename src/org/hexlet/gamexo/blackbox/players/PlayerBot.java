@@ -2,6 +2,7 @@ package org.hexlet.gamexo.blackbox.players;
 
 
 import org.hexlet.gamexo.ai.IBrainAI;
+import org.hexlet.gamexo.ai.brutforceway.BrutforceAI;
 import org.hexlet.gamexo.ai.gardnerway.Gardner;
 import org.hexlet.gamexo.ai.minimaxway.Minimax;
 import org.hexlet.gamexo.ai.spareway.Spare;
@@ -23,7 +24,8 @@ public class PlayerBot implements IPlayer {
         WayEnum wayEnum;// Switch on that you need
 //        wayEnum = WayEnum.GARDNER;
 //        wayEnum = WayEnum.MINIMAX;
-        wayEnum = WayEnum.SPARE;
+//        wayEnum = WayEnum.SPARE;
+        wayEnum = WayEnum.BRUTFORCE;
 
         switch (wayEnum) {
 
@@ -37,6 +39,10 @@ public class PlayerBot implements IPlayer {
 
             case SPARE:
                 iBrainAI = new Spare(fieldSize, numChecked);
+                break;
+
+            case BRUTFORCE:
+                iBrainAI = new BrutforceAI(fieldSize, numChecked);
                 break;
 
             default:
@@ -63,7 +69,7 @@ public class PlayerBot implements IPlayer {
 //        position[Y] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
 
         position = iBrainAI.findMove(GameField.getFieldMatrix());
-
+        System.out.println("PlayerBot::getCoord::position[X] = " + position[X] + ", position[Y]" + position[Y]);
         return position;
     }
 

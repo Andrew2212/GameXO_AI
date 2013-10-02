@@ -27,18 +27,19 @@ public class Spare implements IBrainAI {
      */
     public int[] findMove(char[][] fieldMatrix) {
 
-         signBot = GameField.getSignForNextMove();
+        int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
+        if (null != lastEnemyMove) {
+            //do something
+        }
+
+        signBot = GameField.getSignForNextMove();
+
         //        This is what you calculate
         MOVE[X] = (int) Math.floor(Math.random() * fieldMatrix.length);
         MOVE[Y] = (int) Math.floor(Math.random() * fieldMatrix.length);
 
         //        checkout for random - it isn't needed for real AI
         if (GameField.isCellValid(MOVE[X], MOVE[Y])) {
-            int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
-            if (null != lastEnemyMove) {
-                //do something
-            }
-
             System.out.println("Spare::findMove MOVE[X] = " + MOVE[X] + " findMove MOVE[Y] = " + MOVE[Y] + " signBot = " + signBot);
             getterLastEnemyMove.setMyOwnMove(MOVE[X], MOVE[Y], signBot);
         }

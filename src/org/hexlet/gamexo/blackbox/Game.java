@@ -20,13 +20,13 @@ public class Game {
     private static IPlayer gamerBotEnemy;
     private static GameFieldMatrixChecker gameFieldMatrixChecker;
 
-    private Game() {
+    public Game() {
         gameFieldMatrixChecker = new GameFieldMatrixChecker();
         init();
     }
 
     private static void init() {
-
+//        System.out.println("Game::init()");
         GameField.getNewGameField();
         gamerMan = new PlayerMan();
         gamerBot = new PlayerBot(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
@@ -39,7 +39,6 @@ public class Game {
         if (uniqueInstance == null) {
             uniqueInstance = new Game();
         }
-
         init();
         return uniqueInstance;
     }

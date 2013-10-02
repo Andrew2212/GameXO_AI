@@ -16,6 +16,7 @@ public class GameField {
     public static int FIELD_SIZE = 3;
     // Set number of the checked signs
     public static int NUM_CHECKED = 3;
+    public static final int NUM_CHECKED_4 = 4; // default value for FIELD_SIZE > 3
 
     private static char[][] fieldMatrix;
     private static char signForNextMove = VALUE_X;

@@ -30,7 +30,7 @@ public class GetterLastEnemyMove {
     }
 
     public int[] getLastEnemyMove(char[][] fieldMatrix) {
-        System.out.println("getLastEnemyField()");
+        System.out.println("Getter::getLastEnemyField()");
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
 
@@ -50,6 +50,7 @@ public class GetterLastEnemyMove {
                 }
             }
         }
+
         return null;
     }
 
@@ -61,6 +62,8 @@ public class GetterLastEnemyMove {
         }
 
     }
+
+//    -----------------Private Methods---------------------------
 
     private void fillDefaultGameMatrix(char[][] fieldMatrix) {
         for (int i = 0; i < GameField.FIELD_SIZE; i++) {

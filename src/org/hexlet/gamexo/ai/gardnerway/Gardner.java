@@ -167,6 +167,7 @@ public class Gardner implements IBrainAI{
     }
 
     // Проверяет - пуста ли ячейка в которую хочет походить противник
+//    **************How do we know where he wants to go?******************************************
     public boolean isCellEmpty(int x,int y){
         return gameBoard[x][y] == '\u0000';
     }

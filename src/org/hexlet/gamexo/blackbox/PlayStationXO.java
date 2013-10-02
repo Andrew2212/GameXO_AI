@@ -21,12 +21,12 @@ public class PlayStationXO {
 
         System.out.println("*Set 'size' for the GameField:");
         strEnter = new Scanner(System.in).next();
-        GameField.FIELD_SIZE = setGameOptionValue(strEnter);
+        GameField.FIELD_SIZE = setGameOptionValueFieldSize(strEnter);
 
 
         System.out.println("*Set Number of the Checked Signs:");
         strEnter = new Scanner(System.in).next();
-        GameField.NUM_CHECKED = setGameOptionValue(strEnter);
+        GameField.NUM_CHECKED = setGameOptionNumChecked(strEnter);
 
     }
 
@@ -107,15 +107,40 @@ public class PlayStationXO {
         System.out.println("*Bot vs BotEnemy: press 3");
 
         String strEnter = new Scanner(System.in).next();
-        return setGameOptionValue(strEnter);
+        return setGameOptionValueFieldSize(strEnter);
     }
 
-    private static int setGameOptionValue(String enter) {
+    private static int setGameOptionValueFieldSize(String enter) {
         if (isEnterGameOptionValid(enter)) {
             return Integer.valueOf(enter);
         }
         System.out.println("***That'll never fly! Let's set Default Value");
         return GameField.FIELD_SIZE;
+    }
+
+    private static int setGameOptionNumChecked(String enter) {
+
+        int numChecked;
+        if (3 < GameField.FIELD_SIZE) {
+            numChecked = GameField.NUM_CHECKED_4;
+        } else {
+            numChecked = GameField.NUM_CHECKED;
+        }
+
+//      If enter is NOT valid
+        if (!isEnterGameOptionValid(enter)) {
+            System.out.println("***That'll never fly! Let's set Default Value");
+            return numChecked;
+        }
+
+//      If enter is valid
+        if (3 < GameField.FIELD_SIZE && Integer.valueOf(enter) < 4) {
+            numChecked = GameField.NUM_CHECKED_4;
+            return numChecked;
+        } else {
+            numChecked = Integer.valueOf(enter);
+            return numChecked;
+        }
     }
 
     private static boolean isEnterGameOptionValid(String strEnter) {

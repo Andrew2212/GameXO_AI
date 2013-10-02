@@ -59,7 +59,7 @@ public class Minimax implements IBrainAI{
                 //do something
             }
 
-            System.out.println("Spare::findMove MOVE[X] = " + MOVE[X] + " findMove MOVE[Y] = " + MOVE[Y] + " signBot = " + signBot);
+            System.out.println("Minimax::findMove MOVE[X] = " + MOVE[X] + " findMove MOVE[Y] = " + MOVE[Y] + " signBot = " + signBot);
             getterLastEnemyMove.setMyOwnMove(MOVE[X], MOVE[Y], signBot);
         }
         return MOVE;
