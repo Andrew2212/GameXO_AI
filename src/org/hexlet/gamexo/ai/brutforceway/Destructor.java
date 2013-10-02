@@ -10,14 +10,12 @@ import java.util.*;
  */
 public class Destructor {
 
-    private Map weightMap;
-
-    private String stringResultOfCheck;
     private final Integer NEAR_MOVE = 1; // i.e. cell close to enemy move
     private final Integer NEAR_WIN_ENEMY_1;  // i.e. string XXXX_ without 1 sign
     private final Integer NEAR_WIN_ENEMY_2;  // i.e. string XXX__ without 2 sign
 
-
+    private Map weightMap;
+    private String stringResultOfCheck;
     /**
      * Temporary list of cell coordinate for checked line
      */
@@ -27,7 +25,6 @@ public class Destructor {
      * <br> by method 'setWeightToNearWin_1()' in order to reduce weight its cell into 'weightMap' after destructive move;</br>
      */
     private ArrayList<int[]> listCheckedCellOldWin_1;
-
     private ArrayList<int[]> listCellsNearLastEnemyMove = new ArrayList<int[]>();
 
     public Destructor() {
@@ -37,6 +34,8 @@ public class Destructor {
 
         weightMap = new HashMap<int[], Integer>();
     }
+
+//    ------------Public Methods-------------------------------
 
     /**
      * @param lastEnemyMoveX
@@ -59,7 +58,7 @@ public class Destructor {
 
         int[] destructiveMove;// It's 'move' to return
 
-        KeyCell keyMaxWeight = getMaxWeight(weightMap);
+        KeyCell keyMaxWeight = getMaxWeight(weightMap); //Coordinate of the cell with max 'weight'
         destructiveMove = new int[]{keyMaxWeight.getX(), keyMaxWeight.getY()};
         if (keyMaxWeight != null) {
             weightMap.remove(keyMaxWeight);
@@ -185,6 +184,8 @@ public class Destructor {
         listCheckedCell.trimToSize();
     }
 
+//    -------------Write Checked Value----------------------------------------
+
     /**
      * @param x coordinate X of checked cell
      * @param y coordinate Y of checked cell
@@ -259,7 +260,7 @@ public class Destructor {
      */
     private void setWeightToNearWin_2() {
         for (int j = 0; j < GameOptions.listStringNearWinEnemy_2.size(); j++) {
-            System.out.println("W2*** " + j + " strWin_2 = " + GameOptions.listStringNearWinEnemy_2.get(j));
+//            System.out.println("W2*** " + j + " strWin_2 = " + GameOptions.listStringNearWinEnemy_2.get(j));
 //            System.out.println("W2*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
 
 //            Check condition 'contains' for each string from 'listStringNearWinEnemy_2'

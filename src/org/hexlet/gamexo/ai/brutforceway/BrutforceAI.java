@@ -20,12 +20,14 @@ public class BrutforceAI implements IBrainAI {
     private char signBot;
 
     private GetterLastEnemyMove getterLastEnemyMove;
+    private Constructor constructor;
     private Destructor destructor;
     private boolean isFirstMoveDone = false;//  Crutch for giving signBot
 
     public BrutforceAI(int fieldSize, int numChecked) {
         getterLastEnemyMove = new GetterLastEnemyMove(fieldSize);
         GameOptions.initGameOptions(fieldSize, numChecked);
+        constructor = new Constructor();
         destructor = new Destructor();
     }
 
@@ -36,37 +38,44 @@ public class BrutforceAI implements IBrainAI {
     public int[] findMove(char[][] fieldMatrix) {
 
         this.fieldMatrix = fieldMatrix;
-        //Executes only one time
 
+        //Executes only one time
         if (!isFirstMoveDone) {
             signBot = GameField.getSignForNextMove();
             System.out.println("isFirstMoveDone*****************signBot = " + signBot);
             GameOptions.setSignBotAndSignEnemy(signBot);
             isFirstMoveDone = true;
         }
-
         //Get lastEnemyMove (if it exists)
         int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
 
         if (null != lastEnemyMove) {
-            // Get DESTRUCTIVE MOVE
+            // Get ConstructiveWIN MOVE
+            int[] moveConstructiveWin = constructor.getConstructiveWinMove();
+            if (moveConstructiveWin != null) {
+                System.out.println("BrutforceAI::findMove moveConstructiveWin[X] = " + moveConstructiveWin[X] + " moveConstructiveWin[Y] = " + moveConstructiveWin[Y] + " signBot = " + signBot);
+                // Here should be GAME OVER =)
+                return moveConstructiveWin;
+            }
+            // Get Destructive MOVE
             int[] moveDestructive = destructor.getDestructiveMove(lastEnemyMove[X], lastEnemyMove[Y]);
             if (moveDestructive != null) {
                 System.out.println("BrutforceAI::findMove moveDestructive[X] = " + moveDestructive[X] + " moveDestructive[Y] = " + moveDestructive[Y] + " signBot = " + signBot);
+                constructor.setLastMyOwnMove(moveDestructive);
                 getterLastEnemyMove.setMyOwnMove(moveDestructive[X], moveDestructive[Y], signBot);
                 return moveDestructive;
             }
         }
 
-        // Get CONSTRUCTIVE move
+        // Get Constructive move
         MOVE = getConstructiveMove();
-
         System.out.println("BrutforceAI::getConstructiveMove constructiveMove[X] = " + MOVE[X] + " constructiveMove[Y] = " + MOVE[Y]);
+        constructor.setLastMyOwnMove(MOVE);
         getterLastEnemyMove.setMyOwnMove(MOVE[X], MOVE[Y], signBot);
         return MOVE;
     }
 
-    public static char[][] getFieldMatrix(){
+    public static char[][] getFieldMatrix() {
         return fieldMatrix;
     }
 
