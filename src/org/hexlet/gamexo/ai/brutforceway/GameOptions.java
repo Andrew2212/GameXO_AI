@@ -160,7 +160,7 @@ public class GameOptions {
 
     private static String createStringWinner(String value) {
         String result = "";
-        for (int i = 0; i < numCheckedSigns - 1; i++) {
+        for (int i = 0; i <= numCheckedSigns - 1; i++) {
             result += value;
         }
         return result;

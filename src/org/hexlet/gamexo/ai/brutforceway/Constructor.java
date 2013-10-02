@@ -12,43 +12,52 @@ public class Constructor {
 
     private static final int X = 0;
     private static final int Y = 1;
+    private final Integer NEAR_MOVE = 1; // i.e. cell close to bot move
     private final Integer NEAR_WIN_BOT_1;  // i.e. string XXXX_ without 1 sign
-    private Map weightMap;
+    private final Integer SOME = 10;  // to 'weightMap' for nonWIN cell
+
     private String stringResultOfCheck;
     /**
      * Temporary list of cell coordinate for checked line
      */
     private ArrayList<int[]> listCheckedCell = new ArrayList<int[]>();
-
-    //    private int lastBotMoveX;
-//    private int lastBotMoveY;
+    /**
+     * All about handling my own LastMove is just copy-past from 'Destructor' =)
+     */
+    private ArrayList<int[]> listCellsNearLastEnemyMove = new ArrayList<int[]>();
     private int[] lastMyOwnMove = new int[2];
+    private int[] moveWin;
 
 
     public Constructor() {
         NEAR_WIN_BOT_1 = GameOptions.numCheckedSigns * 20;
-        weightMap = new HashMap<int[], Integer>();
     }
 
     //    --------------Public Methods-------------------
     public int[] getConstructiveWinMove() {
 
-        setWeightInRow(lastMyOwnMove[X], lastMyOwnMove[Y]);
-        setWeightInColumn(lastMyOwnMove[X], lastMyOwnMove[Y]);
-        setWeightInDiagonalCW(lastMyOwnMove[X], lastMyOwnMove[Y]);
-        setWeightInDiagonalCCW(lastMyOwnMove[X], lastMyOwnMove[Y]);
 
-        if (weightMap.isEmpty()) {
-            return null;
+        if (setWeightInRow(lastMyOwnMove[X], lastMyOwnMove[Y])) {
+            return moveWin;
+        }
+        if (setWeightInColumn(lastMyOwnMove[X], lastMyOwnMove[Y])) {
+            return moveWin;
+        }
+        if (setWeightInDiagonalCW(lastMyOwnMove[X], lastMyOwnMove[Y])) {
+            return moveWin;
+        }
+        if (setWeightInDiagonalCCW(lastMyOwnMove[X], lastMyOwnMove[Y])) {
+            return moveWin;
         }
 
-        int[] constructiveWinMove;// It's 'move' to return
-        KeyCell keyMaxWeight = getMaxWeight(weightMap); //Coordinate of the cell with max 'weight'
-        constructiveWinMove = new int[]{keyMaxWeight.getX(), keyMaxWeight.getY()};
-        return constructiveWinMove;
-//        return null;
+
+        return null;
     }
 
+    /**
+     * @param move last my own move
+     *             <br>It's called into Brutforce::findMove(...)</br>
+     */
     public void setLastMyOwnMove(int[] move) {
         lastMyOwnMove = move;
     }
@@ -79,11 +88,12 @@ public class Constructor {
     //    ---------------Check lines and set weight of the cells-------------------------
 
     /**
-     * @param cellX lastEnemyMove X
-     * @param cellY lastEnemyMove 'Y'
-     *              <br>Checks particular line and set 'weight' of cells into 'weightMap' by methods 'setWeightTo...' </br>
+     * @param cellX lastMyOwnMove X
+     * @param cellY lastMyOwnMove 'Y'
+     *              <br>Sets value (signs from fieldMatrix cells) into 'stringResultOfCheck'</br>
+     *              <br>Sets value (coordinate fieldMatrix cells) into 'listCheckedCell'</br>
      */
-    private void setWeightInRow(int cellX, int cellY) {
+    private boolean setWeightInRow(int cellX, int cellY) {
         stringResultOfCheck = GameOptions.signBot;
         listCheckedCell.add(new int[]{cellX, cellY});
 
@@ -91,18 +101,21 @@ public class Constructor {
             writeCheckedValue(cellX + i, cellY);
             writeCheckedValueInverse(cellX - i, cellY);
         }
-        setWeightToNearWin_1();
+//        We have  'stringResultOfCheck' and   'listCheckedCell' here
+//        And we have 'winCell' (if it exist) with WIN coordinate into 'listCheckedCell'
+//        And value 'GameOptions.DEFAULT_CELL_VALUE' into 'listCheckedCell'
+//        And we go to the 'setWeightToNearWin_1()' in order to check out - exist or no
 
-        listCheckedCell.clear();
-        listCheckedCell.trimToSize();
+        return setWeightToNearWin_1();
     }
 
     /**
-     * @param cellX lastEnemyMove X
-     * @param cellY lastEnemyMove 'Y'
-     *              <br>Checks particular line and set 'weight' of cells into 'weightMap' by methods 'setWeightTo...' </br>
+     * @param cellX lastMyOwnMove X
+     * @param cellY lastMyOwnMove 'Y'
+     *              <br>Sets value (signs from fieldMatrix cells) into 'stringResultOfCheck'</br>
+     *              <br>Sets value (coordinate fieldMatrix cells) into 'listCheckedCell'</br>
      */
-    private void setWeightInColumn(int cellX, int cellY) {
+    private boolean setWeightInColumn(int cellX, int cellY) {
         stringResultOfCheck = GameOptions.signBot;
         listCheckedCell.add(new int[]{cellX, cellY});
 
@@ -110,17 +123,21 @@ public class Constructor {
             writeCheckedValue(cellX, cellY + i);
             writeCheckedValueInverse(cellX, cellY - i);
         }
-        setWeightToNearWin_1();
-        listCheckedCell.clear();
-        listCheckedCell.trimToSize();
+//        We have  'stringResultOfCheck' and   'listCheckedCell' here
+//        And we have 'winCell' (if it exist) with WIN coordinate into 'listCheckedCell'
+//        And value 'GameOptions.DEFAULT_CELL_VALUE' into 'listCheckedCell'
+//        And we go to the 'setWeightToNearWin_1()' in order to check out - exist or no
+
+        return setWeightToNearWin_1();
     }
 
     /**
-     * @param cellX lastEnemyMove X
-     * @param cellY lastEnemyMove 'Y'
-     *              <br>Checks particular line and set 'weight' of cells into 'weightMap' by methods 'setWeightTo...' </br>
+     * @param cellX lastMyOwnMove X
+     * @param cellY lastMyOwnMove 'Y'
+     *              <br>Sets value (signs from fieldMatrix cells) into 'stringResultOfCheck'</br>
+     *              <br>Sets value (coordinate fieldMatrix cells) into 'listCheckedCell'</br>
      */
-    private void setWeightInDiagonalCW(int cellX, int cellY) {
+    private boolean setWeightInDiagonalCW(int cellX, int cellY) {
         stringResultOfCheck = GameOptions.signBot;
         listCheckedCell.add(new int[]{cellX, cellY});
 
@@ -128,17 +145,21 @@ public class Constructor {
             writeCheckedValue(cellX + i, cellY - i);
             writeCheckedValueInverse(cellX - i, cellY + i);
         }
-        setWeightToNearWin_1();
-        listCheckedCell.clear();
-        listCheckedCell.trimToSize();
+//        We have  'stringResultOfCheck' and   'listCheckedCell' here
+//        And we have 'winCell' (if it exist) with WIN coordinate into 'listCheckedCell'
+//        And value 'GameOptions.DEFAULT_CELL_VALUE' into 'listCheckedCell'
+//        And we go to the 'setWeightToNearWin_1()' in order to check out - exist or no
+
+        return setWeightToNearWin_1();
     }
 
     /**
-     * @param cellX lastEnemyMove X
-     * @param cellY lastEnemyMove 'Y'
-     *              <br>Checks particular line and set 'weight' of cells into 'weightMap' by methods 'setWeightTo...' </br>
+     * @param cellX lastMyOwnMove X
+     * @param cellY lastMyOwnMove 'Y'
+     *              <br>Sets value (signs from fieldMatrix cells) into 'stringResultOfCheck'</br>
+     *              <br>Sets value (coordinate fieldMatrix cells) into 'listCheckedCell'</br>
      */
-    private void setWeightInDiagonalCCW(int cellX, int cellY) {
+    private boolean setWeightInDiagonalCCW(int cellX, int cellY) {
 
         stringResultOfCheck = GameOptions.signBot;
         listCheckedCell.add(new int[]{cellX, cellY});
@@ -147,9 +168,72 @@ public class Constructor {
             writeCheckedValue(cellX + i, cellY + i);
             writeCheckedValueInverse(cellX - i, cellY - i);
         }
-        setWeightToNearWin_1();
+//        We have  'stringResultOfCheck' and   'listCheckedCell' here
+//        And we have 'winCell' (if it exist) with WIN coordinate into 'listCheckedCell'
+//        And value 'GameOptions.DEFAULT_CELL_VALUE' into 'listCheckedCell'
+//        And we go to the 'setWeightToNearWin_1()' in order to check out - exist or no
+
+        return setWeightToNearWin_1();
+    }
+
+    /**
+     * <br>Puts into weightMap 'value' (weight = NEAR_WIN_BOT_1) with 'key' (KeyCell keyWeight = new KeyCell(listCheckedCell.get(i)))</br>
+     * <br>ONLY if (stringResultOfCheck.contains(GameOptions.listStringNearWinBot_1.get(j) and cellValue into fieldMatrix == DEFAULT (cell is empty)</br>
+     * <br>Return 'true' if something had been set into 'weightMap'</br>
+     */
+    private boolean setWeightToNearWin_1() {
+        int[] cellWin = null;
+        for (int j = 0; j < GameOptions.listStringNearWinBot_1.size(); j++) {
+//            System.out.println("W1*** " + j + " strWin_1 = " + GameOptions.listStringNearWinEnemy_1.get(j));
+//            System.out.println("W2*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
+
+// Check condition 'contains' for each string from 'listStringNearWinBot_1'
+            if (stringResultOfCheck.contains(GameOptions.listStringNearWinBot_1.get(j))) {
+                for (int i = 0; i < stringResultOfCheck.length(); i++) {
+
+                    char cellValue = stringResultOfCheck.charAt(i);
+// Cell coordinate = 'listCheckedCell.get(i)' and cellValue = 'cellValue' from 'stringResultOfCheck.charAt(i)'
+                    if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
+// Set  signBot with '[listCheckedCell.get(i)[X]][listCheckedCell.get(i)[Y]]' into 'testFieldMatrix'
+                        char[][] testFieldMatrix = copyMatrix(BrutforceAI.getFieldMatrix());
+                        int[] move = listCheckedCell.get(i);
+                        testFieldMatrix[move[X]][move[Y]] = GameOptions.signBot.charAt(0);
+// And do 'checkToWin(listCheckedCell)'
+// If 'true' - moveWin is initialized into method checkToWin (moveWin = move;)
+                        if (checkToWin(move, listCheckedCell, testFieldMatrix)) {
+                            listCheckedCell.clear();
+                            listCheckedCell.trimToSize();
+
+                            return true;
+                        }
+                        testFieldMatrix[move[X]][move[Y]] = GameOptions.DEFAULT_CELL_VALUE;
+                    }
+                }
+            }
+        }
         listCheckedCell.clear();
         listCheckedCell.trimToSize();
+        return false;
+    }
+
+    /**
+     * @param listCheckedCell
+     * @param testFieldMatrix
+     * @return true if string value of fieldMatrix cells with coordinates from 'listCheckedCell' contains stringWinnerBot
+     */
+    private boolean checkToWin(int[] move, List<int[]> listCheckedCell, char[][] testFieldMatrix) {
+        String resultOfCheck = "";
+        for (int i = 0; i < listCheckedCell.size(); i++) {
+
+            resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[X]][listCheckedCell.get(i)[X]];
+        }
+//        System.out.println("Constructor::checkToWin::resultOfCheck = " + resultOfCheck);
+        if (resultOfCheck.contains(GameOptions.stringWinnerBot)) {
+            moveWin = move;
+//            System.out.println("Constructor::checkToWin::moveWin[X] = " + moveWin[X] + " moveWin[Y] = " + moveWin[Y]);
+            return true;
+        }
+        return false;
     }
 
     //    -------------------Write Checked Value--------------------------------------
@@ -182,40 +266,6 @@ public class Constructor {
         }
     }
 
-    //-------------------------Setup weight into checked cell---------------------------------------------------------
-
-    /**
-     * <br>Puts into weightMap 'value' (weight = NEAR_WIN_BOT_1) with 'key' (KeyCell keyWeight = new KeyCell(listCheckedCell.get(i)))</br>
-     * <br> if checked line of cells is 'line WIN without 1 sign' from 'listStringNearWinBot_1' and cellValue into fieldMatrix == DEFAULT (cell is empty)
-     * <br>Return current 'listCheckedCell' </br>
-     */
-    private List<int[]> setWeightToNearWin_1() {
-
-        for (int j = 0; j < GameOptions.listStringNearWinBot_1.size(); j++) {
-//            System.out.println("W1*** " + j + " strWin_1 = " + GameOptions.listStringNearWinEnemy_1.get(j));
-//            System.out.println("W2*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
-
-//            Check condition 'contains' for each string from 'listStringNearWinEnemy_1'
-            if (stringResultOfCheck.contains(GameOptions.listStringNearWinBot_1.get(j))) {
-                for (int i = 0; i < stringResultOfCheck.length(); i++) {
-
-                    KeyCell keyCell = new KeyCell(listCheckedCell.get(i));
-                    char cellValue = stringResultOfCheck.charAt(i);
-
-//                System.out.println("Constructor::setWeightToNearWin_1::cell[0] = " + keyCell.getX() + " cell[1] = " + keyCell.getX() + " cellValue = " + cellValue);
-                    if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
-                        weightMap.put(keyCell, NEAR_WIN_BOT_1);
-//                        System.out.println("1************Destructor::setWeightToNearWin_1::cell = " + keyCell.toString() + "cellNewWeight = " + NEAR_WIN_BOT_1);
-                    } else {
-//                      Remove from 'weightMap' if cell is not empty
-                        weightMap.remove(keyCell);
-                    }
-                }
-                return listCheckedCell;
-            }
-        }
-        return null;
-    }
 
     //    -------------------Util Methods-----------------------------
 
@@ -240,6 +290,17 @@ public class Constructor {
             return true;
         }
         return false;
+    }
+
+    public char[][] copyMatrix(char [][] fieldMatrix){
+        int size = fieldMatrix.length;
+        char[][] fieldMatrixCopy = new char[size][size];
+        for (int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                fieldMatrixCopy[i][j] = fieldMatrix[i][j];
+            }
+        }
+        return fieldMatrixCopy;
     }
 
 }

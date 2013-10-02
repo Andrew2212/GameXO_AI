@@ -25,6 +25,11 @@ public class Destructor {
      * <br> by method 'setWeightToNearWin_1()' in order to reduce weight its cell into 'weightMap' after destructive move;</br>
      */
     private ArrayList<int[]> listCheckedCellOldWin_1;
+    /**
+     * Temporary list of cell coordinate for checked line returned as 'new ArrayList<int[]>(listCheckedCell)'
+     * <br> by method 'setWeightToNearWin_2()' in order to reduce weight its cell into 'weightMap' after destructive move;</br>
+     */
+    private ArrayList<int[]> listCheckedCellOldWin_2;
     private ArrayList<int[]> listCellsNearLastEnemyMove = new ArrayList<int[]>();
 
     public Destructor() {
@@ -49,7 +54,7 @@ public class Destructor {
         setWeightInDiagonalCW(lastEnemyMoveX, lastEnemyMoveY);
         setWeightInDiagonalCCW(lastEnemyMoveX, lastEnemyMoveY);
 
-        controlWeightMap();
+//        controlWeightMap();
 
         if (weightMap.isEmpty()) {
             setWeightToCellNearLastEnemyMove();
@@ -64,7 +69,8 @@ public class Destructor {
             weightMap.remove(keyMaxWeight);
         }
 
-        reduceWeightOldWinCells();
+        reduceWeightOldWin_1Cells();
+//        reduceWeightOldWin_2Cells(); //Check out whether it is necessary(???)
         setWeightToCellNearLastEnemyMove();
         return destructiveMove;
 
@@ -94,10 +100,24 @@ public class Destructor {
         return keyMaxWeight;
     }
 
+//    -------------------Reduce cell weight after destructive move-------------------------
+
     /**
      * Reduces weight of cells that had been into 'lineWin_1' before our last move
      */
-    private void reduceWeightOldWinCells() {
+    private void reduceWeightOldWin_1Cells() {
+        if (listCheckedCellOldWin_1 != null) {
+            for (int i = 0; i < listCheckedCellOldWin_1.size(); i++) {
+                KeyCell keyMaxWeight = new KeyCell(listCheckedCellOldWin_1.get(i));
+                weightMap.put(keyMaxWeight, NEAR_MOVE);
+            }
+        }
+    }
+
+    /**
+     * Reduces weight of cells that had been into 'lineWin_1' before our last move
+     */
+    private void reduceWeightOldWin_2Cells() {
         if (listCheckedCellOldWin_1 != null) {
             for (int i = 0; i < listCheckedCellOldWin_1.size(); i++) {
                 KeyCell keyMaxWeight = new KeyCell(listCheckedCellOldWin_1.get(i));
@@ -258,7 +278,7 @@ public class Destructor {
      * <br>Puts into weightMap 'value' (weight = NEAR_WIN_ENEMY_2) with 'key' (KeyCell keyWeight = new KeyCell(listCheckedCell.get(i)))</br>
      * <br> if checked line of cells close to 'WIN without 2 signs' from 'listStringNearWinEnemy_2' and cellValue into fieldMatrix == DEFAULT
      */
-    private void setWeightToNearWin_2() {
+    private List<int[]> setWeightToNearWin_2() {
         for (int j = 0; j < GameOptions.listStringNearWinEnemy_2.size(); j++) {
 //            System.out.println("W2*** " + j + " strWin_2 = " + GameOptions.listStringNearWinEnemy_2.get(j));
 //            System.out.println("W2*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
@@ -283,8 +303,11 @@ public class Destructor {
                         weightMap.remove(keyCell);
                     }
                 }
+                listCheckedCellOldWin_2 = new ArrayList<int[]>(listCheckedCell);
+                return listCheckedCellOldWin_2;
             }
         }
+        return null;
     }
 
 //    -----------------  Handling cells that are close to LastEnemyMove------------------------------
@@ -400,15 +423,8 @@ public class Destructor {
             KeyCell keyCell = (KeyCell) iterator.next();
             Integer value = (Integer) weightMap.get(keyCell);
 
-            System.out.println("weightMap = ");
+            System.out.println("Destructor::weightMap = ");
             System.out.println("keyCell = " + keyCell.toString() + "  value = " + value);
-        }
-    }
-
-    private void controlSortedMap(List list) {
-
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println("value = " + list.get(i));
         }
     }
 

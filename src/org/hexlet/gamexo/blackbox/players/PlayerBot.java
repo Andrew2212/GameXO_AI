@@ -69,7 +69,7 @@ public class PlayerBot implements IPlayer {
 //        position[Y] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
 
         position = iBrainAI.findMove(GameField.getFieldMatrix());
-        System.out.println("PlayerBot::getCoord::position[X] = " + position[X] + ", position[Y]" + position[Y]);
+        System.out.println("PlayerBot::getCoordinate::position[X] = " + position[X] + ", position[Y] = " + position[Y]);
         return position;
     }
 

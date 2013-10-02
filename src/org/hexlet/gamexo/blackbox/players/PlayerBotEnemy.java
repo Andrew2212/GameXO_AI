@@ -76,7 +76,7 @@ public class PlayerBotEnemy implements IPlayer {
 //        position[Y] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
 
         position = iBrainAI.findMove(GameField.getFieldMatrix());
-
+        System.out.println("PlayerBotEnemy::getCoordinate::position[X] = " + position[X] + ", position[Y] = " + position[Y]);
         return position;
     }
 
