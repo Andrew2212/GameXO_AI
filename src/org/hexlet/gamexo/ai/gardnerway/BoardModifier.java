@@ -10,7 +10,12 @@ public class BoardModifier {
     private final static int X = 0;
     private final static int Y = 1;
 
-    // копирует доску(поле)
+
+    /**
+     * Makes copy of current game board.
+     * @param board game board we want to copy.
+     * @return copy of game board.
+     */
     public static char[][] copyBoard(char[][] board) {
         char[][] cBoard = new char[board.length][board[X].length];
         for (int i = 0; i < board.length; i++) {
@@ -35,6 +40,19 @@ public class BoardModifier {
         }
         return rBoard;
     }
+
+	/**
+	 * Rotates index of board cell.
+	 * @param index of cell which we want to rotate.
+	 * @param size of current board;
+	 * @param degree we need to rotate;
+	 * @return  rotated index of cell.
+	 */
+	public static int rotateHisIndex(int index, int size, int degree){
+		int[] xy = getCoordinateFromIndex(index, size);
+		int[] rotatedXY = rotateXY(xy[X], xy[Y], size, degree);
+		return getIndexOfCell(rotatedXY[X], rotatedXY[Y], size);
+	}
 
     // поворачивает координату на заданный угол
     public static int[] rotateXY(int x, int y, int size, int degree) {
@@ -61,6 +79,32 @@ public class BoardModifier {
                 xy[Y] = (size - 1) - y;
         }
         return xy;
+    }
+
+    /**
+     * Переводим координаты в порядковый номер ячейки
+     * массива считая слева сверху.
+     * @param x  координата по Х
+     * @param y  координата по У
+     * @return порядковый номер ячейки массива.
+     */
+    public static Integer getIndexOfCell(Integer x, Integer y, Integer boardSize) {
+        Integer number;
+        number = y * boardSize + x;
+        return number;
+    }
+
+    /**
+     * Переводим порядковый номер ячейки массива в
+     * координаты этой ячейки по Х и У.
+     * @param number порядковый номер ячейки
+     * @return массив координат
+     */
+    public static int[] getCoordinateFromIndex(int number, int boardSize) {
+        int[] num = new int[2];
+        num[X] = number % boardSize;
+        num[Y] = number / boardSize;
+        return num;
     }
 
 }

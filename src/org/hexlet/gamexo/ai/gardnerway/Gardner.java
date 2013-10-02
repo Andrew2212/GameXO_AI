@@ -115,7 +115,7 @@ public class Gardner implements IBrainAI{
 
         if (!firstMove){
             gameBoard[x][y] = enemyChip;
-            history.add(getIndexOfCell(x, y));
+            history.add(BoardModifier.getIndexOfCell(x, y, gameBoard.length));
 	        if (isWin(x, y, enemyChip)) {
 		    /*
 		    Изврат с возвратом победы,
@@ -130,7 +130,8 @@ public class Gardner implements IBrainAI{
                 /*
                 Checks last AI move. Maybe it lead to win.
                 */
-                int[] checkMyMoves = getCoordinateFromIndex(history.get(history.size() - 2));
+                int[] checkMyMoves = BoardModifier.getCoordinateFromIndex
+                                    (history.get(history.size() - 2), gameBoard.length);
                 if (isWin(checkMyMoves[X], checkMyMoves[Y], myChip)) {
                     MOVE[X] = 25;
                     MOVE[Y] = 25;
@@ -159,7 +160,7 @@ public class Gardner implements IBrainAI{
 
 
 	    gameBoard[MOVE[X]][MOVE[Y]] = myChip;
-        history.add(getIndexOfCell(MOVE[X],MOVE[Y]));
+        history.add(BoardModifier.getIndexOfCell(MOVE[X],MOVE[Y], gameBoard.length));
         return MOVE;
     }
 
@@ -167,7 +168,7 @@ public class Gardner implements IBrainAI{
      * Сверяет новую матрицу доски с предыдущей матрицей и
      * определяет координаты последнего хода. Так же
      * ИИ вычисляет очередь своих ходов и оперирует своим
-     * внутренним внутренним порядком фишек в зависимости от
+     * внутренним порядком фишек в зависимости от
      * полученного результата.
      * @param fieldMatrix поле, которое пришло из ядра
      */
@@ -217,7 +218,10 @@ public class Gardner implements IBrainAI{
         for (int y = 0; y < fieldMatrix.length; y++) {
             for (int x = 0; x < fieldMatrix[1].length; x++) {
                 if (fieldMatrix[x][y] != oldFieldMatrix[x][y]) {
-                    int num = getIndexOfCell(x, y);
+                    int num = BoardModifier.getIndexOfCell(x, y, gameBoard.length);
+                    /*
+                    Checks if current cell is equal to previous move done by AI
+                     */
                     int historyNum = history.get(history.size() - 1);
                     if (num != historyNum) {
                         inX = x;
@@ -265,7 +269,8 @@ public class Gardner implements IBrainAI{
 				Преобразование порядкового номера клетки
 				в ее координаты.
 				 */
-                int[] coordinate = getCoordinateFromIndex(integers);
+                int[] coordinate = BoardModifier.getCoordinateFromIndex
+                                                (integers, gameBoard.length);
                 outX = coordinate[X];
                 outY = coordinate[Y];
             }
@@ -331,7 +336,7 @@ public class Gardner implements IBrainAI{
 			         клетки в Set, который получаем из координат.
 			         */
                     if (gameBoard[x][y] == EMPTY) {
-                        Integer number = getIndexOfCell(x, y);
+                        Integer number = BoardModifier.getIndexOfCell(x, y, gameBoard.length);
                         emptySell.add(number); 	         //делаем преобразование
                     }
 		        /*
@@ -364,34 +369,7 @@ public class Gardner implements IBrainAI{
             emptySum.addAll(emptySell);
             emptySell.clear();
         }
-//	    emptySum.addAll(emptySell);
         return emptySum;
-    }
-
-    /**
-     * Переводим координаты в порядковый номер ячейки
-     * массива считая слева сверху.
-     * @param x  координата по Х
-     * @param y  координата по У
-     * @return порядковый номер ячейки массива.
-     */
-    public Integer getIndexOfCell(Integer x, Integer y) {
-        Integer number;
-        number = y * gameBoard.length + x;
-        return number;
-    }
-
-    /**
-     * Переводим порядковый номер ячейки массива в
-     * координаты этой ячейки по Х и У.
-     * @param number порядковый номер ячейки
-     * @return массив координат
-     */
-    public int[] getCoordinateFromIndex(int number) {
-        int[] num = new int[2];
-        num[X] = number % gameBoard.length;
-        num[Y] = number / gameBoard.length;
-        return num;
     }
 
     public class CellIsNotEmptyException extends Exception{
