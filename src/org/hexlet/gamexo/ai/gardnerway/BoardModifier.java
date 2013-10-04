@@ -5,7 +5,7 @@ package org.hexlet.gamexo.ai.gardnerway;
  * Date: 15.09.13
  * Time: 0:42
  */
-public class BoardModifier {
+class BoardModifier {
 
     private final static int X = 0;
     private final static int Y = 1;
@@ -16,7 +16,7 @@ public class BoardModifier {
      * @param board game board we want to copy.
      * @return copy of game board.
      */
-    public static char[][] copyBoard(char[][] board) {
+    static char[][] copyBoard(char[][] board) {
         char[][] cBoard = new char[board.length][board[X].length];
         for (int i = 0; i < board.length; i++) {
             System.arraycopy(board[i], 0, cBoard[i], 0, board[i].length);
@@ -26,7 +26,7 @@ public class BoardModifier {
 
 
     // поворачивает доску на заданный угол
-    public static char[][] rotate(char[][] board, int degrees) {
+    static char[][] rotate(char[][] board, int degrees) {
         char[][] rBoard = new char[board.length][board[X].length];
         for (int y = 0; y < board.length; y++) {
             for (int x = 0; x < board.length; x++) {
@@ -48,14 +48,14 @@ public class BoardModifier {
 	 * @param degree we need to rotate;
 	 * @return  rotated index of cell.
 	 */
-	public static int rotateHisIndex(int index, int size, int degree){
+	static int rotateHisIndex(int index, int size, int degree){
 		int[] xy = getCoordinateFromIndex(index, size);
 		int[] rotatedXY = rotateXY(xy[X], xy[Y], size, degree);
 		return getIndexOfCell(rotatedXY[X], rotatedXY[Y], size);
 	}
 
     // поворачивает координату на заданный угол
-    public static int[] rotateXY(int x, int y, int size, int degree) {
+    static int[] rotateXY(int x, int y, int size, int degree) {
         int[] xy = new int[2];
         switch (degree) {
             case 90  :
@@ -70,11 +70,11 @@ public class BoardModifier {
                 xy[X] = (size - 1) - y;
                 xy[Y] = x;
                 break;
-            case 11 :
+            case 11 :                    //flip around axis Y
                 xy[X] = (size - 1) - x;
                 xy[Y] = y;
                 break;
-            case 22 :
+            case 22 :                    //flip around axis X
                 xy[X] = x;
                 xy[Y] = (size - 1) - y;
         }
@@ -88,7 +88,7 @@ public class BoardModifier {
      * @param y  координата по У
      * @return порядковый номер ячейки массива.
      */
-    public static Integer getIndexOfCell(Integer x, Integer y, Integer boardSize) {
+    static Integer getIndexOfCell(Integer x, Integer y, Integer boardSize) {
         Integer number;
         number = y * boardSize + x;
         return number;
@@ -100,7 +100,7 @@ public class BoardModifier {
      * @param number порядковый номер ячейки
      * @return массив координат
      */
-    public static int[] getCoordinateFromIndex(int number, int boardSize) {
+    static int[] getCoordinateFromIndex(int number, int boardSize) {
         int[] num = new int[2];
         num[X] = number % boardSize;
         num[Y] = number / boardSize;

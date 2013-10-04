@@ -1,9 +1,6 @@
 package org.hexlet.gamexo.ai.gardnerway;
 
-import java.io.File;
-import java.io.RandomAccessFile;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author  KOlegA
@@ -12,32 +9,61 @@ import java.io.IOException;
  */
 public class FileMaster {
 
-    private RandomAccessFile file;
+    private File file;
+    private RandomAccessFile fileWriter;
+	private FileWriter writer;
 
-    public FileMaster(String filename, String position) {
-        filename += ".xo";
+    public FileMaster(String baseDir, String filename) {
+
+        File f1 = new File("src/org/hexlet/gamexo/ai/gardnerway/bin/" + baseDir);
+	    file = new File(f1, filename);
+	    f1.mkdir();
+	    System.out.println(file.getPath());
 	    try{
-	    file = new RandomAccessFile(filename, "rw");
-        } catch (FileNotFoundException ex){
-	        System.out.println("File " + filename + " not found");
-        }
+	    fileWriter = new RandomAccessFile(file, "rw");
+	    } catch (FileNotFoundException e){}
+    }
 
 
+    public void writeFile(String position)  {
 	    try {
-		    file.seek(file.getFilePointer());
-		    file.writeChars(position);
-	    }catch (IOException ex) {
+
+		    fileWriter.seek(file.length());
+		    fileWriter.writeBytes(position + '\n');
+//		    fileWriter.close();
+
+	    } catch (FileNotFoundException ex) {
+		    System.out.println("File " + file.getName() + " not found");
+
+	    } catch (IOException e) {
 		    System.out.println("IOException");
 	    }
-
     }
 
+    public void readFile() {
 
-    public static void writeFile(){
-
+	    try {
+		    String s = fileWriter.readLine();
+		    System.out.println(s);
+	    } catch (IOException e){
+		    System.out.println("Read File error");
+	    }
     }
 
-    public static void readFile(){
+	public void readFromScratch(){
+		try{
+			fileWriter.seek(0);
+		}catch (IOException e){
+			System.out.println("Set reading at 0 error");
+		}
+	}
 
-    }
+	public void closeReading() {
+
+		try {
+			fileWriter.close();
+		} catch (IOException e) {
+			System.out.println("Close error");
+		}
+	}
 }

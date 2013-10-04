@@ -3,7 +3,9 @@ package org.hexlet.gamexo.ai.gardnerway;
 import org.hexlet.gamexo.ai.IBrainAI;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.TreeSet;
 import java.lang.Exception;
+
 
 /**
  * Date: 03.09.13
@@ -25,30 +27,34 @@ public class Gardner implements IBrainAI{
 
     private char[][] gameBoard;
     private char[][] oldFieldMatrix;
-    private char[][] rotateBoard;
     private ArrayList<Integer> history;
-    private boolean isFirst;
     private char enemyChip, myChip;
-    private final char EMPTY = '_';
-    private int numInTheRow;
     private int outX, outY;
     private int inX, inY;
 	private boolean firstMove = true;
 
     private final int[] MOVE = new int[2];
+	private final int BOARD_SIZE;
+    private final int NUM_IN_THE_ROW;
+	private final char EMPTY = '_';
+	private final String FILE_NAME;
+	private final String BASE_DIR;
     private static final int X = 0;
     private static final int Y = 1;
 
 
-    public Gardner(int fieldSize, int numChecked) {
+    public Gardner(int fieldSize, int numInTheRow) {
         gameBoard = new char[fieldSize][fieldSize];
         for (int y = 0; y < fieldSize; y++) {
             for (int x = 0; x < fieldSize; x++) {
                 gameBoard[x][y] = EMPTY;
             }
         }
-        this.numInTheRow = numChecked;
+        NUM_IN_THE_ROW = numInTheRow;
         history = new ArrayList<Integer>();
+	    BOARD_SIZE = fieldSize;
+	    FILE_NAME = "(" + BOARD_SIZE + "x" + BOARD_SIZE + ")[" + NUM_IN_THE_ROW + "].xog";
+	    BASE_DIR = BOARD_SIZE + " x " + BOARD_SIZE + " [" + NUM_IN_THE_ROW + "]/";
     }
 
     /*
@@ -61,7 +67,7 @@ public class Gardner implements IBrainAI{
                    int numInTheRow, boolean isFirst) {
 
         gameBoard = new char[columnAmount][rowAmount];
-        this.numInTheRow = numInTheRow;
+        NUM_IN_THE_ROW = numInTheRow;
         /*
         ****Maybe it needs to get sign from rest part of 'Game' ? ****
         *
@@ -71,6 +77,9 @@ public class Gardner implements IBrainAI{
         */
         myChip = isFirst ? 'X' : 'O';
         enemyChip = isFirst ? 'O' : 'X';
+	    BOARD_SIZE = columnAmount;
+        FILE_NAME = "(" + BOARD_SIZE + "x" + BOARD_SIZE + ")[" + NUM_IN_THE_ROW + "].xog";
+	    BASE_DIR = BOARD_SIZE + " x " + BOARD_SIZE + " [" + NUM_IN_THE_ROW + "]/";
     }
 
     /**
@@ -113,25 +122,31 @@ public class Gardner implements IBrainAI{
         outX = 25;              // обнуляем потенциально выигрышную клетку
         outY = 25;
 
-        if (!firstMove){
+        if (firstMove){
+	        outX = BOARD_SIZE / 2;
+	        outY = BOARD_SIZE / 2;
+        } else {
             gameBoard[x][y] = enemyChip;
-            history.add(BoardModifier.getIndexOfCell(x, y, gameBoard.length));
+            history.add(BoardModifier.getIndexOfCell(x, y, BOARD_SIZE));
 	        if (isWin(x, y, enemyChip)) {
 		    /*
 		    Изврат с возвратом победы,
 		    надо будет прописать исключение победы
 		     */
-		        MOVE[X] = 25;
-		        MOVE[Y] = 25;
-		        return MOVE;
+//		        MOVE[X] = 25;
+//		        MOVE[Y] = 25;
+//		        return MOVE;
 //		    throw new Exception("Win");
+//                String sortedHistory = sortHistory(history);
+//                FileMaster file = new FileMaster(FILE_NAME);
+//                file.writeFile(sortedHistory);
 	        }
-            if (history.size() > numInTheRow) {
+            if (history.size() > NUM_IN_THE_ROW) {
                 /*
                 Checks last AI move. Maybe it lead to win.
                 */
                 int[] checkMyMoves = BoardModifier.getCoordinateFromIndex
-                                    (history.get(history.size() - 2), gameBoard.length);
+                                    (history.get(history.size() - 2), BOARD_SIZE);
                 if (isWin(checkMyMoves[X], checkMyMoves[Y], myChip)) {
                     MOVE[X] = 25;
                     MOVE[Y] = 25;
@@ -140,6 +155,10 @@ public class Gardner implements IBrainAI{
                 }
             }
         }
+
+	    String sortedHistory = sortHistory(history);
+	    FileMaster file = new FileMaster(BASE_DIR, history.size() + "." + FILE_NAME);
+//	    file.writeFile(sortedHistory);
 
         firstMove = false;
 
@@ -153,14 +172,15 @@ public class Gardner implements IBrainAI{
 			    MOVE[X] = outX;
 			    MOVE[Y] = outY;
 		    } else {
-                MOVE[X] = (int) Math.floor(Math.random() * gameBoard.length);
-                MOVE[Y] = (int) Math.floor(Math.random() * gameBoard.length);
+                MOVE[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
+                MOVE[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
             }
 	    } while (!isCellEmpty(MOVE[X], MOVE[Y]));     //мы должны походить в пустую клетку
 
-
+	    comparePos(file);
+//	    System.out.println(sortHistory(history));
 	    gameBoard[MOVE[X]][MOVE[Y]] = myChip;
-        history.add(BoardModifier.getIndexOfCell(MOVE[X],MOVE[Y], gameBoard.length));
+        history.add(BoardModifier.getIndexOfCell(MOVE[X],MOVE[Y], BOARD_SIZE));
         return MOVE;
     }
 
@@ -177,19 +197,23 @@ public class Gardner implements IBrainAI{
         /*
         Very first move done by AI
         It recognise hwo is doing first move.
+        First player gets sign X and second gets O.
          */
         if (firstMove) {
             oldFieldMatrix = BoardModifier.copyBoard(fieldMatrix);
-            for (int y = 0; y < fieldMatrix.length; y++) {
-                for (int x = 0; x < fieldMatrix[1].length; x++) {
+            for (int y = 0; y < BOARD_SIZE; y++) {
+                for (int x = 0; x < BOARD_SIZE; x++) {
                     if ((x == 0) && (y == 0)) continue;
+                    /*
+                    In this case AI moves second;
+                     */
                     if (fieldMatrix[0][0] != fieldMatrix[x][y]) {
                         /*
                         Move might be done in 0-0 sell.
                          */
                         if (fieldMatrix[0][0] !=
-                                fieldMatrix[fieldMatrix.length - 1]
-                                        [fieldMatrix.length - 1]) {
+                                fieldMatrix[BOARD_SIZE - 1]
+                                           [BOARD_SIZE - 1]) {
                             inX = 0;
                             inY = 0;
                         } else {
@@ -198,27 +222,28 @@ public class Gardner implements IBrainAI{
                         }
                         myChip = 'O';
                         enemyChip = 'X';
-                        isFirst = false;
                         firstMove = false;
                         return;
                     }
                 }
             }
 
+            /*
+            If all cells was empty AI moves first
+             */
             myChip = 'X';
             enemyChip = 'O';
             inX = 100;
             inY = 100;
-            isFirst = true;
             return;
         }
         /*
         Gets last move coordinates from incoming game field.
          */
-        for (int y = 0; y < fieldMatrix.length; y++) {
-            for (int x = 0; x < fieldMatrix[1].length; x++) {
+        for (int y = 0; y < BOARD_SIZE; y++) {
+            for (int x = 0; x < BOARD_SIZE; x++) {
                 if (fieldMatrix[x][y] != oldFieldMatrix[x][y]) {
-                    int num = BoardModifier.getIndexOfCell(x, y, gameBoard.length);
+                    int num = BoardModifier.getIndexOfCell(x, y, BOARD_SIZE);
                     /*
                     Checks if current cell is equal to previous move done by AI
                      */
@@ -235,8 +260,7 @@ public class Gardner implements IBrainAI{
         // Has no new moves. Or move was done in occupied cell.
     }
 
-    // Проверяет - пуста ли ячейка в которую хочет походить противник
-//    **************How do we know where he wants to go?******************************************
+    // Проверяет - пуста ли ячейка в которую хочет походить ИИ
     public boolean isCellEmpty(int x,int y){
         return gameBoard[x][y] == EMPTY;
     }
@@ -271,7 +295,7 @@ public class Gardner implements IBrainAI{
 				в ее координаты.
 				 */
                 int[] coordinate = BoardModifier.getCoordinateFromIndex
-                                                (integers, gameBoard.length);
+                                                (integers, BOARD_SIZE);
                 outX = coordinate[X];
                 outY = coordinate[Y];
             }
@@ -281,7 +305,7 @@ public class Gardner implements IBrainAI{
 
     /**
      * Выполняется проверка победы при заполненнии указанной фишкой
-     * победного ряда, состоящего из numInTheRow количества фишек подряд.
+     * победного ряда, состоящего из NUM_IN_THE_ROW количества фишек подряд.
      * При проверке осуществляется перебор полей на длину победного ряда
      * слева-направо, сверху-вниз, по диагонали слева-вниз и
      * по диагонали слева-вверх. При этом начальная клетка для проверки
@@ -303,16 +327,16 @@ public class Gardner implements IBrainAI{
         HashSet<Integer> emptySum = new HashSet<Integer>();    //сборщик пустых полей от всех проходов
 
         start:
-        for (int i = 0; i < numInTheRow; i++) {
-            for (int k = 0; k < numInTheRow; k++) {
-                x = xx - (numInTheRow - 1) + i + k;
+        for (int i = 0; i < NUM_IN_THE_ROW; i++) {
+            for (int k = 0; k < NUM_IN_THE_ROW; k++) {
+                x = xx - (NUM_IN_THE_ROW - 1) + i + k;
                 switch (direction) {      // переключатель направлений
                     case 0:               // проверка по горизонтали слева
                         y = yy;
                         break;
                     case 1:               // проверка по вертикали сверху
                         x = xx;
-                        y = yy - (numInTheRow - 1) + i + k;
+                        y = yy - (NUM_IN_THE_ROW - 1) + i + k;
                         break;
                     case 2:               // проверка по диагонали слева-сверху
                         y = x + (yy - xx);
@@ -337,7 +361,7 @@ public class Gardner implements IBrainAI{
 			         клетки в Set, который получаем из координат.
 			         */
                     if (gameBoard[x][y] == EMPTY) {
-                        Integer number = BoardModifier.getIndexOfCell(x, y, gameBoard.length);
+                        Integer number = BoardModifier.getIndexOfCell(x, y, BOARD_SIZE);
                         emptySell.add(number); 	         //делаем преобразование
                     }
 		        /*
@@ -373,6 +397,40 @@ public class Gardner implements IBrainAI{
         return emptySum;
     }
 
+    /**
+     * String position got from history and sorted with TreeSet.
+     * It need for write history in the base,and make comparison with
+     * positions already stored in the base.
+     * @param history got from moves.
+     * @return position in String
+     */
+    public String sortHistory(ArrayList<Integer> history){
+        TreeSet<String> historySet = new TreeSet<String>();
+        String sortedHistory = "";
+        String cell;
+        for (int i = 0; i < history.size(); i++) {
+            if(i % 2 == 0){
+               cell = "X_";
+            } else {
+               cell = "O_";
+            }
+            historySet.add(cell + history.get(i) + " ");
+        }
+
+        for (String s : historySet) {
+            sortedHistory += s;
+        }
+
+        return sortedHistory;
+    }
+
+	public void comparePos(FileMaster file){
+		file.readFromScratch();
+		file.readFile();
+		file.readFile();
+		file.readFile();
+	}
+
     public class CellIsNotEmptyException extends Exception{
 
         public CellIsNotEmptyException(String ex) {
@@ -380,6 +438,8 @@ public class Gardner implements IBrainAI{
         }
 
     }
+
+
 
 
 }
