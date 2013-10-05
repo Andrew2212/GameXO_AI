@@ -1,9 +1,8 @@
 package org.hexlet.gamexo.ai.gardnerway;
 
 import org.hexlet.gamexo.ai.IBrainAI;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.TreeSet;
+
+import java.util.*;
 import java.lang.Exception;
 
 
@@ -33,7 +32,7 @@ public class Gardner implements IBrainAI{
     private int inX, inY;
 	private boolean firstMove = true;
 
-    private final int[] MOVE = new int[2];
+    private int[] move = new int[2];
 	private final int BOARD_SIZE;
     private final int NUM_IN_THE_ROW;
 	private final char EMPTY = '_';
@@ -97,7 +96,7 @@ public class Gardner implements IBrainAI{
         try {
             return findMove(inX, inY);
         } catch (CellIsNotEmptyException ex){
-            return  MOVE;    // в случае исключения  пока что получится падение программы
+            return move;    // в случае исключения  пока что получится падение программы
         }
     }
 
@@ -119,69 +118,126 @@ public class Gardner implements IBrainAI{
 //            String ex = x + " " + y;
 //            throw new  CellIsNotEmptyException(ex);
 //        }
-        outX = 25;              // обнуляем потенциально выигрышную клетку
-        outY = 25;
+        move[X] = 25;              // обнуляем потенциально выигрышную клетку
+        move[Y] = 25;
 
         if (firstMove){
-	        outX = BOARD_SIZE / 2;
-	        outY = BOARD_SIZE / 2;
+            move[X] = BOARD_SIZE / 2;
+            move[Y] = BOARD_SIZE / 2;
         } else {
             gameBoard[x][y] = enemyChip;
-            history.add(BoardModifier.getIndexOfCell(x, y, BOARD_SIZE));
-	        if (isWin(x, y, enemyChip)) {
-		    /*
-		    Изврат с возвратом победы,
-		    надо будет прописать исключение победы
-		     */
-//		        MOVE[X] = 25;
-//		        MOVE[Y] = 25;
-//		        return MOVE;
-//		    throw new Exception("Win");
-//                String sortedHistory = sortHistory(history);
-//                FileMaster file = new FileMaster(FILE_NAME);
-//                file.writeFile(sortedHistory);
-	        }
+
             if (history.size() > NUM_IN_THE_ROW) {
                 /*
                 Checks last AI move. Maybe it lead to win.
                 */
-                int[] checkMyMoves = BoardModifier.getCoordinateFromIndex
-                                    (history.get(history.size() - 2), BOARD_SIZE);
-                if (isWin(checkMyMoves[X], checkMyMoves[Y], myChip)) {
-                    MOVE[X] = 25;
-                    MOVE[Y] = 25;
-                    return MOVE;
+                int[] myMove = BoardModifier.getCoordinateFromIndex
+                        (history.get(history.size() - 1), BOARD_SIZE);
+                if (isWin(myMove[X], myMove[Y], myChip)) {
 //		    throw new Exception("Win");
+                    System.out.println("I win");
                 }
+            }
+
+            if (move[X] == 25 || move[Y] == 25) {
+                if (isWin(x, y, enemyChip)) {
+                    String sortedHistory = sortHistory(history);
+                    FileMaster file = new FileMaster(BASE_DIR, history.size() + "." + FILE_NAME);
+                    file.writeFile(sortedHistory);
+                    System.out.println(sortedHistory);
+                }
+                if (move[X] != 25 || move[Y] != 25) {
+                    ArrayList<Integer> temp = new ArrayList<Integer>();
+                    for (Integer i : history) {
+                        temp.add(i);
+                    }
+                    temp.add(BoardModifier.getIndexOfCell(x, y, BOARD_SIZE));
+                    temp.add(BoardModifier.getIndexOfCell(move[X], move[Y], BOARD_SIZE));
+                    FileMaster fileTemp = new FileMaster(BASE_DIR, temp.size() + "." + FILE_NAME);
+                    if (comparePos(fileTemp, temp)){
+                        for (int i = 0; i < 4; i++) {
+                            temp.remove(temp.size() - 1);
+                        }
+                        String loosingWay = sortHistory(temp);
+                        FileMaster loosingFile = new FileMaster(BASE_DIR, temp.size() + "." + FILE_NAME);
+                        loosingFile.writeFile(loosingWay);
+                    }
+//                    return move;
+                }
+
             }
         }
 
-	    String sortedHistory = sortHistory(history);
-	    FileMaster file = new FileMaster(BASE_DIR, history.size() + "." + FILE_NAME);
-//	    file.writeFile(sortedHistory);
+
 
         firstMove = false;
 
-	    do {
-			    /*
+        history.add(BoardModifier.getIndexOfCell(x, y, BOARD_SIZE));    // adds enemy move
+
+        while (true){
+            ArrayList<Integer> tempHistory = new ArrayList<Integer>(history.size());
+
+            for (Integer i : history) {
+                tempHistory.add(i);
+            }
+
+            ArrayList<Integer> deniedCells = new ArrayList<Integer>();
+
+            start:
+            while (true){
+                /*
 			    Мозг червяка - если ИИ видит, что следующим
 			    ходом противник выиграет, то ставит в это место
 			    свою фишку.
 			     */
-		    if (outX != 25 && outY != 25){
-			    MOVE[X] = outX;
-			    MOVE[Y] = outY;
-		    } else {
-                MOVE[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
-                MOVE[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
-            }
-	    } while (!isCellEmpty(MOVE[X], MOVE[Y]));     //мы должны походить в пустую клетку
+                if (move[X] == 25 || move[Y] == 25) {
+                    move[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
+                    move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
+                }
 
-	    comparePos(file);
-//	    System.out.println(sortHistory(history));
-	    gameBoard[MOVE[X]][MOVE[Y]] = myChip;
-        history.add(BoardModifier.getIndexOfCell(MOVE[X],MOVE[Y], BOARD_SIZE));
-        return MOVE;
+                for (Integer i : deniedCells) {
+                    if (move == BoardModifier.getCoordinateFromIndex(i, BOARD_SIZE)) {
+                        continue start;
+                    }
+                }
+                if (isCellEmpty(move[X], move[Y])) {//we have to play in empty cell
+                    break;
+                }
+                move[X] = 25;
+                move[Y] = 25;
+            }
+
+
+            tempHistory.add(BoardModifier.getIndexOfCell(move[X], move[Y], BOARD_SIZE));
+//            String sortedTemp = sortHistory(tempHistory);
+            FileMaster tempFile = new FileMaster(BASE_DIR, tempHistory.size() + "." + FILE_NAME);
+            /*
+            If there is all cells lead to defeat, AI marks his previous position as illegal.
+             */
+            if (!comparePos(tempFile, tempHistory)) break;
+
+            deniedCells.add(BoardModifier.getIndexOfCell(move[X], move[Y], BOARD_SIZE));
+
+            if (deniedCells.size() == BOARD_SIZE * BOARD_SIZE - history.size()) {
+                for (int i = 0; i < 2; i++) {
+                    tempHistory.remove(tempHistory.size() - 1);
+                }
+                String previousHistory = sortHistory(tempHistory);
+                FileMaster previousFile = new FileMaster(BASE_DIR, tempHistory.size() + "." + FILE_NAME);
+                previousFile.writeFile(previousHistory);
+                break;
+            }
+            move[X] = 25;
+            move[Y] = 25;
+        }
+
+	    gameBoard[move[X]][move[Y]] = myChip;
+        /*
+        adds AI move to history
+         */
+        history.add(BoardModifier.getIndexOfCell(move[X], move[Y], BOARD_SIZE));
+
+        return move;
     }
 
     /**
@@ -267,7 +323,8 @@ public class Gardner implements IBrainAI{
 
     // Проверка на победу
     public boolean isWin(int x, int y, char chip) {
-        HashSet<Integer> win = new HashSet<Integer>();
+        boolean result = false;
+        TreeSet<Integer> win = new TreeSet<Integer>();
 
 		/*
 		Проход победных рядов по четырем направлениям
@@ -281,26 +338,24 @@ public class Gardner implements IBrainAI{
 			есть минимум одна из двух клеток, которую не успевает
 			обезвредить противник.
 			 */
-            if ((win.size()) > 1) {
-                return true;
+            if (win.size() > 1) {
+                result = true;
+                if (win.size() == 3) {
+                    return true;
+                }
+                break;
             }
         }
 		/*
 		Получаем координату потенциалной победной клетки
 		 */
-        if (win.size() > 0){
-            for (Integer integers : win){
-				/*
-				Преобразование порядкового номера клетки
-				в ее координаты.
-				 */
-                int[] coordinate = BoardModifier.getCoordinateFromIndex
-                                                (integers, BOARD_SIZE);
-                outX = coordinate[X];
-                outY = coordinate[Y];
-            }
+        if (win.size() != 0) {
+            System.out.println(win.last());
+            move = BoardModifier.getCoordinateFromIndex(win.last(), BOARD_SIZE);
+            System.out.println(move[X] + "&" + move[Y]);
         }
-        return false;
+
+        return result;
     }
 
     /**
@@ -321,10 +376,10 @@ public class Gardner implements IBrainAI{
      * @exception IndexOutOfBoundsException выкидывается при попадании
      * проверочных координат за границы массива.
      */
-    public HashSet<Integer> checkRow(int xx, int yy, char chip, int direction) {
+    public TreeSet<Integer> checkRow(int xx, int yy, char chip, int direction) {
         int x = 0, y = 0;
-        HashSet<Integer> emptySell = new HashSet<Integer>();   //сборщик пустых полей от прохода ряда
-        HashSet<Integer> emptySum = new HashSet<Integer>();    //сборщик пустых полей от всех проходов
+        TreeSet<Integer> emptySell = new TreeSet<Integer>();   //сборщик пустых полей от прохода ряда
+        TreeSet<Integer> emptySum = new TreeSet<Integer>();    //сборщик пустых полей от всех проходов
 
         start:
         for (int i = 0; i < NUM_IN_THE_ROW; i++) {
@@ -380,9 +435,9 @@ public class Gardner implements IBrainAI{
             if (emptySell.size() == 0) {
                 System.out.println(emptySell.size());
                 for (int g = 0; g < 3; g++) {
-                    emptySum.add(50);
+                    emptySell.add(50);
                 }
-                return emptySum;
+                return emptySell;
             }
 	        /*
 	         Если пустых полей больше одного,
@@ -424,11 +479,23 @@ public class Gardner implements IBrainAI{
         return sortedHistory;
     }
 
-	public void comparePos(FileMaster file){
-		file.readFromScratch();
-		file.readFile();
-		file.readFile();
-		file.readFile();
+	public boolean comparePos(FileMaster file, ArrayList<Integer> tempHistory){
+		String basePosition;
+        String tempPosition = sortHistory(tempHistory);
+        file.readFromScratch();
+        while (true) {
+            basePosition = file.readFile();
+            if (basePosition == null){
+                file.closeReading();
+                break;
+            }
+            if (basePosition.equals(tempPosition)){
+                file.closeReading();
+                return true;
+            }
+        }
+        file.closeReading();
+        return false;
 	}
 
     public class CellIsNotEmptyException extends Exception{

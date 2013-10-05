@@ -11,17 +11,19 @@ public class FileMaster {
 
     private File file;
     private RandomAccessFile fileWriter;
-	private FileWriter writer;
 
     public FileMaster(String baseDir, String filename) {
 
         File f1 = new File("src/org/hexlet/gamexo/ai/gardnerway/bin/" + baseDir);
-	    file = new File(f1, filename);
-	    f1.mkdir();
-	    System.out.println(file.getPath());
+
+	    f1.mkdirs();
+        file = new File(f1, filename);
+//	    System.out.println(file.getPath());
 	    try{
 	    fileWriter = new RandomAccessFile(file, "rw");
-	    } catch (FileNotFoundException e){}
+	    } catch (FileNotFoundException e){
+            System.out.println("#############");
+        }
     }
 
 
@@ -30,7 +32,7 @@ public class FileMaster {
 
 		    fileWriter.seek(file.length());
 		    fileWriter.writeBytes(position + '\n');
-//		    fileWriter.close();
+		    fileWriter.close();
 
 	    } catch (FileNotFoundException ex) {
 		    System.out.println("File " + file.getName() + " not found");
@@ -40,14 +42,14 @@ public class FileMaster {
 	    }
     }
 
-    public void readFile() {
+    public String readFile() {
 
 	    try {
-		    String s = fileWriter.readLine();
-		    System.out.println(s);
+		    return fileWriter.readLine();
 	    } catch (IOException e){
 		    System.out.println("Read File error");
 	    }
+        return null;
     }
 
 	public void readFromScratch(){
