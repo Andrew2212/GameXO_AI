@@ -3,10 +3,9 @@ package org.hexlet.gamexo.ai;
 /**
  * Created with IntelliJ IDEA.
  * User: Andrew2212
- * Date: 24.09.13
- * Time: 11:37
- * To change this template use File | Settings | File Templates.
+ * <br>Brain of the 'playerBot'. Its one-and-only method get current 'fieldMatrix' and return the 'best move'</br>
+ * <br></br>
  */
-public interface IBrainAI {
-      int[] findMove(Character[][] fieldMatrix);
+public interface IBrainAI<T>{
+      int[] findMove(T[][] fieldMatrix, T figure);
 }

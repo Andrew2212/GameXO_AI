@@ -1,15 +1,14 @@
 package org.hexlet.gamexo.ai.brutforceway;
 
 import org.hexlet.gamexo.ai.IBrainAI;
+import org.hexlet.gamexo.ai.utils.FieldMatrixConverter;
 import org.hexlet.gamexo.ai.utils.GetterLastEnemyMove;
 import org.hexlet.gamexo.blackbox.game.GameField;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Andrew2212
- * Date: 28.09.13
- * Time: 14:54
- * To change this template use File | Settings | File Templates.
+ * <br>Just simply AI </br>
  */
 public class BrutforceAI implements IBrainAI {
 
@@ -17,7 +16,7 @@ public class BrutforceAI implements IBrainAI {
     private static final int X = 0;
     private static final int Y = 1;
     private static Character[][] fieldMatrix;
-    private char signBot;
+    private Character signBot;
 
     private GetterLastEnemyMove getterLastEnemyMove;
     private Constructor constructor;
@@ -32,16 +31,19 @@ public class BrutforceAI implements IBrainAI {
     }
 
     /**
-     * @param fieldMatrix char[][]
+     * @param fieldMatrixObject Object[][] matrix from 'Game core'
+     * @param figure player's sign
      * @return MOVE i.e. int[2] - coordinates of cell
      */
-    public int[] findMove(Character[][] fieldMatrix) {
+    public int[] findMove(Object[][] fieldMatrixObject, Object figure) {
 
-        this.fieldMatrix = fieldMatrix;
+        FieldMatrixConverter converter = new FieldMatrixConverter();
+        Character[][] fieldMatrixCharacter = converter.convertFieldMatrixToCharacter(fieldMatrixObject);
+        this.fieldMatrix = fieldMatrixCharacter;
 
         //Executes only one time
         if (!isFirstMoveDone) {
-            signBot = GameField.getSignForNextMove();
+            signBot = converter.convertSignToCharacter(figure);
             System.out.println("isFirstMoveDone*****************signBot = " + signBot);
             GameOptions.setSignBotAndSignEnemy(signBot);
             isFirstMoveDone = true;

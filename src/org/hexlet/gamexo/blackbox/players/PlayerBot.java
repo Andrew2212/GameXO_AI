@@ -2,20 +2,20 @@ package org.hexlet.gamexo.blackbox.players;
 
 
 import org.hexlet.gamexo.ai.IBrainAI;
+import org.hexlet.gamexo.ai.IPlayerBot;
 import org.hexlet.gamexo.ai.brutforceway.BrutforceAI;
 import org.hexlet.gamexo.ai.gardnerway.Gardner;
 import org.hexlet.gamexo.ai.minimaxway.Minimax;
 import org.hexlet.gamexo.ai.spareway.Spare;
+import org.hexlet.gamexo.ai.utils.FieldMatrixConverter;
 import org.hexlet.gamexo.blackbox.game.GameField;
 
-public class PlayerBot<T> implements IPlayer {
+public class PlayerBot implements IPlayer, IPlayerBot{
 
     private static final int X = 0;
     private static final int Y = 1;
     private static int[] position = new int[2];
     private IBrainAI iBrainAI;
-    //    private T[][] originalFieldMatrix; // original (Enum) fieldMatrix into 'Game'
-    private Character[][] fieldMatrixCharacter; // (Character) fieldMatrix for IBrainAI
 
     /**
      * @param fieldSize
@@ -32,11 +32,11 @@ public class PlayerBot<T> implements IPlayer {
         switch (wayEnum) {
 
             case GARDNER:
-                iBrainAI = new Gardner(fieldSize, numChecked);
+//                iBrainAI = new Gardner(fieldSize, numChecked);
                 break;
 
             case MINIMAX:
-                iBrainAI = new Minimax(fieldSize, numChecked);
+//                iBrainAI = new Minimax(fieldSize, numChecked);
                 break;
 
             case SPARE:
@@ -54,34 +54,19 @@ public class PlayerBot<T> implements IPlayer {
 
     public int[] doMove() {
         System.out.println("PlayerBot::doMove()");
-
-        fieldMatrixCharacter = GameField.getFieldMatrix();
         do {
-            position = getCoordinate(iBrainAI, fieldMatrixCharacter);
+            position = getCoordinate(iBrainAI, GameField.getFieldMatrix(), GameField.getSignForNextMove());
         } while (GameField.getFieldMatrix()[position[X]][position[Y]] != GameField.getDefaultCellValue());
-
 
         return position;
     }
 
 //    ---------Private Methods-----------------
 
-    private int[] getCoordinate(IBrainAI iBrainAI, Character[][] fieldMatrixCharacter) {
-
-//        Just random AI - it works perfectly
-//        position[X] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
-//        position[Y] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
-
-        position = iBrainAI.findMove(fieldMatrixCharacter);
+    public int[] getCoordinate(IBrainAI iBrainAI, Object[][] matrix, Object figure) {
+        position = iBrainAI.findMove(matrix, figure);
         System.out.println("PlayerBot::getCoordinate::position[X] = " + position[X] + ", position[Y] = " + position[Y]);
         return position;
-    }
-
-    private <T> T[][] convertMatrixToCharacter(T[][] originalFieldMatrix) {
-//            if (originalFieldMatrix instanceof Character[][]) {
-//     return originalFieldMatrix;  }
-
-        return null;
     }
 
 }

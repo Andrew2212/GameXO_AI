@@ -1,6 +1,7 @@
 package org.hexlet.gamexo.blackbox.players;
 
 import org.hexlet.gamexo.ai.IBrainAI;
+import org.hexlet.gamexo.ai.IPlayerBot;
 import org.hexlet.gamexo.ai.brutforceway.BrutforceAI;
 import org.hexlet.gamexo.ai.gardnerway.Gardner;
 import org.hexlet.gamexo.ai.minimaxway.Minimax;
@@ -9,12 +10,12 @@ import org.hexlet.gamexo.blackbox.game.GameField;
 
 /**
  * Created with IntelliJ IDEA.
- * User: Andrew
+ * User: Andrew2212
  * Date: 24.09.13
  * Time: 13:37
  * To change this template use File | Settings | File Templates.
  */
-public class PlayerBotEnemy implements IPlayer {
+public class PlayerBotEnemy implements IPlayer, IPlayerBot {
 
     private static final int X = 0;
     private static final int Y = 1;
@@ -37,11 +38,11 @@ public class PlayerBotEnemy implements IPlayer {
         switch (wayEnum) {
 
             case GARDNER:
-                iBrainAI = new Gardner(fieldSize,numChecked);
+//                iBrainAI = new Gardner(fieldSize,numChecked);
                 break;
 
             case MINIMAX:
-                iBrainAI = new Minimax(fieldSize,numChecked);
+//                iBrainAI = new Minimax(fieldSize,numChecked);
                 break;
 
             case SPARE:
@@ -60,25 +61,19 @@ public class PlayerBotEnemy implements IPlayer {
     public int[] doMove() {
         System.out.println("PlayerBotEnemy::doMove()");
         do {
-            position = getCoordinate();
+            position = getCoordinate(iBrainAI, GameField.getFieldMatrix(), GameField.getSignForNextMove());
         } while (GameField.getFieldMatrix()[position[X]][position[Y]] != GameField.getDefaultCellValue());
-
 
         return position;
     }
 
 //    ---------Private Methods-----------------
 
-    private int[] getCoordinate() {
-
-//        Just random AI - it works perfectly
-//        position[X] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
-//        position[Y] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
-
-        position = iBrainAI.findMove(GameField.getFieldMatrix());
-        System.out.println("PlayerBotEnemy::getCoordinate::position[X] = " + position[X] + ", position[Y] = " + position[Y]);
-        return position;
-    }
+        public int[] getCoordinate(IBrainAI iBrainAI, Object[][] matrix, Object figure) {
+            position = iBrainAI.findMove(matrix, figure);
+            System.out.println("PlayerBot::getCoordinate::position[X] = " + position[X] + ", position[Y] = " + position[Y]);
+            return position;
+        }
 
 }
 

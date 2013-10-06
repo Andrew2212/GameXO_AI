@@ -4,7 +4,7 @@ import org.hexlet.gamexo.ai.IBrainAI;
 import org.hexlet.gamexo.ai.utils.GetterLastEnemyMove;
 import org.hexlet.gamexo.blackbox.game.GameField;
 
-public class Minimax implements IBrainAI{
+public class Minimax {
 
     // массив смещений адресов ячеек по направлениям
     private static final int[][] OFFSET = {
