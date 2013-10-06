@@ -162,7 +162,7 @@ public class Gardner implements IBrainAI{
                         FileMaster loosingFile = new FileMaster(BASE_DIR, temp.size() + "." + FILE_NAME);
                         loosingFile.writeFile(loosingWay);
                     }
-//                    return move;
+                    return move;
                 }
 
             }
@@ -435,7 +435,7 @@ public class Gardner implements IBrainAI{
             if (emptySell.size() == 0) {
                 System.out.println(emptySell.size());
                 for (int g = 0; g < 3; g++) {
-                    emptySell.add(50);
+                    emptySell.add(50 + g);
                 }
                 return emptySell;
             }
