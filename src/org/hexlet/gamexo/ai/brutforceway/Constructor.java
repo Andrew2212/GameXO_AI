@@ -94,7 +94,7 @@ public class Constructor {
      *              <br>Sets value (coordinate fieldMatrix cells) into 'listCheckedCell'</br>
      */
     private boolean setWeightInRow(int cellX, int cellY) {
-        stringResultOfCheck = GameOptions.signBot;
+        stringResultOfCheck = "" + GameOptions.getSignBot();
         listCheckedCell.add(new int[]{cellX, cellY});
 
         for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
@@ -116,7 +116,7 @@ public class Constructor {
      *              <br>Sets value (coordinate fieldMatrix cells) into 'listCheckedCell'</br>
      */
     private boolean setWeightInColumn(int cellX, int cellY) {
-        stringResultOfCheck = GameOptions.signBot;
+        stringResultOfCheck = "" + GameOptions.getSignBot();
         listCheckedCell.add(new int[]{cellX, cellY});
 
         for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
@@ -138,7 +138,7 @@ public class Constructor {
      *              <br>Sets value (coordinate fieldMatrix cells) into 'listCheckedCell'</br>
      */
     private boolean setWeightInDiagonalCW(int cellX, int cellY) {
-        stringResultOfCheck = GameOptions.signBot;
+        stringResultOfCheck = "" + GameOptions.getSignBot();
         listCheckedCell.add(new int[]{cellX, cellY});
 
         for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
@@ -161,7 +161,7 @@ public class Constructor {
      */
     private boolean setWeightInDiagonalCCW(int cellX, int cellY) {
 
-        stringResultOfCheck = GameOptions.signBot;
+        stringResultOfCheck = "" + GameOptions.getSignBot();
         listCheckedCell.add(new int[]{cellX, cellY});
 
         for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
@@ -184,8 +184,8 @@ public class Constructor {
     private boolean setWeightToNearWin_1() {
         int[] cellWin = null;
         for (int j = 0; j < GameOptions.listStringNearWinBot_1.size(); j++) {
-//            System.out.println("W1*** " + j + " strWin_1 = " + GameOptions.listStringNearWinEnemy_1.get(j));
-//            System.out.println("W2*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
+//            System.out.println("Constructor*** " + j + " strWin_1 = " + GameOptions.listStringNearWinBot_1.get(j));
+//            System.out.println("Constructor*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
 
 // Check condition 'contains' for each string from 'listStringNearWinBot_1'
             if (stringResultOfCheck.contains(GameOptions.listStringNearWinBot_1.get(j))) {
@@ -195,9 +195,9 @@ public class Constructor {
 // Cell coordinate = 'listCheckedCell.get(i)' and cellValue = 'cellValue' from 'stringResultOfCheck.charAt(i)'
                     if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
 // Set  signBot with '[listCheckedCell.get(i)[X]][listCheckedCell.get(i)[Y]]' into 'testFieldMatrix'
-                        char[][] testFieldMatrix = copyMatrix(BrutforceAI.getFieldMatrix());
+                        Character[][] testFieldMatrix = copyMatrix(BrutforceAI.getFieldMatrix());
                         int[] move = listCheckedCell.get(i);
-                        testFieldMatrix[move[X]][move[Y]] = GameOptions.signBot.charAt(0);
+                        testFieldMatrix[move[X]][move[Y]] = (Character)GameOptions.getSignBot();
 // And do 'checkToWin(listCheckedCell)'
 // If 'true' - moveWin is initialized into method checkToWin (moveWin = move;)
                         if (checkToWin(move, listCheckedCell, testFieldMatrix)) {
@@ -221,11 +221,11 @@ public class Constructor {
      * @param testFieldMatrix
      * @return true if string value of fieldMatrix cells with coordinates from 'listCheckedCell' contains stringWinnerBot
      */
-    private boolean checkToWin(int[] move, List<int[]> listCheckedCell, char[][] testFieldMatrix) {
+    private boolean checkToWin(int[] move, List<int[]> listCheckedCell, Character[][] testFieldMatrix) {
         String resultOfCheck = "";
         for (int i = 0; i < listCheckedCell.size(); i++) {
 
-            resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[X]][listCheckedCell.get(i)[X]];
+            resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[X]][listCheckedCell.get(i)[Y]];
         }
 //        System.out.println("Constructor::checkToWin::resultOfCheck = " + resultOfCheck);
         if (resultOfCheck.contains(GameOptions.stringWinnerBot)) {
@@ -292,9 +292,9 @@ public class Constructor {
         return false;
     }
 
-    public char[][] copyMatrix(char [][] fieldMatrix){
+    public Character[][] copyMatrix(Character [][] fieldMatrix){
         int size = fieldMatrix.length;
-        char[][] fieldMatrixCopy = new char[size][size];
+        Character[][] fieldMatrixCopy = new Character[size][size];
         for (int i = 0; i < size; i++){
             for(int j = 0; j < size; j++){
                 fieldMatrixCopy[i][j] = fieldMatrix[i][j];

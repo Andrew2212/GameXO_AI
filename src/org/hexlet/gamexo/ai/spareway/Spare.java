@@ -25,7 +25,7 @@ public class Spare implements IBrainAI {
      * @param fieldMatrix char[][]
      * @return MOVE i.e. int[2] - coordinates of cell
      */
-    public int[] findMove(char[][] fieldMatrix) {
+    public int[] findMove(Character[][] fieldMatrix) {
 
         int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
         if (null != lastEnemyMove) {

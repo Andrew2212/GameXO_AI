@@ -73,7 +73,7 @@ public class Gardner implements IBrainAI{
      * @param fieldMatrix матрица поля, переданная ядром.
      * @return массив координат клетки, куда выполняется ход.
      */
-    public int[]  findMove(char[][] fieldMatrix) {
+    public int[]  findMove(Character[][] fieldMatrix) {
 
         setMoveCell(fieldMatrix);   // возвращаем координаты хода противника
 
@@ -144,7 +144,7 @@ public class Gardner implements IBrainAI{
      * ИИ принимает фишку противоположную походившей
      * @param fieldMatrix поле, которое пришло из ядра
      */
-    public void setMoveCell(char[][] fieldMatrix){
+    public void setMoveCell(Character[][] fieldMatrix){
 
         for (int y = 0; y < fieldMatrix.length; y++) {
             for (int x = 0; x < fieldMatrix[1].length; x++) {

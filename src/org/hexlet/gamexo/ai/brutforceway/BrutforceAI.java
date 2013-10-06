@@ -16,7 +16,7 @@ public class BrutforceAI implements IBrainAI {
     private int[] MOVE;
     private static final int X = 0;
     private static final int Y = 1;
-    private static char[][] fieldMatrix;
+    private static Character[][] fieldMatrix;
     private char signBot;
 
     private GetterLastEnemyMove getterLastEnemyMove;
@@ -35,7 +35,7 @@ public class BrutforceAI implements IBrainAI {
      * @param fieldMatrix char[][]
      * @return MOVE i.e. int[2] - coordinates of cell
      */
-    public int[] findMove(char[][] fieldMatrix) {
+    public int[] findMove(Character[][] fieldMatrix) {
 
         this.fieldMatrix = fieldMatrix;
 
@@ -75,7 +75,7 @@ public class BrutforceAI implements IBrainAI {
         return MOVE;
     }
 
-    public static char[][] getFieldMatrix() {
+    public static Character[][] getFieldMatrix() {
         return fieldMatrix;
     }
 

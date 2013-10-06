@@ -3,7 +3,7 @@ package org.hexlet.gamexo.blackbox.game;
 public class GameFieldPainter {
 
     //    private Game game;
-    private static char[][] fieldMatrix;
+    private static Character[][] fieldMatrix;
 
     public static void showFields() {
 

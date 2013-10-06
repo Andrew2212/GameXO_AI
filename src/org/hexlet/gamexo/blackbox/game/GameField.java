@@ -18,17 +18,17 @@ public class GameField {
     public static int NUM_CHECKED = 3;
     public static final int NUM_CHECKED_4 = 4; // default value for FIELD_SIZE > 3
 
-    private static char[][] fieldMatrix;
+    private static Character[][] fieldMatrix;
     private static char signForNextMove = VALUE_X;
     private static int flagSign = 1;
 
 
     public static void getNewGameField() {
-        fieldMatrix = new char[FIELD_SIZE][FIELD_SIZE];
+        fieldMatrix = new Character[FIELD_SIZE][FIELD_SIZE];
         fillDefaultGameMatrix(fieldMatrix);
     }
 
-    public static void fillDefaultGameMatrix(char[][] fieldMatrix) {
+    public static void fillDefaultGameMatrix(Character[][] fieldMatrix) {
         for (int i = 0; i < FIELD_SIZE; i++) {
             for (int j = 0; j < FIELD_SIZE; j++) {
                 fillDefaultCurrentCell(i, j);
@@ -70,7 +70,7 @@ public class GameField {
         return DEFAULT_CELL_VALUE;
     }
 
-    public static char[][] getFieldMatrix() {
+    public static Character[][] getFieldMatrix() {
         return fieldMatrix;
     }
 

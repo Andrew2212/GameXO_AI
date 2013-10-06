@@ -45,7 +45,7 @@ public class Minimax implements IBrainAI{
      * @param fieldMatrix char[][]
      * @return MOVE i.e. int[2] - coordinates of cell
      */
-    public int[] findMove(char[][] fieldMatrix) {
+    public int[] findMove(Character[][] fieldMatrix) {
 
         signBot = GameField.getSignForNextMove();
         //        This is what you calculate

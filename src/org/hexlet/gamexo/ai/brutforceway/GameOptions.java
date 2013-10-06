@@ -12,14 +12,20 @@ import java.util.List;
  */
 public class GameOptions {
 
+    private static Character signBot;
+    private static Character signEnemy;
+    public static final Character DEFAULT_CELL_VALUE = '_';
+    private static final Character VALUE_X = 'X';
+    private static final Character VALUE_O = 'O';
+
+//    private static char signBot;
+//    private static char signEnemy;
+//public static final char DEFAULT_CELL_VALUE = '_';
+//    private static char  VALUE_X = 'X';
+//    private static char VALUE_O = 'O';
+
     public static int fieldSize;
     public static int numCheckedSigns;
-
-    public static String signBot;
-    public static String signEnemy;
-    public static final char DEFAULT_CELL_VALUE = '_';
-    private static String VALUE_X = "X";
-    private static String VALUE_O = "O";
 
     private static String stringWinnerX = ""; // i.e. string XXXX
     private static String stringWinnerO = ""; // i.e. string OOOO
@@ -39,6 +45,14 @@ public class GameOptions {
 
     // ---------------------Public Methods-----------------------------
 
+    public static char getSignEnemy() {
+        return signEnemy;
+    }
+
+    public static char getSignBot() {
+        return signBot;
+    }
+
     public static void initGameOptions(int fieldSize, int numCheckedSigns) {
 //        System.out.println("GameOptions::initGameOptions");
         GameOptions.fieldSize = fieldSize;
@@ -54,7 +68,8 @@ public class GameOptions {
 
     public static void setSignBotAndSignEnemy(char signBot) {
 //        System.out.println("GameOptions::setSignBotAndSignEnemy::signBot = " + signBot);
-        if (String.valueOf(signBot).equalsIgnoreCase(VALUE_X)) {
+//        if (String.valueOf(signBot).equalsIgnoreCase(VALUE_X)) {
+        if (signBot == VALUE_X) {
             //Bot strings
             GameOptions.signBot = VALUE_X;
             GameOptions.stringWinnerBot = stringWinnerX;
@@ -85,11 +100,10 @@ public class GameOptions {
 //    ----------------------Private Methods------------------------------------
 
     /**
-     *
      * @param value 'X' or 'O'
-     * @return    all strings such as '_XX, X_X, XX_, XXX_' (so if numCheckedSigns = 4) and all that
+     * @return all strings such as '_XX, X_X, XX_, XXX_' (so if numCheckedSigns = 4) and all that
      */
-    private static List<String> createListStringWin_1(String value) {
+    private static List<String> createListStringWin_1(char value) {
         List<String> listStringNearWinner_1 = new ArrayList<String>();
 
         for (int i = 0; i < numCheckedSigns; i++) { // number of the strings
@@ -108,11 +122,10 @@ public class GameOptions {
     }
 
     /**
-     *
      * @param value 'X' or 'O'
-     * @return    all strings such as 'XX__, X__X, __XX' (so if numCheckedSigns = 4) and all that
+     * @return all strings such as 'XX__, X__X, __XX' (so if numCheckedSigns = 4) and all that
      */
-    private static List<String> createListStringWin_2(String value) {
+    private static List<String> createListStringWin_2(char value) {
         List<String> listStringNearWinner_2 = new ArrayList<String>();
 
         for (int i = 0; i < numCheckedSigns - 1; i++) { // number of the strings
@@ -130,17 +143,18 @@ public class GameOptions {
         if (3 < numCheckedSigns) {
 //        Add  all strings such as '_X_X'
             listStringNearWinner_2.addAll(createListStringWin_2add(value));
+            //        Add  all strings such as '_XX_'
+            listStringNearWinner_2.addAll(createListStringWin_2add_(value));
         }
         return listStringNearWinner_2;
     }
 
     /**
-     *
-     * @param value  'X' or 'O'
-     * @return   all strings such as '_X_X, X_X_' (so if numCheckedSigns = 4) and all that
-     * <br>It is called ONLY for fieldSize > 3 </br>
+     * @param value 'X' or 'O'
+     * @return all strings such as '_X_X, X_X_' (so if numCheckedSigns = 4) and all that
+     *         <br>It is called ONLY for fieldSize > 3 </br>
      */
-    private static List<String> createListStringWin_2add(String value) {
+    private static List<String> createListStringWin_2add(char value) {
         List<String> listStringNearWinner_2w = new ArrayList<String>();
 
         for (int i = 0; i < numCheckedSigns - 2; i++) { // number of the strings
@@ -158,7 +172,30 @@ public class GameOptions {
         return listStringNearWinner_2w;
     }
 
-    private static String createStringWinner(String value) {
+    /**
+     * @param value 'X' or 'O'
+     * @return all strings such as '_XX_X, X_XX_' (so if numCheckedSigns = 4) and all that
+     *         <br>It is called ONLY for fieldSize > 3 </br>
+     */
+    private static List<String> createListStringWin_2add_(char value) {
+        List<String> listStringNearWinner_2w = new ArrayList<String>();
+
+        for (int i = 0; i < numCheckedSigns - 3; i++) { // number of the strings
+            String strWin = "";
+            for (int j = 0; j < numCheckedSigns - 2; j++) { // number of the signs
+                if (i == j) {
+                    strWin += String.valueOf(DEFAULT_CELL_VALUE + value + value + DEFAULT_CELL_VALUE);
+                    j += 1;
+                } else {
+                    strWin += value;
+                }
+            }
+            listStringNearWinner_2w.add(strWin);
+        }
+        return listStringNearWinner_2w;
+    }
+
+    private static String createStringWinner(char value) {
         String result = "";
         for (int i = 0; i <= numCheckedSigns - 1; i++) {
             result += value;

@@ -8,12 +8,14 @@ import org.hexlet.gamexo.ai.minimaxway.Minimax;
 import org.hexlet.gamexo.ai.spareway.Spare;
 import org.hexlet.gamexo.blackbox.game.GameField;
 
-public class PlayerBot implements IPlayer {
+public class PlayerBot<T> implements IPlayer {
 
     private static final int X = 0;
     private static final int Y = 1;
     private static int[] position = new int[2];
     private IBrainAI iBrainAI;
+    //    private T[][] originalFieldMatrix; // original (Enum) fieldMatrix into 'Game'
+    private Character[][] fieldMatrixCharacter; // (Character) fieldMatrix for IBrainAI
 
     /**
      * @param fieldSize
@@ -52,8 +54,10 @@ public class PlayerBot implements IPlayer {
 
     public int[] doMove() {
         System.out.println("PlayerBot::doMove()");
+
+        fieldMatrixCharacter = GameField.getFieldMatrix();
         do {
-            position = getCoordinate();
+            position = getCoordinate(iBrainAI, fieldMatrixCharacter);
         } while (GameField.getFieldMatrix()[position[X]][position[Y]] != GameField.getDefaultCellValue());
 
 
@@ -62,15 +66,22 @@ public class PlayerBot implements IPlayer {
 
 //    ---------Private Methods-----------------
 
-    private int[] getCoordinate() {
+    private int[] getCoordinate(IBrainAI iBrainAI, Character[][] fieldMatrixCharacter) {
 
 //        Just random AI - it works perfectly
 //        position[X] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
 //        position[Y] = (int) Math.floor(Math.random() * GameField.FIELD_SIZE);
 
-        position = iBrainAI.findMove(GameField.getFieldMatrix());
+        position = iBrainAI.findMove(fieldMatrixCharacter);
         System.out.println("PlayerBot::getCoordinate::position[X] = " + position[X] + ", position[Y] = " + position[Y]);
         return position;
+    }
+
+    private <T> T[][] convertMatrixToCharacter(T[][] originalFieldMatrix) {
+//            if (originalFieldMatrix instanceof Character[][]) {
+//     return originalFieldMatrix;  }
+
+        return null;
     }
 
 }

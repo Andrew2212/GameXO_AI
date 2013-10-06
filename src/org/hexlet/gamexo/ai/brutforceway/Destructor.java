@@ -133,7 +133,7 @@ public class Destructor {
      *              <br>Checks particular line and set 'weight' of cells into 'weightMap' by methods 'setWeightTo...' </br>
      */
     private void setWeightInRow(int cellX, int cellY) {
-        stringResultOfCheck = GameOptions.signEnemy;
+        stringResultOfCheck = "" + GameOptions.getSignEnemy();
         listCheckedCell.add(new int[]{cellX, cellY});
 
         for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
@@ -152,7 +152,7 @@ public class Destructor {
      *              <br>Checks particular line and set 'weight' of cells into 'weightMap' by methods 'setWeightTo...' </br>
      */
     private void setWeightInColumn(int cellX, int cellY) {
-        stringResultOfCheck = GameOptions.signEnemy;
+        stringResultOfCheck = "" + GameOptions.getSignEnemy();
         listCheckedCell.add(new int[]{cellX, cellY});
 
         for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
@@ -171,7 +171,7 @@ public class Destructor {
      *              <br>Checks particular line and set 'weight' of cells into 'weightMap' by methods 'setWeightTo...' </br>
      */
     private void setWeightInDiagonalCW(int cellX, int cellY) {
-        stringResultOfCheck = GameOptions.signEnemy;
+        stringResultOfCheck = "" + GameOptions.getSignEnemy();
         listCheckedCell.add(new int[]{cellX, cellY});
 
         for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
@@ -191,7 +191,7 @@ public class Destructor {
      */
     private void setWeightInDiagonalCCW(int cellX, int cellY) {
 
-        stringResultOfCheck = GameOptions.signEnemy;
+        stringResultOfCheck = "" + GameOptions.getSignEnemy();
         listCheckedCell.add(new int[]{cellX, cellY});
 
         for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
@@ -243,8 +243,8 @@ public class Destructor {
     private List<int[]> setWeightToNearWin_1() {
 
         for (int j = 0; j < GameOptions.listStringNearWinEnemy_1.size(); j++) {
-//            System.out.println("W1*** " + j + " strWin_1 = " + GameOptions.listStringNearWinEnemy_1.get(j));
-//            System.out.println("W2*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
+//            System.out.println("Destructor* " + j + " strWin_1 = " + GameOptions.listStringNearWinEnemy_1.get(j));
+//            System.out.println("Destructor* " + j + " stringResultOfCheck = " + stringResultOfCheck);
 
 //            Check condition 'contains' for each string from 'listStringNearWinEnemy_1'
             if (stringResultOfCheck.contains(GameOptions.listStringNearWinEnemy_1.get(j))) {

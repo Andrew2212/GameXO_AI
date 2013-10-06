@@ -29,7 +29,7 @@ public class GetterLastEnemyMove {
 
     }
 
-    public int[] getLastEnemyMove(char[][] fieldMatrix) {
+    public int[] getLastEnemyMove(Character[][] fieldMatrix) {
 //        System.out.println("Getter::getLastEnemyField()");
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
