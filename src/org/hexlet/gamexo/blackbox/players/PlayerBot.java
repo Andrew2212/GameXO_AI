@@ -32,7 +32,7 @@ public class PlayerBot implements IPlayer, IPlayerBot{
         switch (wayEnum) {
 
             case GARDNER:
-//                iBrainAI = new Gardner(fieldSize, numChecked);
+                iBrainAI = new Gardner(fieldSize, numChecked);
                 break;
 
             case MINIMAX:
