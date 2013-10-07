@@ -10,21 +10,18 @@ public class FieldMatrixConverter<T> {
     /*
      * It's such as into 'ai' package made by 'teamAI'
      */
-    private static final char SIGN_X = 'X';
-    private static final char SIGN_O = 'O';
-    public static final char SIGN_EMPTY = '_';
+    private static final Character SIGN_X = 'X';
+    private static final Character SIGN_O = 'O';
+    public static final Character SIGN_EMPTY = '_';
+
+    private static final String X = "X";
+    private static final String O = "O";
 
     private Character[][] fieldMatrixCharacter;
     private int fieldSize;
 
     private Character signCharacter;
 
-    /**
-     * It's such as into Architecture.jar made by 'Hexlet'
-     */
-    public enum CellState {
-        X, O;
-    }
 
     /**
      * @param originalSign  player's figure from 'core Game'
@@ -59,8 +56,8 @@ public class FieldMatrixConverter<T> {
     private Character returnSignToCharacterFromEnum(T originalSign) {
         if(originalSign == null) return null;
         Character sign = null;
-        if(originalSign.equals(CellState.X)) sign = SIGN_X;
-        if(originalSign.equals(CellState.O)) sign = SIGN_O;
+        if(originalSign.toString().equals(X)) sign = SIGN_X;
+        if(originalSign.toString().equals(O)) sign = SIGN_O;
 
         return sign;
     }
@@ -119,9 +116,9 @@ public class FieldMatrixConverter<T> {
             for (int j = 0; j < fieldSize; j++) {
                 T sign = originalFieldMatrix[i][j];
 //                System.out.println("Converter::Enum sign = " + sign);
-                if (sign.equals(CellState.X))
+                if (sign.toString().equals(X))
                     fieldMatrixCharacter[i][j] = SIGN_X;
-                else if (sign.equals(CellState.O))
+                else if (sign.toString().equals(O))
                     fieldMatrixCharacter[i][j] = SIGN_O;
                 else
                     fieldMatrixCharacter[i][j] = SIGN_EMPTY;
