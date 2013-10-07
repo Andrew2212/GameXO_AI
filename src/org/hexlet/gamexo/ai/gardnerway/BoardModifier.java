@@ -24,6 +24,16 @@ class BoardModifier {
         return cBoard;
     }
 
+	static char[][] characterToChar(Character[][] board) {
+		char[][] cBoard = new char[board.length][board[X].length];
+		for (int y = 0; y < board.length; y++) {
+			for (int x = 0; x < board.length; x++) {
+				 cBoard[x][y] = board[x][y];
+			}
+		}
+		return cBoard;
+	}
+
 
     // поворачивает доску на заданный угол
     static char[][] rotate(char[][] board, int degrees) {

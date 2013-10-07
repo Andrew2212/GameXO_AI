@@ -1,6 +1,7 @@
 package org.hexlet.gamexo.ai.gardnerway;
 
 import org.hexlet.gamexo.ai.IBrainAI;
+import org.hexlet.gamexo.ai.utils.FieldMatrixConverter;
 
 import java.util.*;
 import java.lang.Exception;
@@ -22,7 +23,7 @@ import java.lang.Exception;
  * и снова поворачивается. Этим достигается проверка всех
  * перевернутых и зеркальных вариантов.
  */
-public class Gardner {
+public class Gardner implements IBrainAI{
 
     private char[][] gameBoard;
     private char[][] oldFieldMatrix;
@@ -86,19 +87,23 @@ public class Gardner {
      * вычисления следующего хода. Перегрузка методов получилась из
      * желания как можно меньше переделывать код, и иметь более гибкий
      * интерфейс для тестирования.
-     * @param fieldMatrix матрица поля, переданная ядром.
+     * @param fieldMatrixObject матрица поля, переданная ядром.
      * @return массив координат клетки, куда выполняется ход.
      */
-//    public int[]  findMove(Character[][] fieldMatrix) {
-//
-//        setMoveCell(fieldMatrix);   // возвращаем координаты хода противника
-//
-//        try {
-//            return findMove(inX, inY);
-//        } catch (CellIsNotEmptyException ex){
-//            return move;    // в случае исключения  пока что получится падение программы
-//        }
-//    }
+    public int[]  findMove(Object[][] fieldMatrixObject, Object figure) {
+
+	    FieldMatrixConverter converter = new FieldMatrixConverter();
+	    Character[][] fieldMatrixCharacter = converter.convertFieldMatrixToCharacter(fieldMatrixObject);
+	    char[][] fieldMatrix = BoardModifier.characterToChar(fieldMatrixCharacter);
+	    setMoveCell(fieldMatrix);   // возвращаем координаты хода противника
+
+
+        try {
+            return findMove(inX, inY);
+        } catch (CellIsNotEmptyException ex){
+            return move;    // в случае исключения  пока что получится падение программы
+        }
+    }
 
     /**
      * проверяет в соответствии с входящими координатами
