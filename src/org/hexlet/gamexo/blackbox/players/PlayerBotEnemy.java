@@ -32,8 +32,8 @@ public class PlayerBotEnemy implements IPlayer, IPlayerBot {
         WayEnum wayEnum;// Switch on that you need
 //        wayEnum = WayEnum.GARDNER;
 //        wayEnum = WayEnum.MINIMAX;
-        wayEnum = WayEnum.SPARE;
-//        wayEnum = WayEnum.BRUTFORCE;
+//        wayEnum = WayEnum.SPARE;
+        wayEnum = WayEnum.BRUTFORCE;
 
         switch (wayEnum) {
 
