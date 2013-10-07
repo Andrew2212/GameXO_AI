@@ -77,8 +77,16 @@ public class BrutforceAI implements IBrainAI {
         return MOVE;
     }
 
-    public static Character[][] getFieldMatrix() {
-        return fieldMatrix;
+    public static Character[][] getCopyFieldMatrix() {
+        int size = fieldMatrix.length;
+        Character[][] fieldMatrixCopy = new Character[size][size];
+        for (int i = 0; i < size; i++){
+            for(int j = 0; j < size; j++){
+                fieldMatrixCopy[i][j] = fieldMatrix[i][j];
+            }
+        }
+        return fieldMatrixCopy;
+
     }
 
     //---------Private Methods---------------------

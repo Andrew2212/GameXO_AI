@@ -195,9 +195,9 @@ public class Constructor {
 // Cell coordinate = 'listCheckedCell.get(i)' and cellValue = 'cellValue' from 'stringResultOfCheck.charAt(i)'
                     if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
 // Set  signBot with '[listCheckedCell.get(i)[X]][listCheckedCell.get(i)[Y]]' into 'testFieldMatrix'
-                        Character[][] testFieldMatrix = copyMatrix(BrutforceAI.getFieldMatrix());
+                        Character[][] testFieldMatrix = BrutforceAI.getCopyFieldMatrix();
                         int[] move = listCheckedCell.get(i);
-                        testFieldMatrix[move[X]][move[Y]] = (Character)GameOptions.getSignBot();
+                        testFieldMatrix[move[X]][move[Y]] = GameOptions.getSignBot();
 // And do 'checkToWin(listCheckedCell)'
 // If 'true' - moveWin is initialized into method checkToWin (moveWin = move;)
                         if (checkToWin(move, listCheckedCell, testFieldMatrix)) {
@@ -220,6 +220,7 @@ public class Constructor {
      * @param listCheckedCell
      * @param testFieldMatrix
      * @return true if string value of fieldMatrix cells with coordinates from 'listCheckedCell' contains stringWinnerBot
+     * <br>I.e. search 'move' that alters string _XXX___ to string WIN _XXXX__ and does 'moveWin = move' </br>
      */
     private boolean checkToWin(int[] move, List<int[]> listCheckedCell, Character[][] testFieldMatrix) {
         String resultOfCheck = "";
@@ -279,7 +280,7 @@ public class Constructor {
 
         String cellValue = "";
         if (isValueValid(cellX, cellY)) {
-            cellValue += BrutforceAI.getFieldMatrix()[cellX][cellY];
+            cellValue += BrutforceAI.getCopyFieldMatrix()[cellX][cellY];
         }
         return cellValue;
     }
@@ -292,15 +293,15 @@ public class Constructor {
         return false;
     }
 
-    public Character[][] copyMatrix(Character [][] fieldMatrix){
-        int size = fieldMatrix.length;
-        Character[][] fieldMatrixCopy = new Character[size][size];
-        for (int i = 0; i < size; i++){
-            for(int j = 0; j < size; j++){
-                fieldMatrixCopy[i][j] = fieldMatrix[i][j];
-            }
-        }
-        return fieldMatrixCopy;
-    }
+//    public Character[][] copyMatrix(Character [][] fieldMatrix){
+//        int size = fieldMatrix.length;
+//        Character[][] fieldMatrixCopy = new Character[size][size];
+//        for (int i = 0; i < size; i++){
+//            for(int j = 0; j < size; j++){
+//                fieldMatrixCopy[i][j] = fieldMatrix[i][j];
+//            }
+//        }
+//        return fieldMatrixCopy;
+//    }
 
 }

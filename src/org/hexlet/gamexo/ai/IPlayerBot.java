@@ -15,6 +15,8 @@ public interface IPlayerBot<T> {
      * @param figure   player's sign (X or O)
      * @return   best move (i.e. coordinates of cell)
      * <br>Into this method we have to call 'iBrain.findMove(...)' and it should to return us the 'best move'</br>
+     * <br>Ordinary realization is: int[] position = iBrainAI.findMove(matrix, figure);</br>
+     * <br>there 'position' is coordinate of the 'best move' </br>
      */
      int[] getCoordinate(IBrainAI iBrainAI, T[][] fieldMatrix, T figure);
 }

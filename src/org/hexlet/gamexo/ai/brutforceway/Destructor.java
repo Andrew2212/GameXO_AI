@@ -6,13 +6,14 @@ import java.util.*;
  * Created with IntelliJ IDEA.
  * User: Andrew2212
  * <br>Sets weight into certain cells in accordance its own check methods</br>
- *  <br>By method 'getDestructiveMove' returns some 'destructiveMove'</br>
+ * <br>By method 'getDestructiveMove' returns some 'destructiveMove'</br>
  */
 public class Destructor {
 
     private final Integer NEAR_MOVE = 1; // i.e. cell close to enemy move
     private final Integer NEAR_WIN_ENEMY_1;  // i.e. string XXXX_ without 1 sign
     private final Integer NEAR_WIN_ENEMY_2;  // i.e. string XXX__ without 2 sign
+    private final Integer NEAR_WIN_ENEMY_DANGER;  // for cell that alters string '_XX_X_' to string nearWIN_1 '_XXXX_'
 
     private Map weightMap;
     private String stringResultOfCheck;
@@ -32,11 +33,13 @@ public class Destructor {
     private ArrayList<int[]> listCheckedCellOldWin_2;
     private ArrayList<int[]> listCellsNearLastEnemyMove = new ArrayList<int[]>();
 
+    private int[] moveCrash;
+
     public Destructor() {
 
         NEAR_WIN_ENEMY_1 = GameOptions.numCheckedSigns * 10;
         NEAR_WIN_ENEMY_2 = GameOptions.numCheckedSigns * 2;
-
+        NEAR_WIN_ENEMY_DANGER = GameOptions.numCheckedSigns * 6;
         weightMap = new HashMap<int[], Integer>();
     }
 
@@ -70,7 +73,7 @@ public class Destructor {
         }
 
         reduceWeightOldWin_1Cells();
-//        reduceWeightOldWin_2Cells(); //Check out whether it is necessary(???)
+        reduceWeightOldWin_2Cells(); //Check out whether it is necessary(???)
         setWeightToCellNearLastEnemyMove();
         return destructiveMove;
 
@@ -121,12 +124,13 @@ public class Destructor {
         if (listCheckedCellOldWin_1 != null) {
             for (int i = 0; i < listCheckedCellOldWin_1.size(); i++) {
                 KeyCell keyMaxWeight = new KeyCell(listCheckedCellOldWin_1.get(i));
-                weightMap.put(keyMaxWeight, NEAR_MOVE);
+                weightMap.put(keyMaxWeight, NEAR_MOVE * 2);
             }
         }
     }
 
 //    ---------------Check lines and set weight of the cells-------------------------
+
     /**
      * @param cellX lastEnemyMove X
      * @param cellY lastEnemyMove 'Y'
@@ -292,7 +296,24 @@ public class Destructor {
                     if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
 
                         Integer cellNewWeight = NEAR_WIN_ENEMY_2;
-                        if (weightMap.containsKey(keyCell)) {
+
+
+                        /*
+                       Check whether enemyMove into cell with coordinates 'keyCell' alters the string 'stringResultOfCheck'
+                       to 'stringNearWinEnemy_SSS_' and set to it weight 'NEAR_WIN_ENEMY_DANGER'
+                        */
+//                        Copy current fieldMatrix
+                        Character[][] testFieldMatrix = BrutforceAI.getCopyFieldMatrix();
+//                        Get coordinates imagined enemyMove and set it into the testFieldMatrix
+                        int[] enemyMove = new int[]{keyCell.getX(), keyCell.getY()};
+                        testFieldMatrix[keyCell.getX()][keyCell.getY()] = GameOptions.getSignEnemy();
+//                        Check whether it's DANGER
+                        boolean isDanger = checkTo_SSS_(listCheckedCell, testFieldMatrix);
+//                        If it's DANGER
+                        if (isDanger && weightMap.containsKey(keyCell)) {
+                            cellNewWeight = NEAR_WIN_ENEMY_DANGER + (Integer) weightMap.get(keyCell);
+//                            System.out.println("Destructor*DANGER*weightMap.containsKey(keyCell)::weightMap.get(keyCell) = " + weightMap.get(keyCell));
+                        } else if (!isDanger && weightMap.containsKey(keyCell)) {
 //                            System.out.println("weightMap.containsKey(keyCell)::weightMap.get(keyCell) = " + (Integer) weightMap.get(keyCell));
                             cellNewWeight = NEAR_WIN_ENEMY_2 + (Integer) weightMap.get(keyCell);
                         }
@@ -310,7 +331,33 @@ public class Destructor {
         return null;
     }
 
+    /**
+     * @param listCheckedCell
+     * @param testFieldMatrix
+     * @return true if action ::testFieldMatrix[keyCell.getX()][keyCell.getY()] = GameOptions.getSignEnemy():: alter current checked String
+     *         to the 'WIN_1 line likes as  _SSSS_' i.e. WIN_1 line that has "_" before its start and after its end
+     */
+    private boolean checkTo_SSS_(List<int[]> listCheckedCell, Character[][] testFieldMatrix) {
+
+        if (GameOptions.numCheckedSigns < 4) return false; // It's NOT works for field 3x3 and for numCheckedSigns = 3
+
+        int x = 0;
+        int y = 1;
+        String resultOfCheck = "";
+        for (int i = 0; i < listCheckedCell.size(); i++) {
+
+            resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[x]][listCheckedCell.get(i)[y]];
+        }
+//        System.out.println("Destructor::checkTo_SSS_()::resultOfCheck = " + resultOfCheck);
+        if (resultOfCheck.contains(GameOptions.stringNearWinner_SSS_Enemy)) {
+            return true;
+        }
+
+        return false;
+    }
+
 //    -----------------  Handling cells that are close to LastEnemyMove------------------------------
+
     /**
      * @param lastEnemyMoveX
      * @param lastEnemyMoveY <br>Sets weight of cells that are close to last enemy move</br>
@@ -386,6 +433,7 @@ public class Destructor {
     }
 
 //    -------------------Util Methods-----------------------------
+
     /**
      * @param cellX
      * @param cellY
@@ -396,7 +444,7 @@ public class Destructor {
 
         String cellValue = "";
         if (isValueValid(cellX, cellY)) {
-            cellValue += BrutforceAI.getFieldMatrix()[cellX][cellY];
+            cellValue += BrutforceAI.getCopyFieldMatrix()[cellX][cellY];
         }
         return cellValue;
     }

@@ -29,6 +29,8 @@ public class GameOptions {
 
     private static String stringWinnerX = ""; // i.e. string XXXX
     private static String stringWinnerO = ""; // i.e. string OOOO
+    private static String stringNearWinner_XXX_ = "";// i.e. string _XXX_ for numChecked = 4
+    private static String stringNearWinner_OOO_ = "";// i.e. string _OOO_ for numChecked = 4
 
     private static List<String> listStringNearWinnerX_1;// i.e. string XXX_ without 1 sign
     private static List<String> listStringNearWinnerO_1; // i.e. string OOO_ without 1 sign
@@ -42,14 +44,16 @@ public class GameOptions {
 
     public static String stringWinnerBot;
     public static String stringWinnerEnemy;
+    public static String stringNearWinner_SSS_Bot; // S - either 'X' or 'Y'
+    public static String stringNearWinner_SSS_Enemy; // S - either 'X' or 'Y'
 
     // ---------------------Public Methods-----------------------------
 
-    public static char getSignEnemy() {
+    public static Character getSignEnemy() {
         return signEnemy;
     }
 
-    public static char getSignBot() {
+    public static Character getSignBot() {
         return signBot;
     }
 
@@ -60,6 +64,8 @@ public class GameOptions {
 
         stringWinnerX = createStringWinner(VALUE_X);
         stringWinnerO = createStringWinner(VALUE_O);
+        stringNearWinner_XXX_ = createStringNearWinner_SSS_(VALUE_X);
+        stringNearWinner_OOO_ = createStringNearWinner_SSS_(VALUE_O);
         listStringNearWinnerX_1 = createListStringWin_1(VALUE_X);
         listStringNearWinnerO_1 = createListStringWin_1(VALUE_O);
         listStringNearWinnerX_2 = createListStringWin_2(VALUE_X);
@@ -73,12 +79,14 @@ public class GameOptions {
             //Bot strings
             GameOptions.signBot = VALUE_X;
             GameOptions.stringWinnerBot = stringWinnerX;
+            GameOptions.stringNearWinner_SSS_Bot = stringNearWinner_XXX_;
             GameOptions.listStringNearWinBot_1 = listStringNearWinnerX_1;
             GameOptions.listStringNearWinBot_2 = listStringNearWinnerX_2;
 
             //Enemy strings
             GameOptions.signEnemy = VALUE_O;
             GameOptions.stringWinnerEnemy = stringWinnerO;
+            GameOptions.stringNearWinner_SSS_Enemy = stringNearWinner_OOO_;
             GameOptions.listStringNearWinEnemy_1 = listStringNearWinnerO_1;
             GameOptions.listStringNearWinEnemy_2 = listStringNearWinnerO_2;
 
@@ -86,12 +94,14 @@ public class GameOptions {
             //Bot strings
             GameOptions.signBot = VALUE_O;
             GameOptions.stringWinnerBot = stringWinnerO;
+            GameOptions.stringNearWinner_SSS_Bot = stringNearWinner_OOO_;
             GameOptions.listStringNearWinBot_1 = listStringNearWinnerO_1;
             GameOptions.listStringNearWinBot_2 = listStringNearWinnerO_2;
 
             //Enemy strings
             GameOptions.signEnemy = VALUE_X;
             GameOptions.stringWinnerEnemy = stringWinnerX;
+            GameOptions.stringNearWinner_SSS_Enemy = stringNearWinner_XXX_;
             GameOptions.listStringNearWinEnemy_1 = listStringNearWinnerX_1;
             GameOptions.listStringNearWinEnemy_2 = listStringNearWinnerX_2;
         }
@@ -161,7 +171,7 @@ public class GameOptions {
             String strWin = "";
             for (int j = 0; j < numCheckedSigns - 1; j++) { // number of the signs
                 if (i == j) {
-                    strWin += String.valueOf(DEFAULT_CELL_VALUE + value + DEFAULT_CELL_VALUE);
+                    strWin += String.valueOf("" + DEFAULT_CELL_VALUE + value + DEFAULT_CELL_VALUE);
                     j += 1;
                 } else {
                     strWin += value;
@@ -184,7 +194,7 @@ public class GameOptions {
             String strWin = "";
             for (int j = 0; j < numCheckedSigns - 2; j++) { // number of the signs
                 if (i == j) {
-                    strWin += String.valueOf(DEFAULT_CELL_VALUE + value + value + DEFAULT_CELL_VALUE);
+                    strWin += String.valueOf("" + DEFAULT_CELL_VALUE + value + value + DEFAULT_CELL_VALUE);
                     j += 1;
                 } else {
                     strWin += value;
@@ -199,6 +209,25 @@ public class GameOptions {
         String result = "";
         for (int i = 0; i <= numCheckedSigns - 1; i++) {
             result += value;
+        }
+        return result;
+    }
+
+    /**
+     *
+     * @param value  'X' or 'Y'
+     * @return  string that could be WIN line by either of the two next enemy moves
+     */
+    private static String createStringNearWinner_SSS_(char value) {
+        String result = "";
+        for (int i = 0; i <= numCheckedSigns; i++) {
+            if (i == 0) {
+                result += String.valueOf("" + DEFAULT_CELL_VALUE);
+            } else if (i == numCheckedSigns) {
+                result += String.valueOf("" + DEFAULT_CELL_VALUE);
+            } else {
+                result += value;
+            }
         }
         return result;
     }
