@@ -261,7 +261,7 @@ public class Destructor {
 
                         Integer cellNewWeight = NEAR_WIN_ENEMY_1;
 
-                                         /*
+                        /*
                        Check whether enemyMove into cell with coordinates 'keyCell' alters the string 'stringResultOfCheck'
                        to 'stringWinnerEnemy_' and set to it weight 'NEAR_WIN_ENEMY_1_DANGER'
                         */
@@ -276,14 +276,10 @@ public class Destructor {
                         if (isDanger && weightMap.containsKey(keyCell)) {
                             cellNewWeight = NEAR_WIN_ENEMY_1_DANGER + (Integer) weightMap.get(keyCell);
 //                            System.out.println("Destructor*DANGER*weightMap.containsKey(keyCell)::weightMap.get(keyCell) = " + weightMap.get(keyCell));
-                        }
-
-
-
-
-                       else if (!isDanger && weightMap.containsKey(keyCell)) {
+                        } else if (!isDanger && weightMap.containsKey(keyCell)) {
                             cellNewWeight = NEAR_WIN_ENEMY_1 + (Integer) weightMap.get(keyCell);
                         }
+
 
                         weightMap.put(keyCell, cellNewWeight);  //if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)
 //                        System.out.println("1************Destructor::setWeightToNearWin_1::cell = " + keyCell.toString() + "cellNewWeight = " + cellNewWeight);
