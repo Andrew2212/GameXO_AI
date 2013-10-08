@@ -1,5 +1,7 @@
 package org.hexlet.gamexo.ai.gardnerway;
 
+import java.util.ArrayList;
+
 /**
  * User: KOlegA
  * Date: 15.09.13
@@ -51,6 +53,14 @@ class BoardModifier {
         return rBoard;
     }
 
+	static ArrayList<Integer> rotateHistory(ArrayList<Integer> history, int size, int degree) {
+		for (int i = 0; i < history.size(); i++) {
+			Integer indexOfRotatedCell = rotateHisIndex(history.get(i), size, degree);
+			history.set(i, indexOfRotatedCell);
+		}
+		return history;
+	}
+
 	/**
 	 * Rotates index of board cell.
 	 * @param index of cell which we want to rotate.
@@ -58,7 +68,7 @@ class BoardModifier {
 	 * @param degree we need to rotate;
 	 * @return  rotated index of cell.
 	 */
-	static int rotateHisIndex(int index, int size, int degree){
+	static Integer rotateHisIndex(int index, int size, int degree){
 		int[] xy = getCoordinateFromIndex(index, size);
 		int[] rotatedXY = rotateXY(xy[X], xy[Y], size, degree);
 		return getIndexOfCell(rotatedXY[X], rotatedXY[Y], size);
