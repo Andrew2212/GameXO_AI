@@ -57,7 +57,8 @@ public class Destructor {
         setWeightInDiagonalCW(lastEnemyMoveX, lastEnemyMoveY);
         setWeightInDiagonalCCW(lastEnemyMoveX, lastEnemyMoveY);
 
-        controlWeightMap();
+        //Print value of the 'weightMap'
+//        controlWeightMap();
 
         if (weightMap.isEmpty()) {
             setWeightToCellNearLastEnemyMove();
