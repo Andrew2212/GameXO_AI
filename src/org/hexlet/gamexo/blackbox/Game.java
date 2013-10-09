@@ -43,13 +43,20 @@ public class Game {
         return uniqueInstance;
     }
 
-    public void gameManToMan() {
+    public void gameBotEnemyVsBot() {
 
         GameFieldPainter.showFields();
 
         while (true) {
+            GameField.setSignToCell(gamerBotEnemy);
+            GameFieldPainter.showFields();
+            System.out.println("--------------------------------\n");
 
-            GameField.setSignToCell(gamerMan);
+            if (gameFieldMatrixChecker.isGameOver()) {
+                break;
+            }
+
+            GameField.setSignToCell(gamerBot);
             GameFieldPainter.showFields();
             System.out.println("--------------------------------\n");
 
@@ -60,7 +67,7 @@ public class Game {
         PlayStationXO.startGame();
     }
 
-    public void gameManToBot() {
+    public void gameManVsBot() {
 
         GameFieldPainter.showFields();
 
@@ -86,7 +93,7 @@ public class Game {
 
     }
 
-    public void gameBotToBot() {
+    public void gameBotVsBotEnemy() {
 
         GameFieldPainter.showFields();
 
@@ -107,6 +114,41 @@ public class Game {
                 break;
             }
         }
+        PlayStationXO.startGame();
+    }
+
+    public void gameBotVsBotEnemyRepeat() {
+        int numberOfRepeat = 3;
+
+        for (int i = 0; i < numberOfRepeat; i++) {
+
+
+            GameFieldPainter.showFields();
+
+            while (true) {
+                GameField.setSignToCell(gamerBot);
+                GameFieldPainter.showFields();
+                System.out.println("--------------------------------\n");
+
+                if (gameFieldMatrixChecker.isGameOver()) {
+                    break;
+                }
+
+                GameField.setSignToCell(gamerBotEnemy);
+                GameFieldPainter.showFields();
+                System.out.println("--------------------------------\n");
+
+                if (gameFieldMatrixChecker.isGameOver()) {
+                    break;
+                }
+            }
+            System.out.println("************************************************************* " + i);
+            GameField.getNewGameField();
+            gamerBot = new PlayerBot(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
+            gamerBotEnemy = new PlayerBotEnemy(GameField.FIELD_SIZE, GameField.NUM_CHECKED);
+
+        }
+
         PlayStationXO.startGame();
     }
 

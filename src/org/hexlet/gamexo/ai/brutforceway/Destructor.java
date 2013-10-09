@@ -57,7 +57,8 @@ public class Destructor {
         setWeightInDiagonalCW(lastEnemyMoveX, lastEnemyMoveY);
         setWeightInDiagonalCCW(lastEnemyMoveX, lastEnemyMoveY);
 
-        controlWeightMap();
+        //Print value of the 'weightMap'
+//        controlWeightMap();
 
         if (weightMap.isEmpty()) {
             setWeightToCellNearLastEnemyMove();
@@ -261,7 +262,7 @@ public class Destructor {
 
                         Integer cellNewWeight = NEAR_WIN_ENEMY_1;
 
-                                         /*
+                        /*
                        Check whether enemyMove into cell with coordinates 'keyCell' alters the string 'stringResultOfCheck'
                        to 'stringWinnerEnemy_' and set to it weight 'NEAR_WIN_ENEMY_1_DANGER'
                         */
@@ -276,14 +277,10 @@ public class Destructor {
                         if (isDanger && weightMap.containsKey(keyCell)) {
                             cellNewWeight = NEAR_WIN_ENEMY_1_DANGER + (Integer) weightMap.get(keyCell);
 //                            System.out.println("Destructor*DANGER*weightMap.containsKey(keyCell)::weightMap.get(keyCell) = " + weightMap.get(keyCell));
-                        }
-
-
-
-
-                       else if (!isDanger && weightMap.containsKey(keyCell)) {
+                        } else if (!isDanger && weightMap.containsKey(keyCell)) {
                             cellNewWeight = NEAR_WIN_ENEMY_1 + (Integer) weightMap.get(keyCell);
                         }
+
 
                         weightMap.put(keyCell, cellNewWeight);  //if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)
 //                        System.out.println("1************Destructor::setWeightToNearWin_1::cell = " + keyCell.toString() + "cellNewWeight = " + cellNewWeight);
@@ -330,7 +327,7 @@ public class Destructor {
                         int[] enemyMove = new int[]{keyCell.getX(), keyCell.getY()};
                         testFieldMatrix[keyCell.getX()][keyCell.getY()] = GameOptions.getSignEnemy();
 //                        Check whether it's DANGER
-                        boolean isDanger = checkTo_SSS_(listCheckedCell, testFieldMatrix);
+                        boolean isDanger = checkTo_SSS_Danger(listCheckedCell, testFieldMatrix);
 //                        If it's DANGER
                         if (isDanger && weightMap.containsKey(keyCell)) {
                             cellNewWeight = NEAR_WIN_ENEMY_2_DANGER + (Integer) weightMap.get(keyCell);
@@ -372,7 +369,7 @@ public class Destructor {
 
             resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[x]][listCheckedCell.get(i)[y]];
         }
-//        System.out.println("Destructor::checkTo_SSS_()::resultOfCheck = " + resultOfCheck);
+//        System.out.println("Destructor::checkTo_SSS_Danger()::resultOfCheck = " + resultOfCheck);
         if (resultOfCheck.contains(GameOptions.stringWinnerEnemy)) {
             return true;
         }
@@ -386,7 +383,7 @@ public class Destructor {
      * @return true if action ::testFieldMatrix[keyCell.getX()][keyCell.getY()] = GameOptions.getSignEnemy():: alters current checked String
      *         to the 'WIN_1 line that contains  '_SSSS_' i.e. WIN_1 line that has "_" before its start and after its end
      */
-    private boolean checkTo_SSS_(List<int[]> listCheckedCell, Character[][] testFieldMatrix) {
+    private boolean checkTo_SSS_Danger(List<int[]> listCheckedCell, Character[][] testFieldMatrix) {
 
         if (GameOptions.numCheckedSigns < 4) return false; // It's NOT works for field 3x3 and for numCheckedSigns = 3
 
@@ -397,7 +394,7 @@ public class Destructor {
 
             resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[x]][listCheckedCell.get(i)[y]];
         }
-//        System.out.println("Destructor::checkTo_SSS_()::resultOfCheck = " + resultOfCheck);
+//        System.out.println("Destructor::checkTo_SSS_Danger()::resultOfCheck = " + resultOfCheck);
         if (resultOfCheck.contains(GameOptions.stringNearWinner_SSS_Enemy)) {
             return true;
         }

@@ -7,9 +7,10 @@ import java.util.Scanner;
 
 public class PlayStationXO {
 
-    private static final int MAN_TO_MAN = 1;
-    private static final int MAN_TO_COMP = 2;
-    private static final int COMP_TO_COMP = 3;
+    private static final int BOT_ENEMY_VS_BOT = 1;
+    private static final int MAN_VS_BOT = 2;
+    private static final int BOT_VS_BOT_ENEMY = 3;
+    private static final int BOT_VS_BOT_ENEMY_REPEAT = 4;
     private static final String NEW_GAME = "N";
     private static final String REVERSE_HISTORY = "R";
     private static final String QUIT = "Q";
@@ -112,9 +113,10 @@ public class PlayStationXO {
         System.out.println("***Number of the checked signs = " + GameField.NUM_CHECKED);
 
         System.out.println("\n***SELECT GAME:");
-        System.out.println("*Human vs Human: press 1");
+        System.out.println("*BotEnemy vs Bot: press 1");
         System.out.println("*Human vs Bot: press 2");
         System.out.println("*Bot vs BotEnemy: press 3");
+        System.out.println("*Bot vs BotEnemy REPEAT: press 4");
 
         String strEnter = new Scanner(System.in).next();
         return setGameOptionValueFieldSize(strEnter);
@@ -162,16 +164,20 @@ public class PlayStationXO {
     private static void startNewGame(int kindOfGame) {
         switch (kindOfGame) {
 
-            case MAN_TO_MAN:
-                insertGame().gameManToMan();
+            case BOT_ENEMY_VS_BOT:
+                insertGame().gameBotEnemyVsBot();
                 break;
 
-            case MAN_TO_COMP:
-                insertGame().gameManToBot();
+            case MAN_VS_BOT:
+                insertGame().gameManVsBot();
                 break;
 
-            case COMP_TO_COMP:
-                insertGame().gameBotToBot();
+            case BOT_VS_BOT_ENEMY:
+                insertGame().gameBotVsBotEnemy();
+                break;
+
+            case BOT_VS_BOT_ENEMY_REPEAT:
+                insertGame().gameBotVsBotEnemyRepeat();
                 break;
 
             default:
@@ -181,7 +187,9 @@ public class PlayStationXO {
         }
     }
 
-    private static Game insertGame() {
+//    private static Game insertGame() {
+public static Game insertGame() {
         return Game.getInstance();
+
     }
 }
