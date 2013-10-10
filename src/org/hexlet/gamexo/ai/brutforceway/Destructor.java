@@ -1,5 +1,7 @@
 package org.hexlet.gamexo.ai.brutforceway;
 
+import org.hexlet.gamexo.ai.CoreGame;
+
 import java.util.*;
 
 /**
@@ -36,10 +38,10 @@ public class Destructor {
 
     public Destructor() {
 
-        NEAR_WIN_ENEMY_1 = GameOptions.numCheckedSigns * 10;
-        NEAR_WIN_ENEMY_1_DANGER = GameOptions.numCheckedSigns * 20;
-        NEAR_WIN_ENEMY_2 = GameOptions.numCheckedSigns * 2;
-        NEAR_WIN_ENEMY_2_DANGER = GameOptions.numCheckedSigns * 6;
+        NEAR_WIN_ENEMY_1 = CoreGame.getNumCheckedSigns() * 10;
+        NEAR_WIN_ENEMY_1_DANGER = CoreGame.getNumCheckedSigns() * 20;
+        NEAR_WIN_ENEMY_2 = CoreGame.getNumCheckedSigns() * 2;
+        NEAR_WIN_ENEMY_2_DANGER = CoreGame.getNumCheckedSigns() * 6;
         weightMap = new HashMap<int[], Integer>();
     }
 
@@ -141,7 +143,7 @@ public class Destructor {
         stringResultOfCheck = "" + GameOptions.getSignEnemy();
         listCheckedCell.add(new int[]{cellX, cellY});
 
-        for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
+        for (int i = 1; i < CoreGame.getNumCheckedSigns(); i++) {
             writeCheckedValue(cellX + i, cellY);
             writeCheckedValueInverse(cellX - i, cellY);
         }
@@ -160,7 +162,7 @@ public class Destructor {
         stringResultOfCheck = "" + GameOptions.getSignEnemy();
         listCheckedCell.add(new int[]{cellX, cellY});
 
-        for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
+        for (int i = 1; i < CoreGame.getNumCheckedSigns(); i++) {
             writeCheckedValue(cellX, cellY + i);
             writeCheckedValueInverse(cellX, cellY - i);
         }
@@ -179,7 +181,7 @@ public class Destructor {
         stringResultOfCheck = "" + GameOptions.getSignEnemy();
         listCheckedCell.add(new int[]{cellX, cellY});
 
-        for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
+        for (int i = 1; i < CoreGame.getNumCheckedSigns(); i++) {
             writeCheckedValue(cellX + i, cellY - i);
             writeCheckedValueInverse(cellX - i, cellY + i);
         }
@@ -199,7 +201,7 @@ public class Destructor {
         stringResultOfCheck = "" + GameOptions.getSignEnemy();
         listCheckedCell.add(new int[]{cellX, cellY});
 
-        for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
+        for (int i = 1; i < CoreGame.getNumCheckedSigns(); i++) {
             writeCheckedValue(cellX + i, cellY + i);
             writeCheckedValueInverse(cellX - i, cellY - i);
         }
@@ -219,7 +221,7 @@ public class Destructor {
      */
     private void writeCheckedValue(int x, int y) {
         stringResultOfCheck = stringResultOfCheck + fetchCellValue(x, y);
-        if (isValueValid(x, y)) {
+        if (CoreGame.isValueValid(x, y)) {
 //                System.out.println("writeCheckedValue::listCheckedCell.add(cell_)::cell_[x] = " + x + " cell_[y] = " + y);
             listCheckedCell.add(new int[]{x, y});
         }
@@ -233,7 +235,7 @@ public class Destructor {
      */
     private void writeCheckedValueInverse(int x, int y) {
         stringResultOfCheck = fetchCellValue(x, y) + stringResultOfCheck;
-        if (isValueValid(x, y)) {
+        if (CoreGame.isValueValid(x, y)) {
 //                System.out.println("-  listCheckedCell.addInverse(cell_)::cell_[x] = " + x + " cell_[y] = " + y);
             listCheckedCell.add(0, new int[]{x, y});
         }
@@ -247,18 +249,18 @@ public class Destructor {
      */
     private List<int[]> setWeightToNearWin_1() {
 
-        for (int j = 0; j < GameOptions.listStringNearWinEnemy_1.size(); j++) {
+        for (int j = 0; j < GameOptions.getListStringNearWinEnemy_1().size(); j++) {
 //            System.out.println("Destructor* " + j + " strWin_1 = " + GameOptions.listStringNearWinEnemy_1.get(j));
 //            System.out.println("Destructor* " + j + " stringResultOfCheck = " + stringResultOfCheck);
 
 //            Check condition 'contains' for each string from 'listStringNearWinEnemy_1'
-            if (stringResultOfCheck.contains(GameOptions.listStringNearWinEnemy_1.get(j))) {
+            if (stringResultOfCheck.contains(GameOptions.getListStringNearWinEnemy_1().get(j))) {
                 for (int i = 0; i < stringResultOfCheck.length(); i++) {
 
                     KeyCell keyCell = new KeyCell(listCheckedCell.get(i));
                     char cellValue = stringResultOfCheck.charAt(i);
 //                System.out.println("Destructor::setWeightToNearWin_1::cell[0] = " + keyCell.getX() + " cell[1] = " + keyCell.getX() + " cellValue = " + cellValue);
-                    if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
+                    if (cellValue == (CoreGame.DEFAULT_CELL_VALUE)) {
 
                         Integer cellNewWeight = NEAR_WIN_ENEMY_1;
 
@@ -302,19 +304,19 @@ public class Destructor {
      * <br> if checked line of cells close to 'WIN without 2 signs' from 'listStringNearWinEnemy_2' and cellValue into fieldMatrix == DEFAULT
      */
     private List<int[]> setWeightToNearWin_2() {
-        for (int j = 0; j < GameOptions.listStringNearWinEnemy_2.size(); j++) {
+        for (int j = 0; j < GameOptions.getListStringNearWinEnemy_2().size(); j++) {
 //            System.out.println("W2*** " + j + " strWin_2 = " + GameOptions.listStringNearWinEnemy_2.get(j));
 //            System.out.println("W2*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
 
 //            Check condition 'contains' for each string from 'listStringNearWinEnemy_2'
-            if (stringResultOfCheck.contains(GameOptions.listStringNearWinEnemy_2.get(j))) {
+            if (stringResultOfCheck.contains(GameOptions.getListStringNearWinEnemy_2().get(j))) {
 
                 for (int i = 0; i < stringResultOfCheck.length(); i++) {
                     KeyCell keyCell = new KeyCell(listCheckedCell.get(i));
                     char cellValue = stringResultOfCheck.charAt(i);
 //                    System.out.println("Destructor::setWeightToNearWin_2::cell = " + keyCell.toString() + "cellValue = " + cellValue);
 
-                    if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
+                    if (cellValue == (CoreGame.DEFAULT_CELL_VALUE)) {
 
                         Integer cellNewWeight = NEAR_WIN_ENEMY_2;
                        /*
@@ -370,7 +372,7 @@ public class Destructor {
             resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[x]][listCheckedCell.get(i)[y]];
         }
 //        System.out.println("Destructor::checkTo_SSS_Danger()::resultOfCheck = " + resultOfCheck);
-        if (resultOfCheck.contains(GameOptions.stringWinnerEnemy)) {
+        if (resultOfCheck.contains(GameOptions.getStringWinnerEnemy())) {
             return true;
         }
 
@@ -385,7 +387,7 @@ public class Destructor {
      */
     private boolean checkTo_SSS_Danger(List<int[]> listCheckedCell, Character[][] testFieldMatrix) {
 
-        if (GameOptions.numCheckedSigns < 4) return false; // It's NOT works for field 3x3 and for numCheckedSigns = 3
+        if (CoreGame.getNumCheckedSigns() < 4) return false; // It's NOT works for field 3x3 and for numCheckedSigns = 3
 
         int x = 0;
         int y = 1;
@@ -395,7 +397,7 @@ public class Destructor {
             resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[x]][listCheckedCell.get(i)[y]];
         }
 //        System.out.println("Destructor::checkTo_SSS_Danger()::resultOfCheck = " + resultOfCheck);
-        if (resultOfCheck.contains(GameOptions.stringNearWinner_SSS_Enemy)) {
+        if (resultOfCheck.contains(GameOptions.getStringNearWinner_SSS_Enemy())) {
             return true;
         }
 
@@ -459,7 +461,7 @@ public class Destructor {
 
             KeyCell keyCell = new KeyCell(listCellsNearLastEnemyMove.get(i));
 //        if cell is empty of signs
-            if (fetchCellValue(keyCell.getX(), keyCell.getY()).equals(String.valueOf(GameOptions.DEFAULT_CELL_VALUE))) {
+            if (fetchCellValue(keyCell.getX(), keyCell.getY()).equals(String.valueOf(CoreGame.DEFAULT_CELL_VALUE))) {
 //            Increase cell weight on value 'weight'
                 Integer cellPreviousValue = (Integer) weightMap.get(keyCell);
                 int cellNewValue = NEAR_MOVE;
@@ -489,18 +491,10 @@ public class Destructor {
     private String fetchCellValue(int cellX, int cellY) {
 
         String cellValue = "";
-        if (isValueValid(cellX, cellY)) {
+        if (CoreGame.isValueValid(cellX, cellY)) {
             cellValue += BrutforceAI.getCopyFieldMatrix()[cellX][cellY];
         }
         return cellValue;
-    }
-
-
-    private boolean isValueValid(int x, int y) {
-        if ((0 <= x && x < GameOptions.fieldSize) && (0 <= y && y < GameOptions.fieldSize)) {
-            return true;
-        }
-        return false;
     }
 
     //---------------Methods for test print value =) -------------------------------
