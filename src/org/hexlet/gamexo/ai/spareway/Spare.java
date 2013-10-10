@@ -1,5 +1,6 @@
 package org.hexlet.gamexo.ai.spareway;
 
+import org.hexlet.gamexo.ai.CoreGame;
 import org.hexlet.gamexo.ai.IBrainAI;
 import org.hexlet.gamexo.ai.utils.FieldMatrixConverter;
 import org.hexlet.gamexo.ai.utils.GetterLastEnemyMove;
@@ -20,7 +21,9 @@ public class Spare implements IBrainAI {
     private GetterLastEnemyMove getterLastEnemyMove;
 
     public Spare(int fieldSize, int numChecked) {
-        getterLastEnemyMove = new GetterLastEnemyMove(fieldSize);
+        // Set 'CoreGame options' where we'll get them from
+        CoreGame.initCoreGame(fieldSize, numChecked);
+        getterLastEnemyMove = new GetterLastEnemyMove();
     }
 
     /**

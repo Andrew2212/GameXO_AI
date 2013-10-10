@@ -1,5 +1,7 @@
 package org.hexlet.gamexo.ai.brutforceway;
 
+import org.hexlet.gamexo.ai.CoreGame;
+
 import java.util.*;
 
 /**
@@ -30,7 +32,7 @@ public class Constructor {
 
 
     public Constructor() {
-        NEAR_WIN_BOT_1 = GameOptions.numCheckedSigns * 20;
+        NEAR_WIN_BOT_1 = CoreGame.getNumCheckedSigns() * 20;
     }
 
     //    --------------Public Methods-------------------
@@ -97,7 +99,7 @@ public class Constructor {
         stringResultOfCheck = "" + GameOptions.getSignBot();
         listCheckedCell.add(new int[]{cellX, cellY});
 
-        for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
+        for (int i = 1; i < CoreGame.getNumCheckedSigns(); i++) {
             writeCheckedValue(cellX + i, cellY);
             writeCheckedValueInverse(cellX - i, cellY);
         }
@@ -119,7 +121,7 @@ public class Constructor {
         stringResultOfCheck = "" + GameOptions.getSignBot();
         listCheckedCell.add(new int[]{cellX, cellY});
 
-        for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
+        for (int i = 1; i < CoreGame.getNumCheckedSigns(); i++) {
             writeCheckedValue(cellX, cellY + i);
             writeCheckedValueInverse(cellX, cellY - i);
         }
@@ -141,7 +143,7 @@ public class Constructor {
         stringResultOfCheck = "" + GameOptions.getSignBot();
         listCheckedCell.add(new int[]{cellX, cellY});
 
-        for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
+        for (int i = 1; i < CoreGame.getNumCheckedSigns(); i++) {
             writeCheckedValue(cellX + i, cellY - i);
             writeCheckedValueInverse(cellX - i, cellY + i);
         }
@@ -164,7 +166,7 @@ public class Constructor {
         stringResultOfCheck = "" + GameOptions.getSignBot();
         listCheckedCell.add(new int[]{cellX, cellY});
 
-        for (int i = 1; i < GameOptions.numCheckedSigns; i++) {
+        for (int i = 1; i < CoreGame.getNumCheckedSigns(); i++) {
             writeCheckedValue(cellX + i, cellY + i);
             writeCheckedValueInverse(cellX - i, cellY - i);
         }
@@ -183,17 +185,17 @@ public class Constructor {
      */
     private boolean setWeightToNearWin_1() {
         int[] cellWin = null;
-        for (int j = 0; j < GameOptions.listStringNearWinBot_1.size(); j++) {
+        for (int j = 0; j < GameOptions.getListStringNearWinBot_1().size(); j++) {
 //            System.out.println("Constructor*** " + j + " strWin_1 = " + GameOptions.listStringNearWinBot_1.get(j));
 //            System.out.println("Constructor*** " + j + " stringResultOfCheck = " + stringResultOfCheck);
 
 // Check condition 'contains' for each string from 'listStringNearWinBot_1'
-            if (stringResultOfCheck.contains(GameOptions.listStringNearWinBot_1.get(j))) {
+            if (stringResultOfCheck.contains(GameOptions.getListStringNearWinBot_1().get(j))) {
                 for (int i = 0; i < stringResultOfCheck.length(); i++) {
 
                     char cellValue = stringResultOfCheck.charAt(i);
 // Cell coordinate = 'listCheckedCell.get(i)' and cellValue = 'cellValue' from 'stringResultOfCheck.charAt(i)'
-                    if (cellValue == (GameOptions.DEFAULT_CELL_VALUE)) {
+                    if (cellValue == (CoreGame.DEFAULT_CELL_VALUE)) {
 // Set  signBot with '[listCheckedCell.get(i)[X]][listCheckedCell.get(i)[Y]]' into 'testFieldMatrix'
                         Character[][] testFieldMatrix = BrutforceAI.getCopyFieldMatrix();
                         int[] move = listCheckedCell.get(i);
@@ -206,7 +208,7 @@ public class Constructor {
 
                             return true;
                         }
-                        testFieldMatrix[move[X]][move[Y]] = GameOptions.DEFAULT_CELL_VALUE;
+                        testFieldMatrix[move[X]][move[Y]] = CoreGame.DEFAULT_CELL_VALUE;
                     }
                 }
             }
@@ -229,7 +231,7 @@ public class Constructor {
             resultOfCheck += testFieldMatrix[listCheckedCell.get(i)[X]][listCheckedCell.get(i)[Y]];
         }
 //        System.out.println("Constructor::checkToWin::resultOfCheck = " + resultOfCheck);
-        if (resultOfCheck.contains(GameOptions.stringWinnerBot)) {
+        if (resultOfCheck.contains(GameOptions.getStringWinnerBot())) {
             moveWin = move;
 //            System.out.println("Constructor::checkToWin::moveWin[X] = " + moveWin[X] + " moveWin[Y] = " + moveWin[Y]);
             return true;
@@ -247,7 +249,7 @@ public class Constructor {
      */
     private void writeCheckedValue(int x, int y) {
         stringResultOfCheck = stringResultOfCheck + fetchCellValue(x, y);
-        if (isValueValid(x, y)) {
+        if (CoreGame.isValueValid(x, y)) {
 //                System.out.println("writeCheckedValue::listCheckedCell.add(cell_)::cell_[x] = " + x + " cell_[y] = " + y);
             listCheckedCell.add(new int[]{x, y});
         }
@@ -261,7 +263,7 @@ public class Constructor {
      */
     private void writeCheckedValueInverse(int x, int y) {
         stringResultOfCheck = fetchCellValue(x, y) + stringResultOfCheck;
-        if (isValueValid(x, y)) {
+        if (CoreGame.isValueValid(x, y)) {
 //                System.out.println("-  listCheckedCell.addInverse(cell_)::cell_[x] = " + x + " cell_[y] = " + y);
             listCheckedCell.add(0, new int[]{x, y});
         }
@@ -279,29 +281,10 @@ public class Constructor {
     private String fetchCellValue(int cellX, int cellY) {
 
         String cellValue = "";
-        if (isValueValid(cellX, cellY)) {
+        if (CoreGame.isValueValid(cellX, cellY)) {
             cellValue += BrutforceAI.getCopyFieldMatrix()[cellX][cellY];
         }
         return cellValue;
     }
-
-
-    private boolean isValueValid(int x, int y) {
-        if ((0 <= x && x < GameOptions.fieldSize) && (0 <= y && y < GameOptions.fieldSize)) {
-            return true;
-        }
-        return false;
-    }
-
-//    public Character[][] copyMatrix(Character [][] fieldMatrix){
-//        int size = fieldMatrix.length;
-//        Character[][] fieldMatrixCopy = new Character[size][size];
-//        for (int i = 0; i < size; i++){
-//            for(int j = 0; j < size; j++){
-//                fieldMatrixCopy[i][j] = fieldMatrix[i][j];
-//            }
-//        }
-//        return fieldMatrixCopy;
-//    }
 
 }
