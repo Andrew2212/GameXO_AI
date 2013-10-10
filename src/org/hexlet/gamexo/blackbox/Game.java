@@ -118,7 +118,7 @@ public class Game {
     }
 
     public void gameBotVsBotEnemyRepeat() {
-        int numberOfRepeat = 3;
+        int numberOfRepeat = 100;
 
         for (int i = 0; i < numberOfRepeat; i++) {
 

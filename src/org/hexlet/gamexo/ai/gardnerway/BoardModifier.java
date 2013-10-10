@@ -78,17 +78,17 @@ class BoardModifier {
     static int[] rotateXY(int x, int y, int size, int degree) {
         int[] xy = new int[2];
         switch (degree) {
-            case 90  :
-                xy[X] = y;
-                xy[Y] = (size - 1) - x;
+            case 90  :                    //rotate x,y at 90 degrees clockwise;
+                xy[X] = (size - 1) - y;
+                xy[Y] = x;
                 break;
             case 180 :
                 xy[X] = (size - 1) - x;
                 xy[Y] = (size - 1) - y;
                 break;
-            case 270 :
-                xy[X] = (size - 1) - y;
-                xy[Y] = x;
+            case 270 :                    //rotate x,y at 90 degrees anticlockwise;
+                xy[X] = y;
+                xy[Y] = (size - 1) - x;
                 break;
             case 11 :                    //flip around axis Y
                 xy[X] = (size - 1) - x;
