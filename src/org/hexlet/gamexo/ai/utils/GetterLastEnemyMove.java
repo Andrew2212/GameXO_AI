@@ -1,8 +1,6 @@
 package org.hexlet.gamexo.ai.utils;
 
-import org.hexlet.gamexo.blackbox.game.GameField;
-
-import java.util.Arrays;
+import org.hexlet.gamexo.ai.CoreGame;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,17 +12,17 @@ import java.util.Arrays;
  */
 public class GetterLastEnemyMove {
 
-    private char[][] previousFieldMatrix;
+    private Character[][] previousFieldMatrix;
     private int fieldSize;
 
     private final int[] MOVE = new int[2];
     private static final int X = 0;
     private static final int Y = 1;
 
-    public GetterLastEnemyMove(int fieldSize) {
+    public GetterLastEnemyMove() {
 
-        this.fieldSize = fieldSize;
-        previousFieldMatrix = new char[fieldSize][fieldSize];
+        fieldSize = CoreGame.getFieldSize();
+        previousFieldMatrix = new Character[fieldSize][fieldSize];
         fillDefaultGameMatrix(previousFieldMatrix);
 
     }
@@ -34,8 +32,8 @@ public class GetterLastEnemyMove {
         for (int i = 0; i < fieldSize; i++) {
             for (int j = 0; j < fieldSize; j++) {
 
-                if (fieldMatrix[i][j] != GameField.getDefaultCellValue()
-                        && (previousFieldMatrix[i][j] != fieldMatrix[i][j])) {
+                if (!fieldMatrix[i][j].equals(CoreGame.DEFAULT_CELL_VALUE)
+                        && (!previousFieldMatrix[i][j].equals(fieldMatrix[i][j]))) {
 
                     MOVE[X] = i;
                     MOVE[Y] = j;
@@ -57,7 +55,7 @@ public class GetterLastEnemyMove {
     public void setMyOwnMove(int moveX, int moveY, char signBot) {
 
 //        checkout for random - it isn't needed for real AI
-        if (GameField.isCellValid(moveX, moveY)) {
+        if (isCellValid(moveX, moveY)) {
             previousFieldMatrix[moveX][moveY] = signBot;
         }
 
@@ -65,16 +63,28 @@ public class GetterLastEnemyMove {
 
 //    -----------------Private Methods---------------------------
 
-    private void fillDefaultGameMatrix(char[][] fieldMatrix) {
-        for (int i = 0; i < GameField.FIELD_SIZE; i++) {
-            for (int j = 0; j < GameField.FIELD_SIZE; j++) {
+    private void fillDefaultGameMatrix(Character[][] fieldMatrix) {
+        for (int i = 0; i < fieldMatrix.length; i++) {
+            for (int j = 0; j < fieldMatrix.length; j++) {
                 fillDefaultCurrentCell(i, j);
             }
         }
     }
 
     private void fillDefaultCurrentCell(int i, int j) {
-        previousFieldMatrix[i][j] = GameField.getDefaultCellValue();
+        previousFieldMatrix[i][j] = CoreGame.DEFAULT_CELL_VALUE;
+    }
+
+    private boolean isCellValid(int x, int y) {
+
+        if (!CoreGame.isValueValid(x, y)) {
+            return false;
+        }
+
+        if (previousFieldMatrix[x][y].equals(CoreGame.DEFAULT_CELL_VALUE)) {
+            return true;
+        }
+        return false;
     }
 
 }

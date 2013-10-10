@@ -1,5 +1,7 @@
 package org.hexlet.gamexo.ai.brutforceway;
 
+import org.hexlet.gamexo.ai.CoreGame;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,18 +16,6 @@ public class GameOptions {
 
     private static Character signBot;
     private static Character signEnemy;
-    public static final Character DEFAULT_CELL_VALUE = '_';
-    private static final Character VALUE_X = 'X';
-    private static final Character VALUE_O = 'O';
-
-//    private static char signBot;
-//    private static char signEnemy;
-//public static final char DEFAULT_CELL_VALUE = '_';
-//    private static char  VALUE_X = 'X';
-//    private static char VALUE_O = 'O';
-
-    public static int fieldSize;
-    public static int numCheckedSigns;
 
     private static String stringWinnerX = ""; // i.e. string XXXX
     private static String stringWinnerO = ""; // i.e. string OOOO
@@ -37,73 +27,63 @@ public class GameOptions {
     private static List<String> listStringNearWinnerX_2; // i.e. string XX__ without 2 sign
     private static List<String> listStringNearWinnerO_2;  //i.e. string OO__ without 2 sign
 
-    public static List<String> listStringNearWinBot_1;
-    public static List<String> listStringNearWinBot_2;
-    public static List<String> listStringNearWinEnemy_1;
-    public static List<String> listStringNearWinEnemy_2;
+    private static List<String> listStringNearWinBot_1;
+    private static List<String> listStringNearWinBot_2;
+    private static List<String> listStringNearWinEnemy_1;
+    private static List<String> listStringNearWinEnemy_2;
 
-    public static String stringWinnerBot;
-    public static String stringWinnerEnemy;
-    public static String stringNearWinner_SSS_Bot; // S - either 'X' or 'Y'
-    public static String stringNearWinner_SSS_Enemy; // S - either 'X' or 'Y'
+    private static String stringWinnerBot;
+    private static String stringWinnerEnemy;
+    private static String stringNearWinner_SSS_Bot; // S - either 'X' or 'Y'
+    private static String stringNearWinner_SSS_Enemy; // S - either 'X' or 'Y'
 
     // ---------------------Public Methods-----------------------------
 
-    public static Character getSignEnemy() {
-        return signEnemy;
-    }
-
-    public static Character getSignBot() {
-        return signBot;
-    }
-
-    public static void initGameOptions(int fieldSize, int numCheckedSigns) {
+    public static void initGameOptions() {
 //        System.out.println("GameOptions::initGameOptions");
-        GameOptions.fieldSize = fieldSize;
-        GameOptions.numCheckedSigns = numCheckedSigns;
 
-        stringWinnerX = createStringWinner(VALUE_X);
-        stringWinnerO = createStringWinner(VALUE_O);
-        stringNearWinner_XXX_ = createStringNearWinner_SSS_(VALUE_X);
-        stringNearWinner_OOO_ = createStringNearWinner_SSS_(VALUE_O);
-        listStringNearWinnerX_1 = createListStringWin_1(VALUE_X);
-        listStringNearWinnerO_1 = createListStringWin_1(VALUE_O);
-        listStringNearWinnerX_2 = createListStringWin_2(VALUE_X);
-        listStringNearWinnerO_2 = createListStringWin_2(VALUE_O);
+        stringWinnerX = createStringWinner(CoreGame.VALUE_X);
+        stringWinnerO = createStringWinner(CoreGame.VALUE_O);
+        stringNearWinner_XXX_ = createStringNearWinner_SSS_(CoreGame.VALUE_X);
+        stringNearWinner_OOO_ = createStringNearWinner_SSS_(CoreGame.VALUE_O);
+        listStringNearWinnerX_1 = createListStringWin_1(CoreGame.VALUE_X);
+        listStringNearWinnerO_1 = createListStringWin_1(CoreGame.VALUE_O);
+        listStringNearWinnerX_2 = createListStringWin_2(CoreGame.VALUE_X);
+        listStringNearWinnerO_2 = createListStringWin_2(CoreGame.VALUE_O);
     }
 
     public static void setSignBotAndSignEnemy(char signBot) {
 //        System.out.println("GameOptions::setSignBotAndSignEnemy::signBot = " + signBot);
 //        if (String.valueOf(signBot).equalsIgnoreCase(VALUE_X)) {
-        if (signBot == VALUE_X) {
+        if (signBot == CoreGame.VALUE_X) {
             //Bot strings
-            GameOptions.signBot = VALUE_X;
-            GameOptions.stringWinnerBot = stringWinnerX;
-            GameOptions.stringNearWinner_SSS_Bot = stringNearWinner_XXX_;
-            GameOptions.listStringNearWinBot_1 = listStringNearWinnerX_1;
-            GameOptions.listStringNearWinBot_2 = listStringNearWinnerX_2;
+            GameOptions.signBot = CoreGame.VALUE_X;
+            GameOptions.setStringWinnerBot(stringWinnerX);
+            GameOptions.setStringNearWinner_SSS_Bot(stringNearWinner_XXX_);
+            GameOptions.setListStringNearWinBot_1(listStringNearWinnerX_1);
+            GameOptions.setListStringNearWinBot_2(listStringNearWinnerX_2);
 
             //Enemy strings
-            GameOptions.signEnemy = VALUE_O;
-            GameOptions.stringWinnerEnemy = stringWinnerO;
-            GameOptions.stringNearWinner_SSS_Enemy = stringNearWinner_OOO_;
-            GameOptions.listStringNearWinEnemy_1 = listStringNearWinnerO_1;
-            GameOptions.listStringNearWinEnemy_2 = listStringNearWinnerO_2;
+            GameOptions.signEnemy = CoreGame.VALUE_O;
+            GameOptions.setStringWinnerEnemy(stringWinnerO);
+            GameOptions.setStringNearWinner_SSS_Enemy(stringNearWinner_OOO_);
+            GameOptions.setListStringNearWinEnemy_1(listStringNearWinnerO_1);
+            GameOptions.setListStringNearWinEnemy_2(listStringNearWinnerO_2);
 
         } else {
             //Bot strings
-            GameOptions.signBot = VALUE_O;
-            GameOptions.stringWinnerBot = stringWinnerO;
-            GameOptions.stringNearWinner_SSS_Bot = stringNearWinner_OOO_;
-            GameOptions.listStringNearWinBot_1 = listStringNearWinnerO_1;
-            GameOptions.listStringNearWinBot_2 = listStringNearWinnerO_2;
+            GameOptions.signBot = CoreGame.VALUE_O;
+            GameOptions.setStringWinnerBot(stringWinnerO);
+            GameOptions.setStringNearWinner_SSS_Bot(stringNearWinner_OOO_);
+            GameOptions.setListStringNearWinBot_1(listStringNearWinnerO_1);
+            GameOptions.setListStringNearWinBot_2(listStringNearWinnerO_2);
 
             //Enemy strings
-            GameOptions.signEnemy = VALUE_X;
-            GameOptions.stringWinnerEnemy = stringWinnerX;
-            GameOptions.stringNearWinner_SSS_Enemy = stringNearWinner_XXX_;
-            GameOptions.listStringNearWinEnemy_1 = listStringNearWinnerX_1;
-            GameOptions.listStringNearWinEnemy_2 = listStringNearWinnerX_2;
+            GameOptions.signEnemy = CoreGame.VALUE_X;
+            GameOptions.setStringWinnerEnemy(stringWinnerX);
+            GameOptions.setStringNearWinner_SSS_Enemy(stringNearWinner_XXX_);
+            GameOptions.setListStringNearWinEnemy_1(listStringNearWinnerX_1);
+            GameOptions.setListStringNearWinEnemy_2(listStringNearWinnerX_2);
         }
     }
 
@@ -116,11 +96,11 @@ public class GameOptions {
     private static List<String> createListStringWin_1(char value) {
         List<String> listStringNearWinner_1 = new ArrayList<String>();
 
-        for (int i = 0; i < numCheckedSigns; i++) { // number of the strings
+        for (int i = 0; i < CoreGame.getNumCheckedSigns(); i++) { // number of the strings
             String strWin = "";
-            for (int j = 0; j < numCheckedSigns; j++) { // number of the signs
+            for (int j = 0; j < CoreGame.getNumCheckedSigns(); j++) { // number of the signs
                 if (i == j) {
-                    strWin += String.valueOf(DEFAULT_CELL_VALUE);
+                    strWin += String.valueOf(CoreGame.DEFAULT_CELL_VALUE);
                 } else {
                     strWin += value;
                 }
@@ -138,11 +118,11 @@ public class GameOptions {
     private static List<String> createListStringWin_2(char value) {
         List<String> listStringNearWinner_2 = new ArrayList<String>();
 
-        for (int i = 0; i < numCheckedSigns - 1; i++) { // number of the strings
+        for (int i = 0; i < CoreGame.getNumCheckedSigns() - 1; i++) { // number of the strings
             String strWin = "";
-            for (int j = 0; j < numCheckedSigns; j++) { // number of the signs
+            for (int j = 0; j < CoreGame.getNumCheckedSigns(); j++) { // number of the signs
                 if (i == j) {
-                    strWin += String.valueOf(DEFAULT_CELL_VALUE + "" + DEFAULT_CELL_VALUE);
+                    strWin += String.valueOf(CoreGame.DEFAULT_CELL_VALUE + "" + CoreGame.DEFAULT_CELL_VALUE);
                     j += 1;
                 } else {
                     strWin += value;
@@ -150,7 +130,7 @@ public class GameOptions {
             }
             listStringNearWinner_2.add(strWin);
         }
-        if (3 < numCheckedSigns) {
+        if (3 < CoreGame.getNumCheckedSigns()) {
 //        Add  all strings such as '_X_X'
             listStringNearWinner_2.addAll(createListStringWin_2add(value));
             //        Add  all strings such as '_XX_'
@@ -167,11 +147,11 @@ public class GameOptions {
     private static List<String> createListStringWin_2add(char value) {
         List<String> listStringNearWinner_2w = new ArrayList<String>();
 
-        for (int i = 0; i < numCheckedSigns - 2; i++) { // number of the strings
+        for (int i = 0; i < CoreGame.getNumCheckedSigns() - 2; i++) { // number of the strings
             String strWin = "";
-            for (int j = 0; j < numCheckedSigns - 1; j++) { // number of the signs
+            for (int j = 0; j < CoreGame.getNumCheckedSigns() - 1; j++) { // number of the signs
                 if (i == j) {
-                    strWin += String.valueOf("" + DEFAULT_CELL_VALUE + value + DEFAULT_CELL_VALUE);
+                    strWin += String.valueOf("" + CoreGame.DEFAULT_CELL_VALUE + value + CoreGame.DEFAULT_CELL_VALUE);
                     j += 1;
                 } else {
                     strWin += value;
@@ -190,11 +170,11 @@ public class GameOptions {
     private static List<String> createListStringWin_2add_(char value) {
         List<String> listStringNearWinner_2w = new ArrayList<String>();
 
-        for (int i = 0; i < numCheckedSigns - 3; i++) { // number of the strings
+        for (int i = 0; i < CoreGame.getNumCheckedSigns() - 3; i++) { // number of the strings
             String strWin = "";
-            for (int j = 0; j < numCheckedSigns - 2; j++) { // number of the signs
+            for (int j = 0; j < CoreGame.getNumCheckedSigns() - 2; j++) { // number of the signs
                 if (i == j) {
-                    strWin += String.valueOf("" + DEFAULT_CELL_VALUE + value + value + DEFAULT_CELL_VALUE);
+                    strWin += String.valueOf("" + CoreGame.DEFAULT_CELL_VALUE + value + value + CoreGame.DEFAULT_CELL_VALUE);
                     j += 1;
                 } else {
                     strWin += value;
@@ -207,7 +187,7 @@ public class GameOptions {
 
     private static String createStringWinner(char value) {
         String result = "";
-        for (int i = 0; i <= numCheckedSigns - 1; i++) {
+        for (int i = 0; i <= CoreGame.getNumCheckedSigns() - 1; i++) {
             result += value;
         }
         return result;
@@ -220,11 +200,11 @@ public class GameOptions {
      */
     private static String createStringNearWinner_SSS_(char value) {
         String result = "";
-        for (int i = 0; i <= numCheckedSigns; i++) {
+        for (int i = 0; i <= CoreGame.getNumCheckedSigns(); i++) {
             if (i == 0) {
-                result += String.valueOf("" + DEFAULT_CELL_VALUE);
-            } else if (i == numCheckedSigns) {
-                result += String.valueOf("" + DEFAULT_CELL_VALUE);
+                result += String.valueOf("" + CoreGame.DEFAULT_CELL_VALUE);
+            } else if (i == CoreGame.getNumCheckedSigns()) {
+                result += String.valueOf("" + CoreGame.DEFAULT_CELL_VALUE);
             } else {
                 result += value;
             }
@@ -232,4 +212,77 @@ public class GameOptions {
         return result;
     }
 
+    // ---------------------Getters and Setters-----------------------------
+
+    public static Character getSignBot() {
+        return signBot;
+    }
+
+    public static Character getSignEnemy() {
+        return signEnemy;
+    }
+
+    public static List<String> getListStringNearWinBot_1() {
+        return listStringNearWinBot_1;
+    }
+
+    public static void setListStringNearWinBot_1(List<String> listStringNearWinBot_1) {
+        GameOptions.listStringNearWinBot_1 = listStringNearWinBot_1;
+    }
+
+    public static List<String> getListStringNearWinBot_2() {
+        return listStringNearWinBot_2;
+    }
+
+    public static void setListStringNearWinBot_2(List<String> listStringNearWinBot_2) {
+        GameOptions.listStringNearWinBot_2 = listStringNearWinBot_2;
+    }
+
+    public static List<String> getListStringNearWinEnemy_1() {
+        return listStringNearWinEnemy_1;
+    }
+
+    public static void setListStringNearWinEnemy_1(List<String> listStringNearWinEnemy_1) {
+        GameOptions.listStringNearWinEnemy_1 = listStringNearWinEnemy_1;
+    }
+
+    public static List<String> getListStringNearWinEnemy_2() {
+        return listStringNearWinEnemy_2;
+    }
+
+    public static void setListStringNearWinEnemy_2(List<String> listStringNearWinEnemy_2) {
+        GameOptions.listStringNearWinEnemy_2 = listStringNearWinEnemy_2;
+    }
+
+    public static String getStringWinnerBot() {
+        return stringWinnerBot;
+    }
+
+    public static void setStringWinnerBot(String stringWinnerBot) {
+        GameOptions.stringWinnerBot = stringWinnerBot;
+    }
+
+    public static String getStringWinnerEnemy() {
+        return stringWinnerEnemy;
+    }
+
+    public static void setStringWinnerEnemy(String stringWinnerEnemy) {
+        GameOptions.stringWinnerEnemy = stringWinnerEnemy;
+    }
+
+    public static String getStringNearWinner_SSS_Bot() {
+        return stringNearWinner_SSS_Bot;
+    }
+
+    public static void setStringNearWinner_SSS_Bot(String stringNearWinner_SSS_Bot) {
+        GameOptions.stringNearWinner_SSS_Bot = stringNearWinner_SSS_Bot;
+    }
+
+    public static String getStringNearWinner_SSS_Enemy() {
+        return stringNearWinner_SSS_Enemy;
+    }
+
+    public static void setStringNearWinner_SSS_Enemy(String stringNearWinner_SSS_Enemy) {
+        GameOptions.stringNearWinner_SSS_Enemy = stringNearWinner_SSS_Enemy;
+    }
 }
