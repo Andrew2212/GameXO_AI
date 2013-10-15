@@ -133,6 +133,8 @@ public class Gardner implements IBrainAI{
             move[X] = BOARD_SIZE / 2;
             move[Y] = BOARD_SIZE / 2;
 	        firstMove = false;
+	        setChipOnBoard(move[X], move[Y], aiChip);
+	        return move;
         } else {
             setChipOnBoard(enemyX, enemyY,enemyChip);
 
@@ -177,7 +179,7 @@ public class Gardner implements IBrainAI{
             }
         }
 
-
+	    MiniMax miniMax = new MiniMax();
 
         while (true){
             ArrayList<Integer> tempHistory = new ArrayList<Integer>(history.size());
@@ -194,8 +196,54 @@ public class Gardner implements IBrainAI{
 			    свою фишку.
 			     */
                 if (move[X] == 25 || move[Y] == 25) {
-                    move[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
-                    move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
+//	                move[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
+//	                move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
+	                String status;
+	                ArrayList<Integer> winCells = new ArrayList<Integer>();
+	                ArrayList<Integer> drawCells = new ArrayList<Integer>();
+	                ArrayList<Integer> loseCells = new ArrayList<Integer>();
+	                ArrayList<Integer> noneCells = new ArrayList<Integer>();
+	                for (int moveY = 0; moveY < BOARD_SIZE; moveY++) {
+		                for (int moveX = 0; moveX < BOARD_SIZE; moveX++) {
+			                if (isCellEmpty(moveX, moveY)) {
+				                status = miniMax.miniMax(GAME_BOARD, moveX, moveY, aiChip, history.size(), 2);
+				                int returnMove = CoordinateConverter.getIndexOfCell(moveX, moveY, BOARD_SIZE);
+				                if (status.equals("0_Lose")) {
+					                loseCells.add(returnMove);
+					                continue;
+				                }
+				                if (status.equals("3_Win")) {
+					                winCells.add(returnMove);
+					                continue;
+				                }
+				                if (status.equals("2_Draw")) {
+					                drawCells.add(returnMove);
+					                continue;
+				                }
+				                noneCells.add(returnMove);
+
+			                }
+		                }
+	                }
+	                if (winCells.size() > 0) {
+		                return setMove(winCells);
+	                }
+
+	                if (drawCells.size() > 0) {
+		                return setMove(drawCells);
+	                }
+
+	                if (noneCells.size() > 0) {
+		                return setMove(noneCells);
+	                }
+
+	                if (loseCells.size() > 0) {
+		                return setMove(loseCells);
+	                }
+
+	                move[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
+	                move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
+
                 }
 
                 for (Integer i : deniedCells) {
@@ -221,7 +269,7 @@ public class Gardner implements IBrainAI{
 
             if (deniedCells.size() == BOARD_SIZE * BOARD_SIZE - history.size()) {
 
-	            ArrayList<Integer> temporaryHistory = rewindHistoryBack(tempHistory, 2);
+	            ArrayList<Integer> temporaryHistory = rewindHistoryBack(tempHistory, 1);
 	            writePosition(temporaryHistory);
 
                 break;
@@ -237,6 +285,14 @@ public class Gardner implements IBrainAI{
 
         return move;
     }
+
+	public int[] setMove (ArrayList<Integer> list) {
+		int iterator = (int) (Math.random() * (list.size() - 1));
+		int index = list.get(iterator);
+		move = CoordinateConverter.getCoordinateFromIndex(index, BOARD_SIZE);
+		setChipOnBoard(move[X], move[Y], aiChip);
+		return move;
+	}
 
     /**
      * Сверяет новую матрицу доски с предыдущей матрицей и
