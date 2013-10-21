@@ -10,6 +10,7 @@ import java.util.TreeSet;
 public class GameStatusChecker {
 
     private int[] move = new int[2];
+    private String lastMoveStatus = "None";
     private final int X = 0;
     private final int Y = 1;
     private final int NUM_IN_THE_ROW;
@@ -23,7 +24,7 @@ public class GameStatusChecker {
     }
 
     // Проверка на победу
-    public boolean isWin(char[][] gB, int x, int y, char chip) {
+    public boolean isWin(char[][] gB, int x, int y, char chip, boolean isFork) {
         move[X] = 25;
         move[Y] = 25;
         boolean result = false;
@@ -42,8 +43,10 @@ public class GameStatusChecker {
 			обезвредить противник.
 			 */
             if (win.size() > 1) {
-                result = true;
+                if (isFork) result = true;
+                lastMoveStatus = "Fork";
                 if (win.size() == 3) {
+                    lastMoveStatus = "Win";
                     return true;
                 }
                 break;
@@ -154,5 +157,9 @@ public class GameStatusChecker {
 
     public int[] getMove() {
         return move;
+    }
+
+    public String getLastMoveStatus() {
+        return lastMoveStatus;
     }
 }

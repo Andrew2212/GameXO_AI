@@ -38,6 +38,7 @@ public class Gardner implements IBrainAI{
 	private final String BASE_DIR;
     private static final int X = 0;
     private static final int Y = 1;
+    private static final int M_DEPTH = 8;
 
 
     public Gardner(int fieldSize, int numInTheRow) {
@@ -137,49 +138,49 @@ public class Gardner implements IBrainAI{
 	        return move;
         } else {
             setChipOnBoard(enemyX, enemyY,enemyChip);
-
-            if (history.size() > NUM_IN_THE_ROW) {
-                /*
-                Checks last AI move. Maybe it lead to win.
-                */
-                int[] myMove = CoordinateConverter.getCoordinateFromIndex
-                        (history.get(history.size() - 2), BOARD_SIZE);
-                /*
-				If AI gets win, there is enemy last position will be written.
-				*/
-
-                if (checker.isWin(GAME_BOARD, myMove[X], myMove[Y], aiChip)) {
-					writePosition(history);
-					System.out.println("I win");
-                }
-                System.arraycopy(checker.getMove(), 0, move, 0, move.length);
-            }
-
-            if (move[X] == 25 || move[Y] == 25) {
-                if (checker.isWin(GAME_BOARD, enemyX, enemyY, enemyChip)) {
-                    /*
-                    write last AI position before enemy had to move.
-                     */
-                    ArrayList<Integer> temp = rewindHistoryBack(history, 1);
-                    writePosition(temp);
-                }
-                System.arraycopy(checker.getMove(), 0, move, 0, move.length);
-
-                if (move[X] != 25 || move[Y] != 25) {
-                    setChipOnBoard(move[X], move[Y], aiChip);
-                    if (comparePos(history)){
-						/*
-						write prior AI position
-						 */
-                        ArrayList<Integer> temp = rewindHistoryBack(history, 2);
-						writePosition(temp);
-                    }
-                    return move;
-                }
-            }
+//
+//            if (history.size() > NUM_IN_THE_ROW) {
+//                /*
+//                Checks last AI move. Maybe it lead to win.
+//                */
+//                int[] myMove = CoordinateConverter.getCoordinateFromIndex
+//                        (history.get(history.size() - 2), BOARD_SIZE);
+//                /*
+//				If AI gets win, there is enemy last position will be written.
+//				*/
+//
+//                if (checker.isWin(GAME_BOARD, myMove[X], myMove[Y], aiChip)) {
+//					writePosition(history);
+//					System.out.println("I win");
+//                }
+//                System.arraycopy(checker.getMove(), 0, move, 0, move.length);
+//            }
+//
+//            if (move[X] == 25 || move[Y] == 25) {
+//                if (checker.isWin(GAME_BOARD, enemyX, enemyY, enemyChip)) {
+//                    /*
+//                    write last AI position before enemy had to move.
+//                     */
+//                    ArrayList<Integer> temp = rewindHistoryBack(history, 1);
+//                    writePosition(temp);
+//                }
+//                System.arraycopy(checker.getMove(), 0, move, 0, move.length);
+//
+//                if (move[X] != 25 || move[Y] != 25) {
+//                    setChipOnBoard(move[X], move[Y], aiChip);
+//                    if (comparePos(history)){
+//						/*
+//						write prior AI position
+//						 */
+//                        ArrayList<Integer> temp = rewindHistoryBack(history, 2);
+//						writePosition(temp);
+//                    }
+//                    return move;
+//                }
+//            }
         }
 
-	    MiniMax miniMax = new MiniMax();
+	    MiniMax miniMax = new MiniMax(BOARD_SIZE, 'O', M_DEPTH);
 
         while (true){
             ArrayList<Integer> tempHistory = new ArrayList<Integer>(history.size());
@@ -196,53 +197,9 @@ public class Gardner implements IBrainAI{
 			    свою фишку.
 			     */
                 if (move[X] == 25 || move[Y] == 25) {
+	                move = miniMax.getBestMove(GAME_BOARD, enemyX, enemyY, false, history.size());
 //	                move[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
 //	                move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
-	                String status;
-	                ArrayList<Integer> winCells = new ArrayList<Integer>();
-	                ArrayList<Integer> drawCells = new ArrayList<Integer>();
-	                ArrayList<Integer> loseCells = new ArrayList<Integer>();
-	                ArrayList<Integer> noneCells = new ArrayList<Integer>();
-	                for (int moveY = 0; moveY < BOARD_SIZE; moveY++) {
-		                for (int moveX = 0; moveX < BOARD_SIZE; moveX++) {
-			                if (isCellEmpty(moveX, moveY)) {
-				                status = miniMax.miniMax(GAME_BOARD, moveX, moveY, aiChip, history.size(), 2);
-				                int returnMove = CoordinateConverter.getIndexOfCell(moveX, moveY, BOARD_SIZE);
-				                if (status.equals("0_Lose")) {
-					                loseCells.add(returnMove);
-					                continue;
-				                }
-				                if (status.equals("3_Win")) {
-					                winCells.add(returnMove);
-					                continue;
-				                }
-				                if (status.equals("2_Draw")) {
-					                drawCells.add(returnMove);
-					                continue;
-				                }
-				                noneCells.add(returnMove);
-
-			                }
-		                }
-	                }
-	                if (winCells.size() > 0) {
-		                return setMove(winCells);
-	                }
-
-	                if (drawCells.size() > 0) {
-		                return setMove(drawCells);
-	                }
-
-	                if (noneCells.size() > 0) {
-		                return setMove(noneCells);
-	                }
-
-	                if (loseCells.size() > 0) {
-		                return setMove(loseCells);
-	                }
-
-	                move[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
-	                move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
 
                 }
 
@@ -286,13 +243,7 @@ public class Gardner implements IBrainAI{
         return move;
     }
 
-	public int[] setMove (ArrayList<Integer> list) {
-		int iterator = (int) (Math.random() * (list.size() - 1));
-		int index = list.get(iterator);
-		move = CoordinateConverter.getCoordinateFromIndex(index, BOARD_SIZE);
-		setChipOnBoard(move[X], move[Y], aiChip);
-		return move;
-	}
+
 
     /**
      * Сверяет новую матрицу доски с предыдущей матрицей и
@@ -465,7 +416,7 @@ public class Gardner implements IBrainAI{
         return false;
 	}
 
-    void setChipOnBoard(int x, int y, char chip) {
+    private void setChipOnBoard(int x, int y, char chip) {
         GAME_BOARD[x][y] = chip;
         history.add(CoordinateConverter.getIndexOfCell(x, y, BOARD_SIZE));
     }
