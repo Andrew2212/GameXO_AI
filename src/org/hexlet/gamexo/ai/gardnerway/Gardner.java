@@ -24,6 +24,7 @@ import java.util.*;
  */
 public class Gardner implements IBrainAI{
 
+    public static final char EMPTY = '_';
     private GameStatusChecker checker;
     private char[][] oldFieldMatrix;
     private ArrayList<Integer> history;
@@ -33,7 +34,6 @@ public class Gardner implements IBrainAI{
 	private final char[][] GAME_BOARD;
 	private final int BOARD_SIZE;
     private final int NUM_IN_THE_ROW;
-	private final char EMPTY = '_';
 	private final String FILE_NAME;
 	private final String BASE_DIR;
     private static final int X = 0;
@@ -194,8 +194,12 @@ public class Gardner implements IBrainAI{
 			    свою фишку.
 			     */
                 if (move[X] == 25 || move[Y] == 25) {
-                    move[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
-                    move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
+
+                    ArrayList<Integer> moveList = MoveAdviser.preferableMoves(GAME_BOARD);
+
+                    int index = (int) Math.floor(Math.random() * moveList.size());
+                    move = CoordinateConverter.getCoordinateFromIndex(moveList.get(index), BOARD_SIZE);
+//                    move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
                 }
 
                 for (Integer i : deniedCells) {
