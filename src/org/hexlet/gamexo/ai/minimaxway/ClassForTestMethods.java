@@ -43,12 +43,14 @@ public class ClassForTestMethods{
             if (cnt % 2 == 0){
                 move = minimax.findMoveMiniMax(field);
                 field[move[0]][move[1]] = 'X';
-                System.out.println(move[0] + " " + move[1]);
             } else {
                 System.out.print("\nEnter x: ");
                 int x = scan.nextInt();
                 System.out.print("\nEnter y: ");
                 int y = scan.nextInt();
+                if ((x == 0) && (y == 2)) {
+                    x = 0;
+                }
                 field[x][y] = 'O';
             }
             for (int i = 0; i < 3; i++) {

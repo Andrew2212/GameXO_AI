@@ -59,7 +59,7 @@ class Heuristic {
      int heuristicRating(int x, int y, int sign){
         this.field[x][y] = sign;
         for (int j = 0; j < OFFSET.length; j++){   //последовательно перебираем все направления по часой стрелке,
-            try{                                   // начиная с верха, на достижение требуемой длинны
+            try {                                   // начиная с верха, на достижение требуемой длинны
                 if (isEnoughLength(x,y,sign,j)){
                     switch (sign){
                         case -1: return -5;
@@ -132,8 +132,26 @@ class Heuristic {
         return false;
     }
 
+    // interface copies to Heuristic class field from parameter
+    // may be IndexOutOfBorder exception and may doesn't work well if size of this field not equal to that field
+    public void copyField(char[][] thatField) {
+        for (int i = 0; i < thatField.length; i++) {
+            for (int j = 0; j < thatField[i].length; j++) {
+                if (thatField[i][j] == Minimax.VALUE_X) {
+                    this.field[i][j] = 1;  // x
+                }
+                else if (thatField[i][j] == Minimax.VALUE_O) {
+                    this.field[i][j] = -1;
+                }
+                else {
+                    this.field[i][j] = 0;
+                }
+            }
+        }
+    }
+
     //метод используется в клиенте тестирования, в дальнейшем не нужен
-    public void showField(){
+    private void showField(){
         for (int i = 0; i < X_SIZE; i++){
             for (int j = 0; j < Y_SIZE; j++){
                 if (j == Y_SIZE - 1){

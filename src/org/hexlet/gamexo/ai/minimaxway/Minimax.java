@@ -8,15 +8,19 @@ public class Minimax implements IBrainAI{
 
     public static final char VALUE_X = 'X';
     public static final char VALUE_O = 'O';
-    private static final char DEFAULT_CELL_VALUE = '_';
-    public static final int MINUSINFINITY = -1000;
+    public static final char DEFAULT_CELL_VALUE = '_';
+    private static final int MINUSINFINITY = -4000000;
+    private static final int INFINITY = 4000000;
+    private static final int LOSS_WEIGHT = -5;
+    private static final int BAD_STEP_WEIGHT = -1000;
 
     private final int LENGTH; //длинна линии, необходимая для победы
     private final int X_SIZE; // количество строк поля
     private final int Y_SIZE; // количество столбцов поля
     private char[][] field; //используется для хранения оригинального поля
 
-    private int weightOfBestMove;
+    private int bestMoveWeight;
+    private int worstCurStepWeight;
     private Heuristic heuristic;
 //*************REMAKE Random dummy*********************************
     private final int[] MOVE = new int[2];    // координаты следующих ходов
@@ -77,22 +81,26 @@ public class Minimax implements IBrainAI{
                 this.field[i][j] = DEFAULT_CELL_VALUE;
             }
         }
-        weightOfBestMove = MINUSINFINITY;
+        bestMoveWeight = MINUSINFINITY;
+        worstCurStepWeight = INFINITY;
         heuristic = Heuristic.createInstance(len,x,y);
     }
 
     // Begin
     public int[] findMoveMiniMax(char[][] fieldMatrix) {
         int[] curBestMove = {0, 0};
-        weightOfBestMove = MINUSINFINITY;
-        maxMinStrategy(3, 3, fieldMatrix, 0, curBestMove); // maxMin on depth 2. Only for X!!!
+        MOVE[X] = 0;
+        MOVE[Y] = 0;
+        bestMoveWeight = MINUSINFINITY;
+        maxMinStrategy(4, 4, fieldMatrix, 0, curBestMove); // maxMin on depth 2. Only for X!!!
         //  best move didn't find. Will use random
         // TODO add check if the cell is not empty.
-        if  (weightOfBestMove == 0)  {
-            MOVE[X] = 2; //(int) Math.floor(Math.random() * fieldMatrix.length);
-            MOVE[Y] = 2; //(int) Math.floor(Math.random() * fieldMatrix.length);
+        if  (bestMoveWeight == MINUSINFINITY)  {
+            //(int) Math.floor(Math.random() * fieldMatrix.length);
+            //(int) Math.floor(Math.random() * fieldMatrix.length);
         }
-        System.out.println("Weight = " + weightOfBestMove);
+        System.out.println("Coords of MiniMax is: " + MOVE[X] + ' ' + MOVE[Y]);
+        System.out.println("Weight = " + bestMoveWeight);
         return MOVE;  // returns garbage. Need to return to this, when will finish findMove procedure
     }
 
@@ -122,41 +130,53 @@ public class Minimax implements IBrainAI{
          Когда добираемся до 0 глубины, оцениваем вес проделанного пути. Соответственно запоминаем максимальный вес и
          лучший ход. Здесь проиходит завершение рекурсивной функции, делается следующая итерация, поле и все веса
          возвращаются на шаг назад.
+
          TODO протестировать, отладить и сделать возможным работу для O
+         НОВОЕ!!!
+         На глубине 4 в целом работает неплохо.
 
-         есть косяк, что постоянно на пустом поле эвристика выдает 12, если сделать ход x в {0,0},
-         а О куда-то еще поставить. хотя вообще по идее на пустом поле при глубине 2, на которой я тестировал
-         веса всех ходов должны быть 0.
-         [x][][]
-         [][o][]
-         [][][]
+         ******************
+         Известные баги:
+         в ситуации
+         Х Х _      Х Х _
+         О О _   => О О Х
+         _ _ _      _ _ _
+         Походит 1 2, так как думает, что проигрывает, хотя можно сделать один ход и выйграть
 
-         Причем дальше, если продолжать играть все равно он упорно считает, что лучший ход в левый верхний угол
-         с весом 12.
-
-         Короче надо все вместе с эвристикой смотреть.
+         ******************
+         На глубине больше 4 не видит проигрышной ситуации, например, при ходах:
+         1 1; 0 2. Определяет вес как 7 и ходит не туда.
      */
 
     // search in the depth
-    private void maxMinStrategy(int depth, final int depthMax, char[][] curField, int curStepWeight, int[] curBestMove) {
-        if (depth != 0) {
+    //
+    private void maxMinStrategy(int curDepth, final int depthMax, char[][] curField, int curStepWeight, int[] curBestMove) {
+        if (curDepth != 0) {
             for (int j = 0; j < X_SIZE; j++) {  // looking for empty cell. Maybe it will be the best step.
                 for (int k = 0; k < Y_SIZE; k++) {
                     if (curField[j][k] == DEFAULT_CELL_VALUE) {
                         int deltaWeight = 0;
-                        if ( (depthMax - depth) % 2 == 0) {
+                        if ((depthMax - curDepth) % 2 == 0) {
                             curField[j][k] = VALUE_X;
-                            if (depth == 2) {
+                            if (curDepth == depthMax) {   // @ToDo Here we should choose the right depthMax to search
                                 curBestMove[X] = j; // save temp best step
                                 curBestMove[Y] = k;
+                                worstCurStepWeight = INFINITY;
                             }
+                            // copy to heuristic field our current field and get heuristic rating of of the step
+                            heuristic.copyField(curField);
                             deltaWeight = heuristic.heuristicRating(j, k, 1);
                         }
                         else {
                             curField[j][k] = VALUE_O;
+                            heuristic.copyField(curField);
                             deltaWeight = heuristic.heuristicRating(j, k, -1);
-                        }// end of operators before recursive call
-                        maxMinStrategy(depth - 1, depthMax, curField, curStepWeight + deltaWeight, curBestMove);
+                        }
+                        if (deltaWeight == LOSS_WEIGHT) {
+                            curStepWeight += BAD_STEP_WEIGHT; // if loss, it is very bad step!
+                        }
+                        // end of operators before recursive call
+                        maxMinStrategy(curDepth - 1, depthMax, curField, curStepWeight + deltaWeight, curBestMove);
                         // operators after recursive call
                         // reverse all changes
                         curField[j][k] = DEFAULT_CELL_VALUE;  // reverse curField back, cancel our current step
@@ -164,13 +184,24 @@ public class Minimax implements IBrainAI{
                     }
                 }
             }
-        }
-        else {
-            if (weightOfBestMove < curStepWeight) {
-                weightOfBestMove = curStepWeight;
-                MOVE[X] = curBestMove[X];
-                MOVE[Y] = curBestMove[Y];
+            // if truth then we have never gone o the depthMax
+            if (worstCurStepWeight == INFINITY) {
+                worstCurStepWeight = curStepWeight;
             }
+            rememberNewBestMove(curBestMove);
+        }
+        else { // look if it is the worst weight
+            if (curStepWeight < worstCurStepWeight) {
+                worstCurStepWeight = curStepWeight;
+            }
+        }
+    }
+
+    private void rememberNewBestMove(int[] curBestMove) {
+        if (bestMoveWeight < worstCurStepWeight) {
+            bestMoveWeight = worstCurStepWeight;
+            MOVE[X] = curBestMove[X];
+            MOVE[Y] = curBestMove[Y];
         }
     }
 
@@ -178,7 +209,7 @@ public class Minimax implements IBrainAI{
     public void showField() {
         for (int i = 0; i < X_SIZE; i++){
             for (int j = 0; j < Y_SIZE; j++){
-                if (j == Y_SIZE - 1){
+                if (j == Y_SIZE - 1) {
                     System.out.println(field[i][j]);
                 } else {
                     System.out.print(field[i][j] + " ");
