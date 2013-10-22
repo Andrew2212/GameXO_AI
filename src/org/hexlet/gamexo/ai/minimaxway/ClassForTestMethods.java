@@ -39,6 +39,7 @@ public class ClassForTestMethods{
                 field[i][j] = '_';
             }
         }
+        // without check of victory!
         while(cnt < 9){
             if (cnt % 2 == 0){
                 move = minimax.findMoveMiniMax(field);

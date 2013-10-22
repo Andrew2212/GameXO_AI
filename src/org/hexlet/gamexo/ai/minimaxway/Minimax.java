@@ -9,10 +9,8 @@ public class Minimax implements IBrainAI{
     public static final char VALUE_X = 'X';
     public static final char VALUE_O = 'O';
     public static final char DEFAULT_CELL_VALUE = '_';
-    private static final int MINUSINFINITY = -4000000;
-    private static final int INFINITY = 4000000;
-    private static final int LOSS_WEIGHT = -5;
-    private static final int BAD_STEP_WEIGHT = -1000;
+    public static final int MINUSINFINITY = -4000000;
+    public static final int INFINITY = 4000000;
 
     private final int LENGTH; //длинна линии, необходимая для победы
     private final int X_SIZE; // количество строк поля
@@ -135,17 +133,12 @@ public class Minimax implements IBrainAI{
          НОВОЕ!!!
          На глубине 4 в целом работает неплохо.
 
-         ******************
+         *****************
          Известные баги:
-         в ситуации
-         Х Х _      Х Х _
-         О О _   => О О Х
-         _ _ _      _ _ _
-         Походит 1 2, так как думает, что проигрывает, хотя можно сделать один ход и выйграть
 
-         ******************
          На глубине больше 4 не видит проигрышной ситуации, например, при ходах:
          1 1; 0 2. Определяет вес как 7 и ходит не туда.
+         ******************
      */
 
     // search in the depth
@@ -165,15 +158,12 @@ public class Minimax implements IBrainAI{
                             }
                             // copy to heuristic field our current field and get heuristic rating of of the step
                             heuristic.copyField(curField);
-                            deltaWeight = heuristic.heuristicRating(j, k, 1);
+                            deltaWeight = heuristic.heuristicRating(j, k, 1, (depthMax - curDepth +1));
                         }
                         else {
                             curField[j][k] = VALUE_O;
                             heuristic.copyField(curField);
-                            deltaWeight = heuristic.heuristicRating(j, k, -1);
-                        }
-                        if (deltaWeight == LOSS_WEIGHT) {
-                            curStepWeight += BAD_STEP_WEIGHT; // if loss, it is very bad step!
+                            deltaWeight = heuristic.heuristicRating(j, k, -1, (depthMax - curDepth +1));
                         }
                         // end of operators before recursive call
                         maxMinStrategy(curDepth - 1, depthMax, curField, curStepWeight + deltaWeight, curBestMove);

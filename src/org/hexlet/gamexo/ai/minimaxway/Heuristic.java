@@ -22,6 +22,7 @@ class Heuristic {
             {0,-1},  // left
             {-1,-1}  // left-up
     };
+    private static final int FIRST_STEP_RATING = 100;
     private static Heuristic uniqueInstance = null;
 
     private final int LENGTH; //длинна линии, необходимая для победы
@@ -56,14 +57,23 @@ class Heuristic {
      * @param sign   знак хода: -1 - нолик, 1 - крестик
      * @return       возвращаем -5 при победе ноликов, 5 - крестиков, 2 - ничья, 0 - есть еще ходы
      */
-     int heuristicRating(int x, int y, int sign){
+     // closer steps have better rating
+     int heuristicRating(int x, int y, int sign, int stepNumber){
         this.field[x][y] = sign;
         for (int j = 0; j < OFFSET.length; j++){   //последовательно перебираем все направления по часой стрелке,
             try {                                   // начиная с верха, на достижение требуемой длинны
                 if (isEnoughLength(x,y,sign,j)){
                     switch (sign){
-                        case -1: return -5;
-                        case  1: return 5;
+                        case -1: {
+                            return -5 * (FIRST_STEP_RATING / stepNumber);
+                        }
+                        case  1: {
+                            if (stepNumber == 1) {
+                                return Minimax.INFINITY; // the best step. It will be victory.
+                            }
+                            return 5 * (FIRST_STEP_RATING / stepNumber) - 5; // less than when sign = -1, because
+                                                                             // our goal is not loose
+                        }
                     }
                 }
             }  catch (ArrayIndexOutOfBoundsException e){
@@ -73,7 +83,7 @@ class Heuristic {
         if (hasEmptyCell()) {
             return 0;
         }
-        return 2;
+        return 2 * (FIRST_STEP_RATING / stepNumber);
     }
 
     /**
