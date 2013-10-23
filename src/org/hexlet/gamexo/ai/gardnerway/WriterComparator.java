@@ -1,8 +1,5 @@
 package org.hexlet.gamexo.ai.gardnerway;
 
-import org.hexlet.gamexo.ai.gardnerway.CoordinateConverter;
-import org.hexlet.gamexo.ai.gardnerway.FileMaster;
-
 import java.util.ArrayList;
 
 /**
