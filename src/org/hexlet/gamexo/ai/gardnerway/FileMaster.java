@@ -1,5 +1,7 @@
 package org.hexlet.gamexo.ai.gardnerway;
 
+import org.hexlet.gamexo.ai.utils.LoggerAI;
+
 import java.io.*;
 
 /**
@@ -18,11 +20,10 @@ public class FileMaster {
 
 	    f1.mkdirs();
         file = new File(f1, filename);
-//	    System.out.println(file.getPath());
 	    try{
 	    fileWriter = new RandomAccessFile(file, "rw");
 	    } catch (FileNotFoundException e){
-            System.out.println("#############");
+		    LoggerAI.p("File not found");
         }
     }
 
@@ -35,10 +36,10 @@ public class FileMaster {
 		    fileWriter.close();
 
 	    } catch (FileNotFoundException ex) {
-		    System.out.println("File " + file.getName() + " not found");
+		    LoggerAI.p("File " + file.getName() + " not found");
 
 	    } catch (IOException e) {
-		    System.out.println("IOException");
+		    LoggerAI.p("IOException");
 	    }
     }
 
@@ -47,7 +48,7 @@ public class FileMaster {
 	    try {
 		    return fileWriter.readLine();
 	    } catch (IOException e){
-		    System.out.println("Read File error");
+		    LoggerAI.p("Read File error");
 	    }
         return null;
     }
@@ -56,7 +57,7 @@ public class FileMaster {
 		try{
 			fileWriter.seek(0);
 		}catch (IOException e){
-			System.out.println("Set reading at 0 error");
+			LoggerAI.p("Set reading at 0 error");
 		}
 	}
 
@@ -65,7 +66,7 @@ public class FileMaster {
 		try {
 			fileWriter.close();
 		} catch (IOException e) {
-			System.out.println("Close error");
+			LoggerAI.p("Close error");
 		}
 	}
 }

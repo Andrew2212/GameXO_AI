@@ -2,7 +2,7 @@ package org.hexlet.gamexo.ai.gardnerway;
 
 import org.hexlet.gamexo.ai.IBrainAI;
 import org.hexlet.gamexo.ai.utils.FieldMatrixConverter;
-
+import org.hexlet.gamexo.ai.utils.LoggerAI;
 import java.util.*;
 
 
@@ -124,7 +124,7 @@ public class Gardner implements IBrainAI{
 
                 if (checker.isWin(GAME_BOARD, myMove[X], myMove[Y], aiChip)) {
 					writerComparator.writePosition(history);
-					System.out.println("I win");
+					LoggerAI.p("I win");
                 }
                 System.arraycopy(checker.getMove(), 0, move, 0, move.length);
             }
