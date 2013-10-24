@@ -36,7 +36,7 @@ public class Spare implements IBrainAI {
 //      Initializes 'converter' and gets current 'fieldMatrix'
         FieldMatrixConverter converter = new FieldMatrixConverter();
         Character[][] fieldMatrixCharacter = converter.convertFieldMatrixToCharacter(fieldMatrixObject);
-        this.fieldMatrix = fieldMatrixCharacter;
+        Spare.fieldMatrix = fieldMatrixCharacter;
 
 //      Executes only one time
         if (!isFirstMoveDone) {
@@ -56,11 +56,9 @@ public class Spare implements IBrainAI {
         MOVE[X] = (int) Math.floor(Math.random() * fieldMatrix.length);
         MOVE[Y] = (int) Math.floor(Math.random() * fieldMatrix.length);
 
-//        checkout for random - it isn't needed for real AI
-        if (GameField.isCellValid(MOVE[X], MOVE[Y])) {
             System.out.println("Spare::findMove MOVE[X] = " + MOVE[X] + " findMove MOVE[Y] = " + MOVE[Y] + " signBot = " + signBot);
             getterLastEnemyMove.setMyOwnMove(MOVE[X], MOVE[Y], signBot);
-        }
+
         return MOVE;
     }
 
