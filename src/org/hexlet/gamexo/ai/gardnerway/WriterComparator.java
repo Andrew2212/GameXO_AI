@@ -1,5 +1,7 @@
 package org.hexlet.gamexo.ai.gardnerway;
 
+import org.hexlet.gamexo.ai.utils.LoggerAI;
+
 import java.util.ArrayList;
 
 /**
@@ -53,7 +55,12 @@ public class WriterComparator {
 
 				tempPosition = HistoryMaster.sortHistory(tempHistory);
 				file = new FileMaster(BASE_DIR, tempHistory.size() + "." + FILE_NAME);
-				while (true) {
+                if (file.isEmpty()) {
+                    LoggerAI.p("file " + file.toString() + " is empty");
+                    return false;
+                }
+                LoggerAI.p("temp position: " + tempHistory);
+                while (true) {
 					basePosition = file.readFile();
 					if (basePosition == null){
 						file.closeReading();

@@ -69,4 +69,8 @@ public class FileMaster {
 			LoggerAI.p("Close error");
 		}
 	}
+
+    public boolean isEmpty() {
+        return file.length() == 0;
+    }
 }
