@@ -42,7 +42,7 @@ public class BrutforceAI implements IBrainAI {
 
         FieldMatrixConverter converter = new FieldMatrixConverter();
         Character[][] fieldMatrixCharacter = converter.convertFieldMatrixToCharacter(fieldMatrixObject);
-        this.fieldMatrix = fieldMatrixCharacter;
+        BrutforceAI.fieldMatrix = fieldMatrixCharacter;
 
         //Executes only one time
         if (!isFirstMoveDone) {

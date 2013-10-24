@@ -14,25 +14,21 @@ public class Constructor {
 
     private static final int X = 0;
     private static final int Y = 1;
-    private final Integer NEAR_MOVE = 1; // i.e. cell close to bot move
-    private final Integer NEAR_WIN_BOT_1;  // i.e. string XXXX_ without 1 sign
-    private final Integer SOME = 10;  // to 'weightMap' for nonWIN cell
+//    private final Integer NEAR_MOVE = 1; // i.e. cell close to bot move
+//    private final Integer NEAR_WIN_BOT_1;  // i.e. string XXXX_ without 1 sign
+//    private final Integer SOME = 10;  // to 'weightMap' for nonWIN cell
 
     private String stringResultOfCheck;
     /**
      * Temporary list of cell coordinate for checked line
      */
     private ArrayList<int[]> listCheckedCell = new ArrayList<int[]>();
-    /**
-     * All about handling my own LastMove is just copy-past from 'Destructor' =)
-     */
-    private ArrayList<int[]> listCellsNearLastEnemyMove = new ArrayList<int[]>();
     private int[] lastMyOwnMove = new int[2];
     private int[] moveWin;
 
 
     public Constructor() {
-        NEAR_WIN_BOT_1 = CoreGame.getNumCheckedSigns() * 20;
+//        NEAR_WIN_BOT_1 = CoreGame.getNumCheckedSigns() * 20;
     }
 
     //    --------------Public Methods-------------------
@@ -66,26 +62,26 @@ public class Constructor {
 
     //------------Private Methods-----------------
 
-    /**
-     * @param weightMap
-     * @return KeyCell 'keyMaxWeight' that corresponds to max value from HashMap
-     */
-    private KeyCell getMaxWeight(Map<KeyCell, Integer> weightMap) {
-
-        Integer maxWeight = null;
-        KeyCell keyMaxWeight = null;
-
-        Iterator iterator = weightMap.keySet().iterator();
-        while (iterator.hasNext()) {
-            KeyCell key = (KeyCell) iterator.next();
-            Integer value = weightMap.get(key);
-            if (maxWeight == null || maxWeight < value) {
-                maxWeight = value;
-                keyMaxWeight = key;
-            }
-        }
-        return keyMaxWeight;
-    }
+//    /**
+//     * @param weightMap
+//     * @return KeyCell 'keyMaxWeight' that corresponds to max value from HashMap
+//     */
+//    private KeyCell getMaxWeight(Map<KeyCell, Integer> weightMap) {
+//
+//        Integer maxWeight = null;
+//        KeyCell keyMaxWeight = null;
+//
+//        Iterator iterator = weightMap.keySet().iterator();
+//        while (iterator.hasNext()) {
+//            KeyCell key = (KeyCell) iterator.next();
+//            Integer value = weightMap.get(key);
+//            if (maxWeight == null || maxWeight < value) {
+//                maxWeight = value;
+//                keyMaxWeight = key;
+//            }
+//        }
+//        return keyMaxWeight;
+//    }
 
     //    ---------------Check lines and set weight of the cells-------------------------
 
@@ -184,7 +180,7 @@ public class Constructor {
      * <br>Return 'true' if something had been set into 'weightMap'</br>
      */
     private boolean setWeightToNearWin_1() {
-        int[] cellWin = null;
+
         for (int j = 0; j < GameOptions.getListStringNearWinBot_1().size(); j++) {
 //            System.out.println("Constructor*** " + j + " strWin_1 = " + GameOptions.listStringNearWinBot_1.get(j));
 //            System.out.println("Constructor*** " + j + " stringResultOfCheck = " + stringResultOfCheck);

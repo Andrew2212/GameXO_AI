@@ -3,11 +3,10 @@ package org.hexlet.gamexo.blackbox.players;
 
 import org.hexlet.gamexo.ai.IBrainAI;
 import org.hexlet.gamexo.ai.IPlayerBot;
+import org.hexlet.gamexo.ai.WayEnum;
 import org.hexlet.gamexo.ai.brutforceway.BrutforceAI;
 import org.hexlet.gamexo.ai.gardnerway.Gardner;
-import org.hexlet.gamexo.ai.minimaxway.Minimax;
 import org.hexlet.gamexo.ai.spareway.Spare;
-import org.hexlet.gamexo.ai.utils.FieldMatrixConverter;
 import org.hexlet.gamexo.blackbox.game.GameField;
 
 public class PlayerBot implements IPlayer, IPlayerBot{
