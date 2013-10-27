@@ -117,127 +117,16 @@ public class Gardner implements IBrainAI{
             move[Y] = BOARD_SIZE / 2;
 	        firstMove = false;
         } else {
-            setChipOnBoard(enemyX, enemyY,enemyChip);
-
-            if (history.size() > NUM_IN_THE_ROW) {
-                /*
-                Checks last AI move. Maybe it lead to win.
-                */
-                int[] myMove = CoordinateConverter.getCoordinateFromIndex
-                        (history.get(history.size() - 2), BOARD_SIZE);
-                /*
-				If AI gets win, there is enemy last position will be written.
-				*/
-
-                if (checker.isWin(GAME_BOARD, myMove[X], myMove[Y], aiChip)) {
-					writerComparator.writePosition(history);
-					LoggerAI.p("I win");
-                }
-                System.arraycopy(checker.getMove(), 0, move, 0, move.length);
-            }
-
-            if (move[X] == 25 || move[Y] == 25) {
-                if (checker.isWin(GAME_BOARD, enemyX, enemyY, enemyChip)) {
-                    /*
-                    write last AI position before enemy had to move.
-                     */
-                    ArrayList<Integer> temp = HistoryMaster.rewindHistoryBack(history, 1);
-                    writerComparator.writePosition(temp);
-                }
-                System.arraycopy(checker.getMove(), 0, move, 0, move.length);
-
-                if (move[X] != 25 || move[Y] != 25) {
-                    setChipOnBoard(move[X], move[Y], aiChip);
-                    if (writerComparator.comparePos(history)){
-						/*
-						write prior AI position
-						 */
-                        ArrayList<Integer> temp = HistoryMaster.rewindHistoryBack(history, 2);
-						writerComparator.writePosition(temp);
-                    }
-                    return move;
-                }
+            if (isWin(enemyX, enemyY)) {
+                return move;
             }
         }
-
-        /*
-        There are is disclosure of variants with writing of losing positions.
-         */
 
         ArrayList<Integer> moveList = MoveAdviser.preferableMoves(GAME_BOARD);
-        Date startTime = new Date();                     // we have to limit of disclosure time.
 
-        if (move[X] == 25) {
-            for(Integer i : moveList ) {
-                if (new Date().getTime() - startTime.getTime() > TIME_BREAK) { break; }
-                if (depth == 0) { break; }
-                if (history.size() == BOARD_SIZE * BOARD_SIZE - 1) { break; }
-                if (!writerComparator.comparePos(history)) {
-                    int[] tempMove = CoordinateConverter.getCoordinateFromIndex(i, BOARD_SIZE);
-                    new Gardner(GAME_BOARD, enemyChip, NUM_IN_THE_ROW, history, false, depth - 1)
-                            .findMove(tempMove[X], tempMove[Y]);
-                }
-            }
-        }
+        preWritePositions(moveList);
 
-        while (true){
-            ArrayList<Integer> tempHistory = new ArrayList<Integer>(history.size());
-	        tempHistory.addAll(history);
-
-            ArrayList<Integer> deniedCells = new ArrayList<Integer>();
-
-            start:
-            while (true){
-                /*
-			    Мозг червяка - если ИИ видит, что следующим
-			    ходом противник выиграет, то ставит в это место
-			    свою фишку.
-			     */
-                if (move[X] == 25 || move[Y] == 25) {
-
-
-
-                    int index = (int) Math.floor(Math.random() * moveList.size());
-                    move = CoordinateConverter.getCoordinateFromIndex(moveList.get(index), BOARD_SIZE);
-//                    move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
-                }
-
-                for (Integer i : deniedCells) {
-                    if (move == CoordinateConverter.getCoordinateFromIndex(i, BOARD_SIZE)) {
-                        continue start;
-                    }
-                }
-                if (isCellEmpty(move[X], move[Y])) {        //we have to play in empty cell
-                    break;
-                }
-                move[X] = 25;
-                move[Y] = 25;
-            }
-
-
-            tempHistory.add(CoordinateConverter.getIndexOfCell(move[X], move[Y], BOARD_SIZE));
-            /*
-            If there is all cells lead to defeat, AI marks his previous position as illegal.
-             */
-            if (!writerComparator.comparePos(tempHistory)) break;
-
-            deniedCells.add(CoordinateConverter.getIndexOfCell(move[X], move[Y], BOARD_SIZE));
-
-            if (deniedCells.size() == BOARD_SIZE * BOARD_SIZE - history.size()) {
-
-	            ArrayList<Integer> temporaryHistory = HistoryMaster.rewindHistoryBack(tempHistory, 2);
-	            writerComparator.writePosition(temporaryHistory);
-
-                break;
-            }
-            move[X] = 25;
-            move[Y] = 25;
-        }
-
-        /*
-        adds AI move
-         */
-        setChipOnBoard(move[X], move[Y], aiChip);
+        chooseMove(moveList);
 
         return move;
     }
@@ -321,6 +210,125 @@ public class Gardner implements IBrainAI{
         }
         // Has no new moves. Or move was done in occupied cell.
         return enemyMove;
+    }
+
+    public boolean isWin(int enemyX, int enemyY) {
+
+        setChipOnBoard(enemyX, enemyY,enemyChip);
+
+        if (history.size() > NUM_IN_THE_ROW) {
+                /*
+                Checks last AI move. Maybe it lead to win.
+                */
+            int[] myMove = CoordinateConverter.getCoordinateFromIndex
+                    (history.get(history.size() - 2), BOARD_SIZE);
+                /*
+				If AI gets win, there is enemy last position will be written.
+				*/
+
+            if (checker.isWin(GAME_BOARD, myMove[X], myMove[Y], aiChip)) {
+                writerComparator.writePosition(history);
+                LoggerAI.p("I win and I write this position");
+            }
+            System.arraycopy(checker.getMove(), 0, move, 0, move.length);
+        }
+
+        if (move[X] == 25 || move[Y] == 25) {
+            if (checker.isWin(GAME_BOARD, enemyX, enemyY, enemyChip)) {
+                    /*
+                    write last AI position before enemy had to move.
+                     */
+                ArrayList<Integer> temp = HistoryMaster.rewindHistoryBack(history, 1);
+                writerComparator.writePosition(temp);
+            }
+            System.arraycopy(checker.getMove(), 0, move, 0, move.length);
+
+            if (move[X] != 25 || move[Y] != 25) {
+                setChipOnBoard(move[X], move[Y], aiChip);
+                if (writerComparator.comparePos(history)){
+						/*
+						write prior AI position
+						 */
+                    ArrayList<Integer> temp = HistoryMaster.rewindHistoryBack(history, 2);
+                    writerComparator.writePosition(temp);
+                }
+                return true;
+            }
+        }
+
+        if (move[X] != 25) {
+            setChipOnBoard(move[X], move[Y], aiChip);
+            return true;
+        }
+
+        return false;
+    }
+
+    /*
+       There are disclosure of variants with writing of losing positions.
+    */
+    public void preWritePositions(ArrayList<Integer> moveList) {
+        Date startTime = new Date();                     // we have to limit of disclosure time.
+
+        for(Integer i : moveList ) {
+            if (new Date().getTime() - startTime.getTime() > TIME_BREAK) { break; }
+            if (depth == 0) { break; }
+            if (history.size() == BOARD_SIZE * BOARD_SIZE - 1) { break; }
+            if (!writerComparator.comparePos(history)) {
+                int[] tempMove = CoordinateConverter.getCoordinateFromIndex(i, BOARD_SIZE);
+                new Gardner(GAME_BOARD, enemyChip, NUM_IN_THE_ROW, history, false, depth - 1)
+                        .findMove(tempMove[X], tempMove[Y]);
+            }
+        }
+    }
+
+    public void chooseMove(ArrayList<Integer> moveList) {
+
+        ArrayList<Integer> deniedCells = new ArrayList<Integer>();
+
+        while (true) {
+            ArrayList<Integer> tempHistory = new ArrayList<Integer>(history.size());
+            tempHistory.addAll(history);
+            int index;
+            start:
+            while (true) {
+
+                index = (int) Math.floor(Math.random() * moveList.size());
+
+                for (Integer i : deniedCells) {
+                    if (moveList.get(index).equals(i)) {
+                        continue start;
+                    }
+                }
+
+                move = CoordinateConverter.getCoordinateFromIndex(moveList.get(index), BOARD_SIZE);
+
+                if (isCellEmpty(move[X], move[Y])) {        //we have to play in empty cell
+                    tempHistory.add(index);
+                    break;
+                }
+            }
+
+            /*
+            If there are all cells lead to defeat, AI marks his previous position as illegal.
+             */
+            if (!writerComparator.comparePos(tempHistory)) break;
+
+            deniedCells.add(index);
+
+            if (deniedCells.size() == BOARD_SIZE * BOARD_SIZE - history.size()) {
+                LoggerAI.p("All positions lost, let's write previous position");
+//                ArrayList<Integer> temporaryHistory = HistoryMaster.rewindHistoryBack(tempHistory, 2);
+//                writerComparator.writePosition(temporaryHistory);
+
+                break;
+            }
+        }
+
+        /*
+        adds AI move
+         */
+        setChipOnBoard(move[X], move[Y], aiChip);
     }
 
     // Проверяет - пуста ли ячейка в которую хочет походить ИИ
