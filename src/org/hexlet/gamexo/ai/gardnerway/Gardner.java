@@ -30,6 +30,7 @@ public class Gardner implements IBrainAI{
     private ArrayList<Integer> history;
     private char enemyChip, aiChip;
 	private boolean firstMove = true;
+    private int depth = 2;
 	private int[] move = new int[2];
 	private final char[][] GAME_BOARD;
 	private final int BOARD_SIZE;
@@ -59,17 +60,22 @@ public class Gardner implements IBrainAI{
     /*
     Constructor for tests
      */
-    public Gardner (char[][] gB, char myChip, int numInTheRow, ArrayList<Integer> h) {
-        GAME_BOARD = gB;
+    public Gardner (char[][] gB, char aiChip, int numInTheRow,
+                    ArrayList<Integer> history, boolean firstMove, int depth) {
+
+        GAME_BOARD = CoordinateConverter.copyBoard(gB);
         BOARD_SIZE = gB.length;
         NUM_IN_THE_ROW = numInTheRow;
         FILE_NAME = "(" + BOARD_SIZE + "x" + BOARD_SIZE + ")[" + NUM_IN_THE_ROW + "].xog";
         BASE_DIR = BOARD_SIZE + " x " + BOARD_SIZE + " [" + NUM_IN_THE_ROW + "]/";
-        firstMove = false;
-        history = h;
-        this.aiChip = myChip;
-        enemyChip = (myChip == 'O') ? 'X' : 'O';
+        this.depth = depth;
+        this.firstMove = firstMove;
+        this.history = new ArrayList<Integer>();
+        this.history.addAll(history);
+        this.aiChip = aiChip;
+        enemyChip = (aiChip == 'O') ? 'X' : 'O';
         checker = new GameStatusChecker(EMPTY, NUM_IN_THE_ROW, BOARD_SIZE);
+        writerComparator = new WriterComparator(BASE_DIR, FILE_NAME, BOARD_SIZE);
     }
 
     /**
@@ -153,11 +159,20 @@ public class Gardner implements IBrainAI{
             }
         }
 
+        ArrayList<Integer> moveList = MoveAdviser.preferableMoves(GAME_BOARD);
 
+        for(Integer i : moveList ) {
+            if (depth == 0) { break; }
+            if (history.size() == BOARD_SIZE * BOARD_SIZE - 1) { break; }
+            move = CoordinateConverter.getCoordinateFromIndex(i, BOARD_SIZE);
+            if (!writerComparator.comparePos(history)) {
+                new Gardner(GAME_BOARD, enemyChip, NUM_IN_THE_ROW, history, false, depth - 1)
+                        .findMove(move[X], move[Y]);
+            }
+        }
 
         while (true){
             ArrayList<Integer> tempHistory = new ArrayList<Integer>(history.size());
-
 	        tempHistory.addAll(history);
 
             ArrayList<Integer> deniedCells = new ArrayList<Integer>();
@@ -171,7 +186,7 @@ public class Gardner implements IBrainAI{
 			     */
                 if (move[X] == 25 || move[Y] == 25) {
 
-                    ArrayList<Integer> moveList = MoveAdviser.preferableMoves(GAME_BOARD);
+
 
                     int index = (int) Math.floor(Math.random() * moveList.size());
                     move = CoordinateConverter.getCoordinateFromIndex(moveList.get(index), BOARD_SIZE);

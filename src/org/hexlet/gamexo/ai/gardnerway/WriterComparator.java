@@ -29,6 +29,7 @@ public class WriterComparator {
 		String sortedPosition = HistoryMaster.sortHistory(history);
 		FileMaster file = new FileMaster(BASE_DIR, history.size() + "." + FILE_NAME);
 		file.writeFile(sortedPosition);
+        LoggerAI.p (sortedPosition);
 	}
 
 
@@ -56,10 +57,10 @@ public class WriterComparator {
 				tempPosition = HistoryMaster.sortHistory(tempHistory);
 				file = new FileMaster(BASE_DIR, tempHistory.size() + "." + FILE_NAME);
                 if (file.isEmpty()) {
-                    LoggerAI.p("file " + file.toString() + " is empty");
+//                    LoggerAI.p("file " + file.toString() + " is empty");
                     return false;
                 }
-                LoggerAI.p("temp position: " + tempHistory);
+//                LoggerAI.p("temp position: " + tempHistory);
                 while (true) {
 					basePosition = file.readFile();
 					if (basePosition == null){
