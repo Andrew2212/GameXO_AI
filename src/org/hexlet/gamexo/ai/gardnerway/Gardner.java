@@ -40,6 +40,7 @@ public class Gardner implements IBrainAI{
     private static final int X = 0;
     private static final int Y = 1;
 	private static final char EMPTY = '_';
+    private static final int TIME_BREAK = 10000;
 
     public Gardner(int fieldSize, int numInTheRow) {
         GAME_BOARD = new char[fieldSize][fieldSize];
@@ -159,15 +160,23 @@ public class Gardner implements IBrainAI{
             }
         }
 
-        ArrayList<Integer> moveList = MoveAdviser.preferableMoves(GAME_BOARD);
+        /*
+        There are is disclosure of variants with writing of losing positions.
+         */
 
-        for(Integer i : moveList ) {
-            if (depth == 0) { break; }
-            if (history.size() == BOARD_SIZE * BOARD_SIZE - 1) { break; }
-            move = CoordinateConverter.getCoordinateFromIndex(i, BOARD_SIZE);
-            if (!writerComparator.comparePos(history)) {
-                new Gardner(GAME_BOARD, enemyChip, NUM_IN_THE_ROW, history, false, depth - 1)
-                        .findMove(move[X], move[Y]);
+        ArrayList<Integer> moveList = MoveAdviser.preferableMoves(GAME_BOARD);
+        Date startTime = new Date();                     // we have to limit of disclosure time.
+
+        if (move[X] == 25) {
+            for(Integer i : moveList ) {
+                if (new Date().getTime() - startTime.getTime() > TIME_BREAK) { break; }
+                if (depth == 0) { break; }
+                if (history.size() == BOARD_SIZE * BOARD_SIZE - 1) { break; }
+                if (!writerComparator.comparePos(history)) {
+                    int[] tempMove = CoordinateConverter.getCoordinateFromIndex(i, BOARD_SIZE);
+                    new Gardner(GAME_BOARD, enemyChip, NUM_IN_THE_ROW, history, false, depth - 1)
+                            .findMove(tempMove[X], tempMove[Y]);
+                }
             }
         }
 
