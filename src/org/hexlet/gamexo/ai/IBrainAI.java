@@ -8,5 +8,7 @@ package org.hexlet.gamexo.ai;
  * To change this template use File | Settings | File Templates.
  */
 public interface IBrainAI {
-      int[] findMove(char[][] fieldMatrix);
+
+   int[] findMove(char[][] fieldMatrix);
+
 }

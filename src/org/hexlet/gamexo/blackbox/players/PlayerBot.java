@@ -32,7 +32,7 @@ public class PlayerBot implements IPlayer {
                 break;
 
             case MINIMAX:
-                iBrainAI = new Minimax(fieldSize, numChecked);
+         //       iBrainAI = new Minimax(fieldSize, numChecked);
                 break;
 
             case SPARE:

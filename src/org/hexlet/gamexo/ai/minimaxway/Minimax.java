@@ -6,12 +6,13 @@ import org.hexlet.gamexo.blackbox.game.GameField;
 
 public class Minimax implements IBrainAI{
 
-    public static final char VALUE_X = 'X';
-    public static final char VALUE_O = 'O';
+    // public static final char VALUE_X = 'X';
+    // public static final char VALUE_O = 'O';
     public static final char DEFAULT_CELL_VALUE = '_';
-    public static final int MINUSINFINITY = -4000000;
-    public static final int INFINITY = 4000000;
+    // public static final int MINUSINFINITY = -4000000;
+    // public static final int INFINITY = 4000000;
 
+   /*
     private final int LENGTH; //длинна линии, необходимая для победы
     private final int X_SIZE; // количество строк поля
     private final int Y_SIZE; // количество столбцов поля
@@ -20,13 +21,14 @@ public class Minimax implements IBrainAI{
     private int bestMoveWeight;
     private int worstCurStepWeight;
     private Heuristic heuristic;
+    */
 //*************REMAKE Random dummy*********************************
     private final int[] MOVE = new int[2];    // координаты следующих ходов
-    private static final int X = 0;
-    private static final int Y = 1;
+    public static final int ROW_COORD = 0;
+    public static final int COL_COORD = 1;
     private GetterLastEnemyMove getterLastEnemyMove;
     private char signBot; // за кого играет бот. Х либо О
-
+/*
     public Minimax(int fieldSize,int numChecked){
         this.LENGTH = numChecked;
         this.X_SIZE = fieldSize;
@@ -40,26 +42,28 @@ public class Minimax implements IBrainAI{
      * @param fieldMatrix char[][]
      * @return MOVE i.e. int[2] - coordinates of cell
      */
+
     public int[] findMove(char[][] fieldMatrix) {
 
         signBot = GameField.getSignForNextMove();
         //        This is what you calculate
-        MOVE[X] = (int) Math.floor(Math.random() * fieldMatrix.length);
-        MOVE[Y] = (int) Math.floor(Math.random() * fieldMatrix.length);
+        MOVE[ROW_COORD] = (int) Math.floor(Math.random() * fieldMatrix.length);
+        MOVE[COL_COORD] = (int) Math.floor(Math.random() * fieldMatrix.length);
 
         //        checkout for random - it isn't needed for real AI
-        if (GameField.isCellValid(MOVE[X], MOVE[Y])) {
+        if (GameField.isCellValid(MOVE[ROW_COORD], MOVE[COL_COORD])) {
             int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
             if (null != lastEnemyMove) {
                 //do something
             }
 
-            System.out.println("Spare::findMove MOVE[X] = " + MOVE[X] + " findMove MOVE[Y] = " + MOVE[Y] + " signBot = " + signBot);
-            getterLastEnemyMove.setMyOwnMove(MOVE[X], MOVE[Y], signBot);
+            System.out.println("Spare::findMove MOVE[ROW_COORD] = " + MOVE[ROW_COORD] + " findMove MOVE[COL_COORD] = " + MOVE[COL_COORD] + " signBot = " + signBot);
+            getterLastEnemyMove.setMyOwnMove(MOVE[ROW_COORD], MOVE[COL_COORD], signBot);
         }
         return MOVE;
     }
 
+/* TODO FUTURE NORMAL MINIMAX CLASS! GLOBAL REFACTORING
 
 //    **********End of random dummy******************************************
 
@@ -69,6 +73,7 @@ public class Minimax implements IBrainAI{
      * @param x   количество строк поля
      * @param y   количество столбцов на поле
      */
+   /*
     public Minimax(int len, int x, int y) {
         this.LENGTH = len;
         this.X_SIZE = x;
@@ -87,17 +92,17 @@ public class Minimax implements IBrainAI{
     // Begin
     public int[] findMoveMiniMax(char[][] fieldMatrix) {
         int[] curBestMove = {0, 0};
-        MOVE[X] = 0;
-        MOVE[Y] = 0;
+        MOVE[ROW_COORD] = 0;
+        MOVE[COL_COORD] = 0;
         bestMoveWeight = MINUSINFINITY;
-        maxMinStrategy(4, 4, fieldMatrix, 0, curBestMove); // maxMin on depth 2. Only for X!!!
+        maxMinStrategy(4, 4, fieldMatrix, 0, curBestMove); // maxMin on depth 2. Only for ROW_COORD!!!
         //  best move didn't find. Will use random
         // TODO add check if the cell is not empty.
         if  (bestMoveWeight == MINUSINFINITY)  {
             //(int) Math.floor(Math.random() * fieldMatrix.length);
             //(int) Math.floor(Math.random() * fieldMatrix.length);
         }
-        System.out.println("Coords of MiniMax is: " + MOVE[X] + ' ' + MOVE[Y]);
+        System.out.println("Coords of MiniMax is: " + MOVE[ROW_COORD] + ' ' + MOVE[COL_COORD]);
         System.out.println("Weight = " + bestMoveWeight);
         return MOVE;  // returns garbage. Need to return to this, when will finish findMove procedure
     }
@@ -141,8 +146,10 @@ public class Minimax implements IBrainAI{
          ******************
      */
 
+
     // search in the depth
     //
+   /*
     private void maxMinStrategy(int curDepth, final int depthMax, char[][] curField, int curStepWeight, int[] curBestMove) {
         if (curDepth != 0) {
             for (int j = 0; j < X_SIZE; j++) {  // looking for empty cell. Maybe it will be the best step.
@@ -152,8 +159,8 @@ public class Minimax implements IBrainAI{
                         if ((depthMax - curDepth) % 2 == 0) {
                             curField[j][k] = VALUE_X;
                             if (curDepth == depthMax) {   // @ToDo Here we should choose the right depthMax to search
-                                curBestMove[X] = j; // save temp best step
-                                curBestMove[Y] = k;
+                                curBestMove[ROW_COORD] = j; // save temp best step
+                                curBestMove[COL_COORD] = k;
                                 worstCurStepWeight = INFINITY;
                             }
                             // copy to heuristic field our current field and get heuristic rating of of the step
@@ -190,8 +197,8 @@ public class Minimax implements IBrainAI{
     private void rememberNewBestMove(int[] curBestMove) {
         if (bestMoveWeight < worstCurStepWeight) {
             bestMoveWeight = worstCurStepWeight;
-            MOVE[X] = curBestMove[X];
-            MOVE[Y] = curBestMove[Y];
+            MOVE[ROW_COORD] = curBestMove[ROW_COORD];
+            MOVE[COL_COORD] = curBestMove[COL_COORD];
         }
     }
 
@@ -207,5 +214,5 @@ public class Minimax implements IBrainAI{
             }
         }
     }
-
+*/
 }
