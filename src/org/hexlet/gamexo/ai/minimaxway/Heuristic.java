@@ -7,17 +7,17 @@ import java.util.Scanner;
 
 /**
  * Class for estimating raiting (or weight) of the step
- *  API: stepWeight(char[][] field, boolean isX, int[] stepTaken, int stepNumber)
+ * API: stepWeight(char[][] field, boolean isX, int[] stepTaken, int stepNumber)
  */
 final class Heuristic {
 
-   private static final int X_WINNER_SCORE = 100;
+   private static final int X_WINNER_SCORE = 500;
 
-   private static final int O_WINNER_SCORE = -100;
+   private static final int O_WINNER_SCORE = -500;
 
    private static final int DRAW_SCORE = 1;
 
-   public static final int EMPTY_CELLS_SCORE = 0;
+   private static final int EMPTY_CELLS_SCORE = 0;
 
 //    // массив смещений адресов ячеек по направлениям
 //    private static final int[][] OFFSET = {
@@ -183,14 +183,22 @@ final class Heuristic {
 
    /**
     * Interface for estimating rating (or weight) of the step
+    * For win situations it returns nonzeros values.
+    * For X it returns positive values,
+    * For O - negative.
+    * If there are empty cells it returns 0;
+    * In case of draw it returns +-1 consequently.
     * @param field      income field with step taken
     * @param isX        true if step taken was X, false if O
     * @param stepTaken  step taken to weight (last taken step)
     * @param stepNumber number of the taken step
-    * @return weight of step. Higher is better
+    * @return weight of step. Abs higher is better for each figure
+    * @throws ArrayIndexOutOfBoundsException
     */
 
-   public static int stepWeight(char[][] field, boolean isX, int[] stepTaken, int stepNumber) {
+   public static int stepWeight(char[][] field, boolean isX, int[] stepTaken, int stepNumber) throws
+           ArrayIndexOutOfBoundsException {
+
       if (isWin(field, stepTaken)) {
          if (isX) {
             return (X_WINNER_SCORE / stepNumber);
@@ -198,14 +206,20 @@ final class Heuristic {
             return (O_WINNER_SCORE / stepNumber);
          }
       }
+
       if (isHasEmptyCells(field)) {
          return EMPTY_CELLS_SCORE;
       }
-      return DRAW_SCORE;
+
+      if (isX) {
+         return DRAW_SCORE;
+      } else {
+         return -DRAW_SCORE;
+      }
    }
 
 
-   private static boolean isWin(char[][] field, int[] stepTaken) {
+   private static boolean isWin(char[][] field, int[] stepTaken) throws ArrayIndexOutOfBoundsException {
 
       if (isHorizWin(field, stepTaken) ) {
          return true;
@@ -298,7 +312,7 @@ final class Heuristic {
       }
    }
 
-   private static boolean isHasEmptyCells(char[][] field) {
+   private static boolean isHasEmptyCells(char[][] field) throws ArrayIndexOutOfBoundsException {
       for(int row = 0; row < field.length; row++) {
          for (int col = 0; col < field[row].length; col++) {
             if(field[row][col] == Minimax.DEFAULT_CELL_VALUE) {
@@ -343,9 +357,9 @@ final class Heuristic {
                field[stepTaken[0]][stepTaken[1]] = 'O';
                rating = Heuristic.stepWeight(field, false, stepTaken, cnt);
             }
-            for (int i = 0; i < field.length; i++) {
-               for (int j = 0; j < field.length; j++) {
-                  System.out.print("[" + field[i][j] + "]");
+            for (int row = 0; row < field.length; row++) {
+               for (int col = 0; col < field.length; col++) {
+                  System.out.print("[" + field[row][col] + "]");
                }
                System.out.println();
             }

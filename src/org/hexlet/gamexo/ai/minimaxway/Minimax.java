@@ -3,14 +3,21 @@ package org.hexlet.gamexo.ai.minimaxway;
 import org.hexlet.gamexo.ai.IBrainAI;
 import org.hexlet.gamexo.ai.utils.GetterLastEnemyMove;
 import org.hexlet.gamexo.blackbox.game.GameField;
+import org.junit.Test;
 
-public class Minimax implements IBrainAI{
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
-    // public static final char VALUE_X = 'X';
-    // public static final char VALUE_O = 'O';
-    public static final char DEFAULT_CELL_VALUE = '_';
-    // public static final int MINUSINFINITY = -4000000;
-    // public static final int INFINITY = 4000000;
+public class Minimax implements IBrainAI {
+
+   public static final char DEFAULT_CELL_VALUE = '_';
+
+   public static final char VALUE_X = 'X';
+
+   public static final char VALUE_O = 'O';
+
+   // public static final int MINUSINFINITY = -4000000;
+   // public static final int INFINITY = 4000000;
 
    /*
     private final int LENGTH; //длинна линии, необходимая для победы
@@ -23,11 +30,11 @@ public class Minimax implements IBrainAI{
     private Heuristic heuristic;
     */
 //*************REMAKE Random dummy*********************************
-    private final int[] MOVE = new int[2];    // координаты следующих ходов
-    public static final int ROW_COORD = 0;
-    public static final int COL_COORD = 1;
-    private GetterLastEnemyMove getterLastEnemyMove;
-    private char signBot; // за кого играет бот. Х либо О
+   private final int[] MOVE = new int[2];    // координаты следующих ходов
+   public static final int ROW_COORD = 0;
+   public static final int COL_COORD = 1;
+   private GetterLastEnemyMove getterLastEnemyMove;
+   private char signBot; // за кого играет бот. Х либо О
 /*
     public Minimax(int fieldSize,int numChecked){
         this.LENGTH = numChecked;
@@ -43,27 +50,27 @@ public class Minimax implements IBrainAI{
      * @return MOVE i.e. int[2] - coordinates of cell
      */
 
-    public int[] findMove(char[][] fieldMatrix) {
+   public int[] findMove(char[][] fieldMatrix) {
 
-        signBot = GameField.getSignForNextMove();
-        //        This is what you calculate
-        MOVE[ROW_COORD] = (int) Math.floor(Math.random() * fieldMatrix.length);
-        MOVE[COL_COORD] = (int) Math.floor(Math.random() * fieldMatrix.length);
+      signBot = GameField.getSignForNextMove();
+      //        This is what you calculate
+      MOVE[ROW_COORD] = (int) Math.floor(Math.random() * fieldMatrix.length);
+      MOVE[COL_COORD] = (int) Math.floor(Math.random() * fieldMatrix.length);
 
-        //        checkout for random - it isn't needed for real AI
-        if (GameField.isCellValid(MOVE[ROW_COORD], MOVE[COL_COORD])) {
-            int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
-            if (null != lastEnemyMove) {
-                //do something
-            }
+      //        checkout for random - it isn't needed for real AI
+      if (GameField.isCellValid(MOVE[ROW_COORD], MOVE[COL_COORD])) {
+         int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
+         if (null != lastEnemyMove) {
+            //do something
+         }
 
-            System.out.println("Spare::findMove MOVE[ROW_COORD] = " + MOVE[ROW_COORD] + " findMove MOVE[COL_COORD] = " + MOVE[COL_COORD] + " signBot = " + signBot);
-            getterLastEnemyMove.setMyOwnMove(MOVE[ROW_COORD], MOVE[COL_COORD], signBot);
-        }
-        return MOVE;
-    }
+         System.out.println("Spare::findMove MOVE[ROW_COORD] = " + MOVE[ROW_COORD] + " findMove MOVE[COL_COORD] = " + MOVE[COL_COORD] + " signBot = " + signBot);
+         getterLastEnemyMove.setMyOwnMove(MOVE[ROW_COORD], MOVE[COL_COORD], signBot);
+      }
+      return MOVE;
+   }
 
-/* TODO FUTURE NORMAL MINIMAX CLASS! GLOBAL REFACTORING
+/*
 
 //    **********End of random dummy******************************************
 
@@ -95,7 +102,7 @@ public class Minimax implements IBrainAI{
         MOVE[ROW_COORD] = 0;
         MOVE[COL_COORD] = 0;
         bestMoveWeight = MINUSINFINITY;
-        maxMinStrategy(4, 4, fieldMatrix, 0, curBestMove); // maxMin on depth 2. Only for ROW_COORD!!!
+        maxMinSearch(4, 4, fieldMatrix, 0, curBestMove); // maxMin on depth 2. Only for ROW_COORD!!!
         //  best move didn't find. Will use random
         // TODO add check if the cell is not empty.
         if  (bestMoveWeight == MINUSINFINITY)  {
@@ -147,10 +154,10 @@ public class Minimax implements IBrainAI{
      */
 
 
-    // search in the depth
-    //
+   // search in the depth
+   //
    /*
-    private void maxMinStrategy(int curDepth, final int depthMax, char[][] curField, int curStepWeight, int[] curBestMove) {
+    private void maxMinSearch(int curDepth, final int depthMax, char[][] curField, int curStepWeight, int[] curBestMove) {
         if (curDepth != 0) {
             for (int j = 0; j < X_SIZE; j++) {  // looking for empty cell. Maybe it will be the best step.
                 for (int k = 0; k < Y_SIZE; k++) {
@@ -173,7 +180,7 @@ public class Minimax implements IBrainAI{
                             deltaWeight = heuristic.heuristicRating(j, k, -1, (depthMax - curDepth +1));
                         }
                         // end of operators before recursive call
-                        maxMinStrategy(curDepth - 1, depthMax, curField, curStepWeight + deltaWeight, curBestMove);
+                        maxMinSearch(curDepth - 1, depthMax, curField, curStepWeight + deltaWeight, curBestMove);
                         // operators after recursive call
                         // reverse all changes
                         curField[j][k] = DEFAULT_CELL_VALUE;  // reverse curField back, cancel our current step
@@ -215,4 +222,128 @@ public class Minimax implements IBrainAI{
         }
     }
 */
+
+   /**
+    * Constructs Minimax instance with necessary field size;
+    * @param fieldSize
+    */
+   public Minimax(int fieldSize) {
+
+   }
+
+   /**
+    * Returns computer step using MaxMin strategy
+    * @param fieldMatrix  current field.
+    * @return int[] with coords of computer step {row coordinate, column coordinate}.
+    */
+
+   public int[] findMoveMiniMax(char[][] fieldMatrix) {
+      int[] curBestMove = {0, 0};
+      curBestMove = maxMinSearch(4, 4, fieldMatrix, 0, curBestMove);
+      return curBestMove;
+   }
+
+   /*
+   private int[] maxMinSearch(int curDepth, final int maxDepth, char[][] fieldMatrix, int curStepWeight,
+                              int[] curBestMove) {
+      if (curDepth != 0) {
+
+      }
+   }
+
+
+   private void checkAllEmptyCells(int curDepth, final int maxDepth, char[][] fieldMatrix, int curStepWeight,
+            int[] curBestMove) {
+      for (int row = 0; row < fieldMatrix.length; row++) {
+         for (int col = 0; col < fieldMatrix[row].length; col++) {
+            if (fieldMatrix[row][col] == DEFAULT_CELL_VALUE) {
+               if ( (maxDepth - curDepth) % 2 == 0) {
+                  fieldMatrix[row][col] = VALUE_X;
+                  if (curDepth == maxDepth) {
+                     curBestMove[ROW_COORD] = row;
+                     curBestMove[COL_COORD] = col;
+                     // worstCurStepWeight = INFINITY;
+                  }
+               }
+               else {
+
+               }
+
+         }
+
+
+         */
+
+   @Test
+   public static void main(String[] args) {
+      char[][] field = {
+              {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
+              {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
+              {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
+      };
+      Minimax miniMax = new Minimax(3);
+      System.out.println(miniMax.findMoveMiniMax(field)[ROW_COORD] + " " + miniMax.findMoveMiniMax(field)[COL_COORD]);
+
+      field[0][0] = VALUE_X;
+      field[1][1] = VALUE_X;
+      field[0][2] = VALUE_O;
+      System.out.println(miniMax.findMoveMiniMax(field)[ROW_COORD] + " " + miniMax.findMoveMiniMax(field)[COL_COORD]);
+      clearField(field);
+
+      field[2][2] = VALUE_X;
+      field[2][0] = VALUE_X;
+      field[0][0] = VALUE_X;
+      field[1][0] = VALUE_O;
+      System.out.println(miniMax.findMoveMiniMax(field)[ROW_COORD] + " " + miniMax.findMoveMiniMax(field)[COL_COORD]);
+      clearField(field);
+
+      System.out.println("/nEnter field size: ");
+      Scanner scan = new Scanner(System.in);
+      int fieldSize = scan.nextInt();
+      field = new char[fieldSize][fieldSize];
+      Minimax minimax = new Minimax(fieldSize);
+      clearField(field);
+      printField(field);
+
+      int cnt = 1;
+      int[] stepTaken = new int[2];
+      while (cnt <= (fieldSize * fieldSize)) {
+         if (cnt % 2 == 1) {
+            stepTaken = miniMax.findMoveMiniMax(field);
+            System.out.println("Computer has stepped to: " + "{" +
+                    stepTaken[ROW_COORD] + "," + stepTaken[COL_COORD] + "}");
+            field[stepTaken[0]][stepTaken[1]] = 'X';
+         } else {
+            try {
+               System.out.print("\nEnter row: ");
+               stepTaken[0] = scan.nextInt();
+               System.out.print("\nEnter col: ");
+               stepTaken[1] = scan.nextInt();
+            }
+            catch (InputMismatchException e) {
+               return;
+            }
+            field[stepTaken[0]][stepTaken[1]] = 'O';
+         }
+         printField(field);
+         cnt++;
+      }
+   }
+
+   private static void  clearField(char[][] field) {
+      for (int row = 0; row < field.length; row++) {
+         for (int col = 0; col < field[row].length; col++) {
+            field[row][col] = DEFAULT_CELL_VALUE;
+         }
+      }
+   }
+
+   private static void printField(char[][] field) {
+      for (int row = 0; row < field.length; row++) {
+         for (int col = 0; col < field.length; col++) {
+            System.out.print("[" + field[row][col] + "]");
+         }
+         System.out.println();
+      }
+   }
 }
