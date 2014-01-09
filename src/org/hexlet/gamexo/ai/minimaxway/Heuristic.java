@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 /**
  * Class for estimating raiting (or weight) of the step
- * API: stepWeight(char[][] field, boolean isX, int[] stepTaken, int stepNumber)
+ * API: stepRaiting(char[][] field, boolean isX, int[] stepTaken, int stepNumber)
  */
 final class Heuristic {
 
@@ -66,7 +66,7 @@ final class Heuristic {
 //     * @return       возвращаем -5 при победе ноликов, 5 - крестиков, 2 - ничья, 0 - есть еще ходы
 //     */
 //     // closer steps have better rating
-//     public static int stepWeight(char[][] field, boolean isX, int[] stepTaken, int stepNumber){
+//     public static int stepRaiting(char[][] field, boolean isX, int[] stepTaken, int stepNumber){
 //        for (int j = 0; j < OFFSET.length; j++){   //последовательно перебираем все направления по часой стрелке,
 //            try {                                   // начиная с верха, на достижение требуемой длинны
 //                if (isEnoughLength(x,y,sign,j)){
@@ -196,7 +196,7 @@ final class Heuristic {
     * @throws ArrayIndexOutOfBoundsException
     */
 
-   public static int stepWeight(char[][] field, boolean isX, int[] stepTaken, int stepNumber) throws
+   public static int stepRaiting(char[][] field, boolean isX, int[] stepTaken, int stepNumber) throws
            ArrayIndexOutOfBoundsException {
 
       char winner = Game.winner(field, stepTaken);
@@ -211,7 +211,8 @@ final class Heuristic {
       else {
          if (isX) {
             return DRAW_SCORE;
-         } else {
+         }
+         else {
             return -DRAW_SCORE;
          }
       }
@@ -248,10 +249,10 @@ final class Heuristic {
             int rating;
             if (cnt % 2 == 1) {
                field[stepTaken[0]][stepTaken[1]] = 'X';
-               rating = Heuristic.stepWeight(field, true, stepTaken, cnt);
+               rating = Heuristic.stepRaiting(field, true, stepTaken, cnt);
             } else {
                field[stepTaken[0]][stepTaken[1]] = 'O';
-               rating = Heuristic.stepWeight(field, false, stepTaken, cnt);
+               rating = Heuristic.stepRaiting(field, false, stepTaken, cnt);
             }
             for (int row = 0; row < field.length; row++) {
                for (int col = 0; col < field.length; col++) {

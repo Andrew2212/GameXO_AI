@@ -27,6 +27,14 @@ public class Minimax implements IBrainAI {
 
    private static final int DEFAULT_FIELD_SIZE = 3;
 
+   private boolean isAIFigureX = true;
+
+   private final int SEARCH_DEPTH = 5;
+
+   private int bestStepRating = 0;
+
+   private int[] bestStep = {-1, -1};
+
    // public static final int MINUSINFINITY = -4000000;
    // public static final int INFINITY = 4000000;
 
@@ -235,55 +243,127 @@ public class Minimax implements IBrainAI {
 */
 
    /**
-    * Constructs Minimax instance with necessary field size;
-    * @param fieldSize
+    *
+    * @param isAIFigureX boolean - true if
     */
-   public Minimax(int fieldSize) {
-
+   public Minimax(boolean isAIFigureX) {
+      this.isAIFigureX = isAIFigureX;
    }
 
    /**
     * Returns computer step using MaxMin strategy
-    * @param fieldMatrix  current field.
+    * @param fieldMatrix  char[][] - current field.
     * @return int[] with coords of computer step {row coordinate, column coordinate}.
     */
 
    public int[] findMoveMiniMax(char[][] fieldMatrix) {
-      int[] curBestMove = {0, 0};
-    //  curBestMove = maxMinSearch(4, 4, fieldMatrix, 0, curBestMove);
-      return curBestMove;
+      searchSimpleSolutions(fieldMatrix);
+      if (bestStepRating > 0) return bestStep;
+      minimaxRecursiveSearch(fieldMatrix, SEARCH_DEPTH, bestStepRating, bestStep);
+      if (bestStepRating == 0) randomStep(fieldMatrix);
+      return bestStep;
    }
 
-   /*
-   private int[] maxMinSearch(int curDepth, final int maxDepth, char[][] fieldMatrix, int curStepWeight,
-                              int[] curBestMove) {
-      if (curDepth != 0) {
+   // search for situations winning in one step or loosing in one step
+   private void searchSimpleSolutions(char[][] field) {
+      char aiFigure = VALUE_O;
+      char rivalFigure = VALUE_X;
+      if (isAIFigureX) {
+         aiFigure = VALUE_X;
+         rivalFigure = VALUE_O;
+      }
+      int[] aiWinnerStep = {-1, -1};
+      int[] rivalWinnerStep = {-1, -1};
 
+      for (int row = 0; row < field.length; row++) {
+         for (int col = 0; col < field[row].length; col++) {
+            if (field[row][col] == DEFAULT_CELL_VALUE) {
+               int[] stepTaken = {row, col};
+               field[row][col] = aiFigure;
+               if (Game.winner(field, stepTaken) == aiFigure) aiWinnerStep = stepTaken;
+               field[row][col] = rivalFigure;
+               if (Game.winner(field, stepTaken) == rivalFigure) rivalWinnerStep = stepTaken;
+               field[row][col] = DEFAULT_CELL_VALUE;
+            }
+         }
+      }
+
+      if (aiWinnerStep[ROW_COORD] != -1) {
+         bestStep = aiWinnerStep;
+         bestStepRating = Heuristic.stepRaiting(field, isAIFigureX, aiWinnerStep, 1);
+      }
+      else if (rivalWinnerStep[ROW_COORD] != -1) {
+         bestStep = rivalWinnerStep;
+         bestStepRating = Heuristic.stepRaiting(field, isAIFigureX, rivalWinnerStep, 1);
+      }
+   }
+
+   // Algorithm
+   // With recursion create tree of possible fields and estimate them using Heuristic class (heuristic coefficient)
+   // Choose the best step based on the future best possible field
+   private void minimaxRecursiveSearch(char[][] field, int depth, int rating, int[] bestStep) {
+      if (depth != 0) {
+         boolean defaultCellWasFound = false;
+         for (int row = 0; row < field.length; row++) {
+            for (int col = 0; col < field[row].length; col++) {
+               if (field[row][col] == DEFAULT_CELL_VALUE) {
+                  defaultCellWasFound = true;
+                  int[] step = {row, col};
+                  if ( (SEARCH_DEPTH - depth) % 2 == 0) {
+                     // AI figure's step
+                     if (isAIFigureX) field[row][col] = VALUE_X;
+                     else field[row][col] = VALUE_O;
+                     // if it is first step then remember it
+                     if (SEARCH_DEPTH == depth) bestStep = step;
+                  }
+                  else {
+                     // NOT AI figure's step
+                     if (isAIFigureX) field[row][col] = VALUE_O;
+                     else field[row][col] = VALUE_X;
+                  }
+                  int stepRating = Heuristic.stepRaiting(field, isAIFigureX, step, SEARCH_DEPTH - depth + 1);
+                  //
+                  if (Math.abs(stepRating) > 1) {
+                     rememberBestStep(rating + stepRating, bestStep);
+                     return;
+                  }
+                  minimaxRecursiveSearch(field, depth - 1, rating + stepRating, bestStep);
+                  // reverse field changes
+                  field[row][col] = DEFAULT_CELL_VALUE;
+               }
+            }
+         }
+         if (!defaultCellWasFound) {
+            rememberBestStep(rating, bestStep);
+         }
+      }
+      rememberBestStep(rating, bestStep);
+   }
+
+   private void rememberBestStep(int rating, int[] bestStep) {
+      // check for different figures
+      if ( ( (isAIFigureX) && (rating > this.bestStepRating) ) ||
+      ( (!isAIFigureX) && (rating < this.bestStepRating) ) ) {
+         bestStepRating = rating;
+         this.bestStep = bestStep;
+      }
+   }
+
+   // do random if minimax hasn't find anything
+   private void randomStep(char[][] field) {
+      Random random = new Random();
+      int[] stepTaken = new int[2];
+      while (true) {
+         stepTaken[ROW_COORD] = random.nextInt(field.length);
+         stepTaken[COL_COORD] = random.nextInt(field.length);
+         if (field[ stepTaken[COL_COORD] ][ stepTaken[COL_COORD] ] == DEFAULT_CELL_VALUE) {
+            bestStep = stepTaken;
+            return;
+         }
       }
    }
 
 
-   private void checkAllEmptyCells(int curDepth, final int maxDepth, char[][] fieldMatrix, int curStepWeight,
-            int[] curBestMove) {
-      for (int row = 0; row < fieldMatrix.length; row++) {
-         for (int col = 0; col < fieldMatrix[row].length; col++) {
-            if (fieldMatrix[row][col] == DEFAULT_CELL_VALUE) {
-               if ( (maxDepth - curDepth) % 2 == 0) {
-                  fieldMatrix[row][col] = VALUE_X;
-                  if (curDepth == maxDepth) {
-                     curBestMove[ROW_COORD] = row;
-                     curBestMove[COL_COORD] = col;
-                     // worstCurStepWeight = INFINITY;
-                  }
-               }
-               else {
-
-               }
-
-         }
-
-
-         */
 
    @Test
    public static void main(String[] args) {
@@ -329,15 +409,16 @@ public class Minimax implements IBrainAI {
    private static void autoTest(BufferedWriter bw, int testNum) throws IOException {
       char[][] field = new char[DEFAULT_FIELD_SIZE][DEFAULT_FIELD_SIZE];
       clearField(field);
-      Minimax minimax = new Minimax(field.length);
 
       bw.write("////////////// TEST NUMBER " + testNum + " //////////////");
       bw.write( (char) 13 + (char) 10 );
       boolean isMinimaxStep = true;
       char minimaxFigure = VALUE_X;
+      Minimax minimax = new Minimax(true);
       if (testNum % 2 == 0) {
          isMinimaxStep = false;
          minimaxFigure = VALUE_O;
+         minimax = new Minimax(false);
       }
 
       int stepNum = 1;
@@ -401,12 +482,13 @@ public class Minimax implements IBrainAI {
               {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
               {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
       };
-      Minimax minimax = new Minimax(DEFAULT_FIELD_SIZE);
+      Minimax minimax = new Minimax(true);
       System.out.println(minimax.findMoveMiniMax(field)[ROW_COORD] + " " + minimax.findMoveMiniMax(field)[COL_COORD]);
 
       field[0][0] = VALUE_X;
       field[1][1] = VALUE_X;
       field[0][2] = VALUE_O;
+      field[1][2] = VALUE_O;
       System.out.println(minimax.findMoveMiniMax(field)[ROW_COORD] + " " + minimax.findMoveMiniMax(field)[COL_COORD]);
       clearField(field);
 
@@ -414,6 +496,8 @@ public class Minimax implements IBrainAI {
       field[2][0] = VALUE_X;
       field[0][0] = VALUE_X;
       field[1][0] = VALUE_O;
+      field[1][2] = VALUE_O;
+
       System.out.println(minimax.findMoveMiniMax(field)[ROW_COORD] + " " + minimax.findMoveMiniMax(field)[COL_COORD]);
       clearField(field);
 
@@ -421,7 +505,7 @@ public class Minimax implements IBrainAI {
       Scanner scan = new Scanner(System.in);
       int fieldSize = scan.nextInt();
       field = new char[fieldSize][fieldSize];
-      minimax = new Minimax(fieldSize);
+      minimax = new Minimax(true);
       clearField(field);
       printField(field);
 
@@ -433,7 +517,8 @@ public class Minimax implements IBrainAI {
             System.out.println("Computer has stepped to: " + "{" +
                     stepTaken[ROW_COORD] + "," + stepTaken[COL_COORD] + "}");
             field[stepTaken[0]][stepTaken[1]] = 'X';
-         } else {
+         }
+         else {
             try {
                System.out.print("\nEnter row: ");
                stepTaken[0] = scan.nextInt();
