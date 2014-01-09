@@ -189,8 +189,8 @@ final class Heuristic {
     * If there are empty cells it returns 0;
     * In case of draw it returns +-1 consequently.
     * @param field      income field with step taken
-    * @param isX        true if step taken was X, false if O
-    * @param stepTaken  step taken to weight (last taken step)
+    * @param isX        true if make heuristic estimate for X figure
+    * @param stepTaken  step taken to weight (last taken step) [0] - row coordinate, [1] - column coordinate
     * @param stepNumber number of the taken step
     * @return weight of step. Abs higher is better for each figure
     * @throws ArrayIndexOutOfBoundsException
@@ -199,129 +199,25 @@ final class Heuristic {
    public static int stepWeight(char[][] field, boolean isX, int[] stepTaken, int stepNumber) throws
            ArrayIndexOutOfBoundsException {
 
-      if (isWin(field, stepTaken)) {
-         if (isX) {
-            return (X_WINNER_SCORE / stepNumber);
-         } else {
-            return (O_WINNER_SCORE / stepNumber);
-         }
-      }
+      char winner = Game.winner(field, stepTaken);
 
-      if (isHasEmptyCells(field)) {
+      if ( (winner == Minimax.VALUE_X) || (winner == Minimax.VALUE_O) ) {
+         if (isX) return (X_WINNER_SCORE / stepNumber);
+         else     return (O_WINNER_SCORE / stepNumber);
+      }
+      else if (winner == Minimax.DEFAULT_CELL_VALUE) {
          return EMPTY_CELLS_SCORE;
       }
-
-      if (isX) {
-         return DRAW_SCORE;
-      } else {
-         return -DRAW_SCORE;
-      }
-   }
-
-
-   private static boolean isWin(char[][] field, int[] stepTaken) throws ArrayIndexOutOfBoundsException {
-
-      if (isHorizWin(field, stepTaken) ) {
-         return true;
-      }
-
-      if (isVertWin(field, stepTaken) ) {
-         return true;
-      }
-
-      if (isMainDiagWin(field, stepTaken) ) {
-         return true;
-      }
-
-      if (isInversDiagWin(field, stepTaken) ) {
-         return true;
-      }
-
-      return false;
-   }
-
-
-   private static boolean isHorizWin(char[][] field, int[] stepTaken) {
-      int col = 1;
-      while ((col < field.length) && (field[stepTaken[Minimax.ROW_COORD] ][col - 1] ==
-              field[stepTaken[Minimax.ROW_COORD] ][col])) {
-         col++;
-      }
-      if (col == field.length) {
-         return true;
-      }
       else {
-         return false;
+         if (isX) {
+            return DRAW_SCORE;
+         } else {
+            return -DRAW_SCORE;
+         }
       }
+
    }
 
-   private static boolean isVertWin(char[][] field, int[] stepTaken) {
-      int row = 1;
-      while ((row < field.length) && (field[row - 1][stepTaken[Minimax.COL_COORD] ] ==
-              field[row][stepTaken[Minimax.COL_COORD] ] ) ) {
-         row++;
-      }
-      if (row == field.length) {
-         return true;
-      }
-      else {
-         return false;
-      }
-   }
-
-   private static boolean isMainDiagWin(char[][] field, int[] stepTaken) {
-      int row = 1;
-      int col = 1;
-      if (stepTaken[Minimax.ROW_COORD] == stepTaken[Minimax.COL_COORD] ) {
-         while ((row < field.length) && (col < field.length) &&
-                 (field[row - 1][col - 1] == field[row][col])) {
-            row++;
-            col++;
-         }
-         if ((row == field.length) && (col == field.length)) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      }
-      else {
-         return false;
-      }
-   }
-
-   private static boolean isInversDiagWin(char[][] field, int[] stepTaken) {
-      int col = field.length - 2; // the coord before the last
-      int row = 1; // coord after the first
-      final int FIRST_COORD = 0;
-      if ( (stepTaken[Minimax.ROW_COORD] + stepTaken[Minimax.COL_COORD] ) == field.length - 1) {
-         while ((row < field.length) && (col > FIRST_COORD - 1) &&
-                 (field[row - 1][col + 1] == field[row][col])) {
-            row++;
-            col--;
-         }
-         if ((row == field.length) && (col == FIRST_COORD - 1)) {
-            return true;
-         }
-         else {
-            return false;
-         }
-      }
-      else {
-         return false;
-      }
-   }
-
-   private static boolean isHasEmptyCells(char[][] field) throws ArrayIndexOutOfBoundsException {
-      for(int row = 0; row < field.length; row++) {
-         for (int col = 0; col < field[row].length; col++) {
-            if(field[row][col] == Minimax.DEFAULT_CELL_VALUE) {
-               return true;
-            }
-         }
-      }
-      return false;
-   }
       /**
        * Unit tests for Heuristic
        * @param args Don't use it

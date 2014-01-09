@@ -5,7 +5,12 @@ import org.hexlet.gamexo.ai.utils.GetterLastEnemyMove;
 import org.hexlet.gamexo.blackbox.game.GameField;
 import org.junit.Test;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Minimax implements IBrainAI {
@@ -15,6 +20,12 @@ public class Minimax implements IBrainAI {
    public static final char VALUE_X = 'X';
 
    public static final char VALUE_O = 'O';
+
+   private static final String FILE_NAME = "minimax_test.log";
+
+   private static final int TESTS_NUMBER = 25;
+
+   private static final int DEFAULT_FIELD_SIZE = 3;
 
    // public static final int MINUSINFINITY = -4000000;
    // public static final int INFINITY = 4000000;
@@ -239,7 +250,7 @@ public class Minimax implements IBrainAI {
 
    public int[] findMoveMiniMax(char[][] fieldMatrix) {
       int[] curBestMove = {0, 0};
-      curBestMove = maxMinSearch(4, 4, fieldMatrix, 0, curBestMove);
+    //  curBestMove = maxMinSearch(4, 4, fieldMatrix, 0, curBestMove);
       return curBestMove;
    }
 
@@ -276,32 +287,141 @@ public class Minimax implements IBrainAI {
 
    @Test
    public static void main(String[] args) {
+      System.out.println("Input test mode: \n1. Random testing to log file.\n2. User testing");
+      Scanner scan = new Scanner(System.in);
+      try {
+         if (scan.nextInt() == 1) {
+            autoLogTesting();
+         } else if (scan.nextInt() == 2) {
+            userTesting();
+         }
+         else {
+            return;
+         }
+      }
+      catch (IOException e) {
+         e.printStackTrace();
+         return;
+      }
+      catch (Exception e) {
+         e.printStackTrace();
+         return;
+      }
+   }
+
+   private static void autoLogTesting() throws IOException {
+      File file = new File(FILE_NAME);
+      file.createNewFile();
+      FileWriter fw = new FileWriter(file.getAbsoluteFile());
+      BufferedWriter bw = new BufferedWriter(fw);
+
+      for (int testNum = 0; testNum < TESTS_NUMBER; testNum++) {
+         try {
+            autoTest(bw, testNum);
+         }
+         finally {
+            bw.close();
+         }
+      }
+      System.out.println("Log test is done successfully!");
+   }
+
+   private static void autoTest(BufferedWriter bw, int testNum) throws IOException {
+      char[][] field = new char[DEFAULT_FIELD_SIZE][DEFAULT_FIELD_SIZE];
+      clearField(field);
+      Minimax minimax = new Minimax(field.length);
+
+      bw.write("////////////// TEST NUMBER " + testNum + " //////////////");
+      bw.write( (char) 13 + (char) 10 );
+      boolean isMinimaxStep = true;
+      char minimaxFigure = VALUE_X;
+      if (testNum % 2 == 0) {
+         isMinimaxStep = false;
+         minimaxFigure = VALUE_O;
+      }
+
+      int stepNum = 1;
+      char winner = DEFAULT_CELL_VALUE;
+      int[] stepTaken = new int[2];
+      while (winner == DEFAULT_CELL_VALUE) {
+         bw.write("Step  " + stepNum + ")");
+         bw.write( (char) 13 + (char) 10 );
+
+         if (isMinimaxStep) {
+            stepTaken[ROW_COORD] = minimax.findMoveMiniMax(field)[ROW_COORD];
+            stepTaken[COL_COORD] = minimax.findMoveMiniMax(field)[COL_COORD];
+            bw.write("Minimax goes to [ " + stepTaken[ROW_COORD] + " ] [ " + stepTaken[COL_COORD] + " ]");
+            bw.write( (char) 13 + (char) 10 );
+         }
+         else {
+            while (true) {
+               Random random = new Random();
+               stepTaken[ROW_COORD] = random.nextInt(field.length);
+               stepTaken[COL_COORD] = random.nextInt(field.length);
+               if (field[ stepTaken[COL_COORD] ][ stepTaken[COL_COORD] ] == DEFAULT_CELL_VALUE) {
+                  if (minimaxFigure == VALUE_X) {
+                     field[ stepTaken[ROW_COORD] ][ stepTaken[COL_COORD] ] = VALUE_O;
+                  }
+                  else {
+                     field[ stepTaken[ROW_COORD] ][ stepTaken[COL_COORD] ] = VALUE_X;
+                  }
+                  bw.write("Random goes to [ " + stepTaken[ROW_COORD] + " ] [ " + stepTaken[COL_COORD] + " ]");
+                  bw.write( (char) 13 + (char) 10 );
+                  break;
+               }
+            }
+            fieldToFile(field, bw);
+            bw.write( (char) 13 + (char) 10 );
+         }
+
+         stepNum++;
+         winner = Game.winner(field, stepTaken);
+      }
+
+      bw.write(winner + " wins!");
+      bw.write( (char) 13 + (char) 10 );
+      bw.write( (char) 13 + (char) 10 );
+      bw.write( (char) 13 + (char) 10 );
+
+   }
+
+   private static void fieldToFile(char[][] field, BufferedWriter bw) throws IOException {
+      for (int row = 0; row < field.length; row++) {
+         for (int col = 0; col < field.length; col++) {
+            bw.write("[ " + field[row][col] + " ] ");
+         }
+         bw.write( (char) 13 + (char) 10 );
+      }
+      bw.write( (char) 13 + (char) 10 );
+   }
+
+   private static void userTesting() {
       char[][] field = {
               {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
               {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
               {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
       };
-      Minimax miniMax = new Minimax(3);
-      System.out.println(miniMax.findMoveMiniMax(field)[ROW_COORD] + " " + miniMax.findMoveMiniMax(field)[COL_COORD]);
+      Minimax minimax = new Minimax(DEFAULT_FIELD_SIZE);
+      System.out.println(minimax.findMoveMiniMax(field)[ROW_COORD] + " " + minimax.findMoveMiniMax(field)[COL_COORD]);
 
       field[0][0] = VALUE_X;
       field[1][1] = VALUE_X;
       field[0][2] = VALUE_O;
-      System.out.println(miniMax.findMoveMiniMax(field)[ROW_COORD] + " " + miniMax.findMoveMiniMax(field)[COL_COORD]);
+      System.out.println(minimax.findMoveMiniMax(field)[ROW_COORD] + " " + minimax.findMoveMiniMax(field)[COL_COORD]);
       clearField(field);
 
       field[2][2] = VALUE_X;
       field[2][0] = VALUE_X;
       field[0][0] = VALUE_X;
       field[1][0] = VALUE_O;
-      System.out.println(miniMax.findMoveMiniMax(field)[ROW_COORD] + " " + miniMax.findMoveMiniMax(field)[COL_COORD]);
+      System.out.println(minimax.findMoveMiniMax(field)[ROW_COORD] + " " + minimax.findMoveMiniMax(field)[COL_COORD]);
       clearField(field);
 
       System.out.println("/nEnter field size: ");
       Scanner scan = new Scanner(System.in);
       int fieldSize = scan.nextInt();
       field = new char[fieldSize][fieldSize];
-      Minimax minimax = new Minimax(fieldSize);
+      minimax = new Minimax(fieldSize);
       clearField(field);
       printField(field);
 
@@ -309,7 +429,7 @@ public class Minimax implements IBrainAI {
       int[] stepTaken = new int[2];
       while (cnt <= (fieldSize * fieldSize)) {
          if (cnt % 2 == 1) {
-            stepTaken = miniMax.findMoveMiniMax(field);
+            stepTaken = minimax.findMoveMiniMax(field);
             System.out.println("Computer has stepped to: " + "{" +
                     stepTaken[ROW_COORD] + "," + stepTaken[COL_COORD] + "}");
             field[stepTaken[0]][stepTaken[1]] = 'X';
@@ -346,4 +466,5 @@ public class Minimax implements IBrainAI {
          System.out.println();
       }
    }
+
 }
