@@ -7,8 +7,6 @@ package org.hexlet.gamexo.ai.minimaxway;
  */
 class Game {
 
-   private static char DRAW = 'D';
-
    // TODO REFACTOR
    // Maybe it would be useful to place here all static constants from Minimax class
 
@@ -23,7 +21,7 @@ class Game {
     */
    public static char winner(char[][] field, int[] stepTaken) {
 
-      char placedFigure = field[Minimax.ROW_COORD][Minimax.COL_COORD];
+      char placedFigure = field[ stepTaken[Minimax.ROW_COORD] ][ stepTaken[Minimax.COL_COORD] ];
 
       if (isWin(field, stepTaken)) {
          if (placedFigure == Minimax.VALUE_X) {
@@ -34,11 +32,11 @@ class Game {
          }
       }
 
-      if (isHasEmptyCells(field)) {
+      if (hasEmptyCells(field)) {
          return Minimax.DEFAULT_CELL_VALUE;
       }
 
-      return DRAW;
+      return Minimax.VALUE_DRAW;
    }
 
    private static boolean isWin(char[][] field, int[] stepTaken) throws ArrayIndexOutOfBoundsException {
@@ -134,7 +132,7 @@ class Game {
       }
    }
 
-   private static boolean isHasEmptyCells(char[][] field) throws ArrayIndexOutOfBoundsException {
+   private static boolean hasEmptyCells(char[][] field) throws ArrayIndexOutOfBoundsException {
       for(int row = 0; row < field.length; row++) {
          for (int col = 0; col < field[row].length; col++) {
             if(field[row][col] == Minimax.DEFAULT_CELL_VALUE) {

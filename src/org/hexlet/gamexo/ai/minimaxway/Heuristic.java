@@ -205,21 +205,46 @@ final class Heuristic {
          if (isX) return (X_WINNER_SCORE / stepNumber);
          else     return (O_WINNER_SCORE / stepNumber);
       }
+      else if ( (wasPreventLoose(field, stepTaken)) || (winner == Minimax.VALUE_DRAW) ) {
+         if (isX)  return DRAW_SCORE;
+         else      return -DRAW_SCORE;
+      }
       else if (winner == Minimax.DEFAULT_CELL_VALUE) {
          return EMPTY_CELLS_SCORE;
       }
-      else {
-         if (isX) {
-            return DRAW_SCORE;
-         }
-         else {
-            return -DRAW_SCORE;
-         }
-      }
-
+      else throw new UnknownError();
    }
 
-      /**
+   private static boolean wasPreventLoose(char[][] field, int[] stepTaken) {
+      char placedFigure = field[stepTaken[Minimax.ROW_COORD]][stepTaken[Minimax.COL_COORD]];
+      // place opposite figure to that place
+      try {
+         if (placedFigure == Minimax.VALUE_X) {
+            field[stepTaken[Minimax.ROW_COORD]][stepTaken[Minimax.COL_COORD]] = Minimax.VALUE_O;
+         } else if (placedFigure == Minimax.VALUE_O) {
+            field[stepTaken[Minimax.ROW_COORD]][stepTaken[Minimax.COL_COORD]] = Minimax.VALUE_X;
+         } else {
+            throw new IllegalArgumentException();
+         }
+      }
+      catch (IllegalArgumentException e) {
+         e.printStackTrace();
+      }
+
+      // watch if it could be win of
+      char possibleWinner = Game.winner(field, stepTaken);
+      // return placedFigure
+      field[stepTaken[Minimax.ROW_COORD]][stepTaken[Minimax.COL_COORD]] = placedFigure;
+      if ( ( (possibleWinner == Minimax.VALUE_X) && (placedFigure == Minimax.VALUE_O) ) ||
+      ( (possibleWinner == Minimax.VALUE_O) && (placedFigure == Minimax.VALUE_X) ) ) {
+         return true;
+      }
+      else {
+         return false;
+      }
+}
+
+   /**
        * Unit tests for Heuristic
        * @param args Don't use it
        */
@@ -227,12 +252,12 @@ final class Heuristic {
       @Test
       public static void main(String[] args) {
          char[][] field = {
-                 {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
-                 {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
+                 {Minimax.VALUE_O, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
+                 {Minimax.DEFAULT_CELL_VALUE, Minimax.VALUE_X, Minimax.VALUE_X},
                  {Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE, Minimax.DEFAULT_CELL_VALUE},
          };
 
-         int cnt = 1;
+         int cnt = 2;
          Scanner scan = new Scanner(System.in);
          int[] stepTaken = new int[2];
          // without check of victory!
@@ -254,6 +279,7 @@ final class Heuristic {
                field[stepTaken[0]][stepTaken[1]] = 'O';
                rating = Heuristic.stepRaiting(field, false, stepTaken, cnt);
             }
+
             for (int row = 0; row < field.length; row++) {
                for (int col = 0; col < field.length; col++) {
                   System.out.print("[" + field[row][col] + "]");

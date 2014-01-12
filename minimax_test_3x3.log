@@ -1,68 +1,47 @@
 ////////////// TEST NUMBER 0 //////////////
 Step  1)
-Random goes to [ 1 ] [ 0 ]
+Random goes to [ 0 ] [ 1 ]
+[ _ ] [ X ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
-[ O ] [ _ ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
+[ O ] [ X ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  3)
 Random goes to [ 0 ] [ 2 ]
-[ O ] [ _ ] [ X ] 
-[ X ] [ _ ] [ _ ] 
+[ O ] [ X ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  4)
-Minimax goes to [ 1 ] [ 1 ]
-[ O ] [ _ ] [ X ] 
-[ X ] [ O ] [ _ ] 
+Minimax goes to [ 1 ] [ 0 ]
+[ O ] [ X ] [ X ] 
+[ O ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  5)
-Random goes to [ 2 ] [ 2 ]
+Random goes to [ 1 ] [ 2 ]
+[ O ] [ X ] [ X ] 
 [ O ] [ _ ] [ X ] 
-[ X ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  6)
-Minimax goes to [ 1 ] [ 2 ]
-[ O ] [ _ ] [ X ] 
-[ X ] [ O ] [ O ] 
-[ _ ] [ _ ] [ X ] 
-
-
-Step  7)
-Random goes to [ 0 ] [ 1 ]
-[ O ] [ X ] [ X ] 
-[ X ] [ O ] [ O ] 
-[ _ ] [ _ ] [ X ] 
-
-
-Step  8)
 Minimax goes to [ 2 ] [ 0 ]
 [ O ] [ X ] [ X ] 
-[ X ] [ O ] [ O ] 
 [ O ] [ _ ] [ X ] 
+[ O ] [ _ ] [ _ ] 
 
 
-Step  9)
-Random goes to [ 2 ] [ 1 ]
-[ O ] [ X ] [ X ] 
-[ X ] [ O ] [ O ] 
-[ O ] [ X ] [ X ] 
-
-
-D wins!
+O wins!
 
 
 ////////////// TEST NUMBER 1 //////////////
@@ -74,31 +53,31 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  2)
-Random goes to [ 2 ] [ 0 ]
+Random goes to [ 1 ] [ 1 ]
 [ X ] [ _ ] [ _ ] 
+[ _ ] [ O ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ O ] [ _ ] [ _ ] 
 
 
 Step  3)
 Minimax goes to [ 0 ] [ 1 ]
 [ X ] [ X ] [ _ ] 
+[ _ ] [ O ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ O ] [ _ ] [ _ ] 
 
 
 Step  4)
-Random goes to [ 2 ] [ 1 ]
+Random goes to [ 1 ] [ 0 ]
 [ X ] [ X ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
 [ O ] [ O ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  5)
 Minimax goes to [ 0 ] [ 2 ]
 [ X ] [ X ] [ X ] 
-[ _ ] [ _ ] [ _ ] 
 [ O ] [ O ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 X wins!
@@ -120,45 +99,45 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  3)
-Random goes to [ 0 ] [ 2 ]
-[ O ] [ _ ] [ X ] 
+Random goes to [ 2 ] [ 1 ]
+[ O ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ X ] 
 
 
 Step  4)
-Minimax goes to [ 1 ] [ 2 ]
-[ O ] [ _ ] [ X ] 
-[ _ ] [ _ ] [ O ] 
-[ _ ] [ _ ] [ X ] 
+Minimax goes to [ 2 ] [ 0 ]
+[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ O ] [ X ] [ X ] 
 
 
 Step  5)
-Random goes to [ 1 ] [ 1 ]
-[ O ] [ _ ] [ X ] 
-[ _ ] [ X ] [ O ] 
-[ _ ] [ _ ] [ X ] 
+Random goes to [ 1 ] [ 0 ]
+[ O ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
+[ O ] [ X ] [ X ] 
 
 
 Step  6)
-Minimax goes to [ 2 ] [ 0 ]
-[ O ] [ _ ] [ X ] 
-[ _ ] [ X ] [ O ] 
-[ O ] [ _ ] [ X ] 
+Minimax goes to [ 0 ] [ 2 ]
+[ O ] [ _ ] [ O ] 
+[ X ] [ _ ] [ _ ] 
+[ O ] [ X ] [ X ] 
 
 
 Step  7)
-Random goes to [ 0 ] [ 1 ]
+Random goes to [ 1 ] [ 2 ]
+[ O ] [ _ ] [ O ] 
+[ X ] [ _ ] [ X ] 
 [ O ] [ X ] [ X ] 
-[ _ ] [ X ] [ O ] 
-[ O ] [ _ ] [ X ] 
 
 
 Step  8)
-Minimax goes to [ 1 ] [ 0 ]
+Minimax goes to [ 1 ] [ 1 ]
+[ O ] [ _ ] [ O ] 
+[ X ] [ O ] [ X ] 
 [ O ] [ X ] [ X ] 
-[ O ] [ X ] [ O ] 
-[ O ] [ _ ] [ X ] 
 
 
 O wins!
@@ -187,17 +166,45 @@ Minimax goes to [ 0 ] [ 1 ]
 
 
 Step  4)
-Random goes to [ 1 ] [ 1 ]
-[ X ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
+Random goes to [ 0 ] [ 2 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ O ] 
 
 
 Step  5)
-Minimax goes to [ 0 ] [ 2 ]
-[ X ] [ X ] [ X ] 
-[ _ ] [ O ] [ _ ] 
+Minimax goes to [ 1 ] [ 2 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ _ ] [ X ] 
 [ _ ] [ _ ] [ O ] 
+
+
+Step  6)
+Random goes to [ 1 ] [ 1 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ O ] [ X ] 
+[ _ ] [ _ ] [ O ] 
+
+
+Step  7)
+Minimax goes to [ 2 ] [ 0 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ O ] [ X ] 
+[ X ] [ _ ] [ O ] 
+
+
+Step  8)
+Random goes to [ 2 ] [ 1 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ O ] [ X ] 
+[ X ] [ O ] [ O ] 
+
+
+Step  9)
+Minimax goes to [ 1 ] [ 0 ]
+[ X ] [ X ] [ O ] 
+[ X ] [ O ] [ X ] 
+[ X ] [ O ] [ O ] 
 
 
 X wins!
@@ -205,59 +212,45 @@ X wins!
 
 ////////////// TEST NUMBER 4 //////////////
 Step  1)
-Random goes to [ 0 ] [ 1 ]
-[ _ ] [ X ] [ _ ] 
+Random goes to [ 2 ] [ 0 ]
 [ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
-[ O ] [ X ] [ _ ] 
+[ O ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  3)
-Random goes to [ 1 ] [ 1 ]
-[ O ] [ X ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
+Random goes to [ 2 ] [ 1 ]
+[ O ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
+[ X ] [ X ] [ _ ] 
 
 
 Step  4)
-Minimax goes to [ 2 ] [ 1 ]
-[ O ] [ X ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
+Minimax goes to [ 2 ] [ 2 ]
+[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ X ] [ X ] [ O ] 
 
 
 Step  5)
-Random goes to [ 1 ] [ 2 ]
-[ O ] [ X ] [ _ ] 
-[ _ ] [ X ] [ X ] 
-[ _ ] [ O ] [ _ ] 
+Random goes to [ 0 ] [ 2 ]
+[ O ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
+[ X ] [ X ] [ O ] 
 
 
 Step  6)
-Minimax goes to [ 1 ] [ 0 ]
-[ O ] [ X ] [ _ ] 
-[ O ] [ X ] [ X ] 
+Minimax goes to [ 1 ] [ 1 ]
+[ O ] [ _ ] [ X ] 
 [ _ ] [ O ] [ _ ] 
-
-
-Step  7)
-Random goes to [ 0 ] [ 2 ]
-[ O ] [ X ] [ X ] 
-[ O ] [ X ] [ X ] 
-[ _ ] [ O ] [ _ ] 
-
-
-Step  8)
-Minimax goes to [ 2 ] [ 0 ]
-[ O ] [ X ] [ X ] 
-[ O ] [ X ] [ X ] 
-[ O ] [ O ] [ _ ] 
+[ X ] [ X ] [ O ] 
 
 
 O wins!
@@ -286,17 +279,17 @@ Minimax goes to [ 0 ] [ 1 ]
 
 
 Step  4)
-Random goes to [ 1 ] [ 2 ]
+Random goes to [ 2 ] [ 2 ]
 [ X ] [ X ] [ _ ] 
-[ _ ] [ _ ] [ O ] 
-[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ O ] [ _ ] [ O ] 
 
 
 Step  5)
 Minimax goes to [ 0 ] [ 2 ]
 [ X ] [ X ] [ X ] 
-[ _ ] [ _ ] [ O ] 
-[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ O ] [ _ ] [ O ] 
 
 
 X wins!
@@ -304,59 +297,45 @@ X wins!
 
 ////////////// TEST NUMBER 6 //////////////
 Step  1)
-Random goes to [ 2 ] [ 0 ]
-[ _ ] [ _ ] [ _ ] 
+Random goes to [ 1 ] [ 0 ]
 [ _ ] [ _ ] [ _ ] 
 [ X ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
 [ O ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
 [ X ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  3)
-Random goes to [ 2 ] [ 2 ]
+Random goes to [ 2 ] [ 1 ]
 [ O ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-[ X ] [ _ ] [ X ] 
+[ X ] [ _ ] [ _ ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  4)
-Minimax goes to [ 2 ] [ 1 ]
-[ O ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-[ X ] [ O ] [ X ] 
-
-
-Step  5)
-Random goes to [ 1 ] [ 0 ]
-[ O ] [ _ ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
-[ X ] [ O ] [ X ] 
-
-
-Step  6)
 Minimax goes to [ 0 ] [ 1 ]
 [ O ] [ O ] [ _ ] 
 [ X ] [ _ ] [ _ ] 
-[ X ] [ O ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 
 
-Step  7)
-Random goes to [ 0 ] [ 2 ]
-[ O ] [ O ] [ X ] 
-[ X ] [ _ ] [ _ ] 
-[ X ] [ O ] [ X ] 
+Step  5)
+Random goes to [ 1 ] [ 2 ]
+[ O ] [ O ] [ _ ] 
+[ X ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 
 
-Step  8)
-Minimax goes to [ 1 ] [ 1 ]
-[ O ] [ O ] [ X ] 
-[ X ] [ O ] [ _ ] 
-[ X ] [ O ] [ X ] 
+Step  6)
+Minimax goes to [ 0 ] [ 2 ]
+[ O ] [ O ] [ O ] 
+[ X ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 
 
 O wins!
@@ -371,45 +350,31 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  2)
-Random goes to [ 0 ] [ 1 ]
-[ X ] [ O ] [ _ ] 
+Random goes to [ 0 ] [ 2 ]
+[ X ] [ _ ] [ O ] 
 [ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  3)
 Minimax goes to [ 1 ] [ 0 ]
-[ X ] [ O ] [ _ ] 
+[ X ] [ _ ] [ O ] 
 [ X ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  4)
-Random goes to [ 2 ] [ 0 ]
-[ X ] [ O ] [ _ ] 
+Random goes to [ 2 ] [ 2 ]
+[ X ] [ _ ] [ O ] 
 [ X ] [ _ ] [ _ ] 
-[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 
 
 Step  5)
-Minimax goes to [ 1 ] [ 1 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ X ] [ _ ] 
-[ O ] [ _ ] [ _ ] 
-
-
-Step  6)
-Random goes to [ 2 ] [ 1 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ X ] [ _ ] 
-[ O ] [ O ] [ _ ] 
-
-
-Step  7)
-Minimax goes to [ 2 ] [ 2 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ X ] [ _ ] 
-[ O ] [ O ] [ X ] 
+Minimax goes to [ 2 ] [ 0 ]
+[ X ] [ _ ] [ O ] 
+[ X ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ O ] 
 
 
 X wins!
@@ -417,45 +382,45 @@ X wins!
 
 ////////////// TEST NUMBER 8 //////////////
 Step  1)
-Random goes to [ 0 ] [ 1 ]
-[ _ ] [ X ] [ _ ] 
+Random goes to [ 2 ] [ 0 ]
 [ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
-[ O ] [ X ] [ _ ] 
+[ O ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  3)
-Random goes to [ 2 ] [ 1 ]
+Random goes to [ 0 ] [ 1 ]
 [ O ] [ X ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  4)
 Minimax goes to [ 1 ] [ 1 ]
 [ O ] [ X ] [ _ ] 
 [ _ ] [ O ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  5)
-Random goes to [ 0 ] [ 2 ]
-[ O ] [ X ] [ X ] 
-[ _ ] [ O ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
+Random goes to [ 1 ] [ 0 ]
+[ O ] [ X ] [ _ ] 
+[ X ] [ O ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  6)
 Minimax goes to [ 2 ] [ 2 ]
-[ O ] [ X ] [ X ] 
-[ _ ] [ O ] [ _ ] 
-[ _ ] [ X ] [ O ] 
+[ O ] [ X ] [ _ ] 
+[ X ] [ O ] [ _ ] 
+[ X ] [ _ ] [ O ] 
 
 
 O wins!
@@ -470,31 +435,31 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  2)
-Random goes to [ 1 ] [ 1 ]
+Random goes to [ 2 ] [ 2 ]
 [ X ] [ _ ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 
 
 Step  3)
 Minimax goes to [ 0 ] [ 1 ]
 [ X ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 
 
 Step  4)
-Random goes to [ 2 ] [ 2 ]
+Random goes to [ 2 ] [ 0 ]
 [ X ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ O ] 
+[ _ ] [ _ ] [ _ ] 
+[ O ] [ _ ] [ O ] 
 
 
 Step  5)
 Minimax goes to [ 0 ] [ 2 ]
 [ X ] [ X ] [ X ] 
-[ _ ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ O ] 
+[ _ ] [ _ ] [ _ ] 
+[ O ] [ _ ] [ O ] 
 
 
 X wins!
@@ -502,45 +467,45 @@ X wins!
 
 ////////////// TEST NUMBER 10 //////////////
 Step  1)
-Random goes to [ 2 ] [ 2 ]
+Random goes to [ 2 ] [ 1 ]
 [ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
 [ O ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  3)
-Random goes to [ 2 ] [ 1 ]
-[ O ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-[ _ ] [ X ] [ X ] 
-
-
-Step  4)
-Minimax goes to [ 2 ] [ 0 ]
-[ O ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-[ O ] [ X ] [ X ] 
-
-
-Step  5)
 Random goes to [ 0 ] [ 2 ]
 [ O ] [ _ ] [ X ] 
 [ _ ] [ _ ] [ _ ] 
-[ O ] [ X ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 
 
-Step  6)
+Step  4)
 Minimax goes to [ 1 ] [ 0 ]
 [ O ] [ _ ] [ X ] 
 [ O ] [ _ ] [ _ ] 
-[ O ] [ X ] [ X ] 
+[ _ ] [ X ] [ _ ] 
+
+
+Step  5)
+Random goes to [ 1 ] [ 1 ]
+[ O ] [ _ ] [ X ] 
+[ O ] [ X ] [ _ ] 
+[ _ ] [ X ] [ _ ] 
+
+
+Step  6)
+Minimax goes to [ 2 ] [ 0 ]
+[ O ] [ _ ] [ X ] 
+[ O ] [ X ] [ _ ] 
+[ O ] [ X ] [ _ ] 
 
 
 O wins!
@@ -555,6 +520,112 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  2)
+Random goes to [ 2 ] [ 2 ]
+[ X ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
+
+
+Step  3)
+Minimax goes to [ 0 ] [ 1 ]
+[ X ] [ X ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
+
+
+Step  4)
+Random goes to [ 2 ] [ 1 ]
+[ X ] [ X ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ _ ] [ O ] [ O ] 
+
+
+Step  5)
+Minimax goes to [ 0 ] [ 2 ]
+[ X ] [ X ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
+[ _ ] [ O ] [ O ] 
+
+
+X wins!
+
+
+////////////// TEST NUMBER 12 //////////////
+Step  1)
+Random goes to [ 1 ] [ 2 ]
+[ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
+
+
+Step  2)
+Minimax goes to [ 0 ] [ 0 ]
+[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
+
+
+Step  3)
+Random goes to [ 2 ] [ 1 ]
+[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
+
+
+Step  4)
+Minimax goes to [ 0 ] [ 1 ]
+[ O ] [ O ] [ _ ] 
+[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
+
+
+Step  5)
+Random goes to [ 0 ] [ 2 ]
+[ O ] [ O ] [ X ] 
+[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
+
+
+Step  6)
+Minimax goes to [ 2 ] [ 2 ]
+[ O ] [ O ] [ X ] 
+[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ O ] 
+
+
+Step  7)
+Random goes to [ 1 ] [ 1 ]
+[ O ] [ O ] [ X ] 
+[ _ ] [ X ] [ X ] 
+[ _ ] [ X ] [ O ] 
+
+
+Step  8)
+Minimax goes to [ 2 ] [ 0 ]
+[ O ] [ O ] [ X ] 
+[ _ ] [ X ] [ X ] 
+[ O ] [ X ] [ O ] 
+
+
+Step  9)
+Random goes to [ 1 ] [ 0 ]
+[ O ] [ O ] [ X ] 
+[ X ] [ X ] [ X ] 
+[ O ] [ X ] [ O ] 
+
+
+X wins!
+
+
+////////////// TEST NUMBER 13 //////////////
+Step  1)
+Minimax goes to [ 0 ] [ 0 ]
+[ X ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+
+
+Step  2)
 Random goes to [ 1 ] [ 2 ]
 [ X ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ O ] 
@@ -569,102 +640,17 @@ Minimax goes to [ 0 ] [ 1 ]
 
 
 Step  4)
-Random goes to [ 1 ] [ 1 ]
+Random goes to [ 2 ] [ 1 ]
 [ X ] [ X ] [ _ ] 
-[ _ ] [ O ] [ O ] 
-[ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
+[ _ ] [ O ] [ _ ] 
 
 
 Step  5)
 Minimax goes to [ 0 ] [ 2 ]
 [ X ] [ X ] [ X ] 
-[ _ ] [ O ] [ O ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-X wins!
-
-
-////////////// TEST NUMBER 12 //////////////
-Step  1)
-Random goes to [ 1 ] [ 0 ]
-[ _ ] [ _ ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-Step  2)
-Minimax goes to [ 0 ] [ 0 ]
-[ O ] [ _ ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-Step  3)
-Random goes to [ 0 ] [ 2 ]
-[ O ] [ _ ] [ X ] 
-[ X ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-Step  4)
-Minimax goes to [ 1 ] [ 1 ]
-[ O ] [ _ ] [ X ] 
-[ X ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-Step  5)
-Random goes to [ 2 ] [ 0 ]
-[ O ] [ _ ] [ X ] 
-[ X ] [ O ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
-
-
-Step  6)
-Minimax goes to [ 2 ] [ 2 ]
-[ O ] [ _ ] [ X ] 
-[ X ] [ O ] [ _ ] 
-[ X ] [ _ ] [ O ] 
-
-
-O wins!
-
-
-////////////// TEST NUMBER 13 //////////////
-Step  1)
-Minimax goes to [ 0 ] [ 0 ]
-[ X ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-Step  2)
-Random goes to [ 0 ] [ 1 ]
-[ X ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-Step  3)
-Minimax goes to [ 1 ] [ 0 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-Step  4)
-Random goes to [ 1 ] [ 2 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ _ ] [ O ] 
-[ _ ] [ _ ] [ _ ] 
-
-
-Step  5)
-Minimax goes to [ 2 ] [ 0 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ _ ] [ O ] 
-[ X ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
+[ _ ] [ O ] [ _ ] 
 
 
 X wins!
@@ -672,45 +658,45 @@ X wins!
 
 ////////////// TEST NUMBER 14 //////////////
 Step  1)
-Random goes to [ 0 ] [ 1 ]
+Random goes to [ 2 ] [ 1 ]
+[ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
 [ _ ] [ X ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
-[ O ] [ X ] [ _ ] 
+[ O ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  3)
 Random goes to [ 1 ] [ 0 ]
-[ O ] [ X ] [ _ ] 
+[ O ] [ _ ] [ _ ] 
 [ X ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  4)
-Minimax goes to [ 1 ] [ 1 ]
-[ O ] [ X ] [ _ ] 
-[ X ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
+Minimax goes to [ 0 ] [ 1 ]
+[ O ] [ O ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  5)
-Random goes to [ 0 ] [ 2 ]
-[ O ] [ X ] [ X ] 
-[ X ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
+Random goes to [ 2 ] [ 0 ]
+[ O ] [ O ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
+[ X ] [ X ] [ _ ] 
 
 
 Step  6)
-Minimax goes to [ 2 ] [ 2 ]
-[ O ] [ X ] [ X ] 
-[ X ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ O ] 
+Minimax goes to [ 0 ] [ 2 ]
+[ O ] [ O ] [ O ] 
+[ X ] [ _ ] [ _ ] 
+[ X ] [ X ] [ _ ] 
 
 
 O wins!
@@ -725,31 +711,31 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  2)
-Random goes to [ 1 ] [ 1 ]
+Random goes to [ 1 ] [ 2 ]
 [ X ] [ _ ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  3)
 Minimax goes to [ 0 ] [ 1 ]
 [ X ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  4)
-Random goes to [ 2 ] [ 1 ]
+Random goes to [ 1 ] [ 1 ]
 [ X ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
+[ _ ] [ O ] [ O ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  5)
 Minimax goes to [ 0 ] [ 2 ]
 [ X ] [ X ] [ X ] 
-[ _ ] [ O ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
+[ _ ] [ O ] [ O ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 X wins!
@@ -785,38 +771,38 @@ Minimax goes to [ 1 ] [ 2 ]
 
 
 Step  5)
-Random goes to [ 0 ] [ 1 ]
-[ O ] [ X ] [ _ ] 
+Random goes to [ 0 ] [ 2 ]
+[ O ] [ _ ] [ X ] 
 [ X ] [ X ] [ O ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  6)
-Minimax goes to [ 2 ] [ 1 ]
-[ O ] [ X ] [ _ ] 
+Minimax goes to [ 2 ] [ 0 ]
+[ O ] [ _ ] [ X ] 
 [ X ] [ X ] [ O ] 
-[ _ ] [ O ] [ _ ] 
+[ O ] [ _ ] [ _ ] 
 
 
 Step  7)
 Random goes to [ 2 ] [ 2 ]
-[ O ] [ X ] [ _ ] 
+[ O ] [ _ ] [ X ] 
 [ X ] [ X ] [ O ] 
-[ _ ] [ O ] [ X ] 
+[ O ] [ _ ] [ X ] 
 
 
 Step  8)
-Minimax goes to [ 0 ] [ 2 ]
-[ O ] [ X ] [ O ] 
+Minimax goes to [ 0 ] [ 1 ]
+[ O ] [ O ] [ X ] 
 [ X ] [ X ] [ O ] 
-[ _ ] [ O ] [ X ] 
+[ O ] [ _ ] [ X ] 
 
 
 Step  9)
-Random goes to [ 2 ] [ 0 ]
-[ O ] [ X ] [ O ] 
+Random goes to [ 2 ] [ 1 ]
+[ O ] [ O ] [ X ] 
 [ X ] [ X ] [ O ] 
-[ X ] [ O ] [ X ] 
+[ O ] [ X ] [ X ] 
 
 
 D wins!
@@ -831,30 +817,30 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  2)
-Random goes to [ 0 ] [ 2 ]
-[ X ] [ _ ] [ O ] 
+Random goes to [ 0 ] [ 1 ]
+[ X ] [ O ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  3)
 Minimax goes to [ 1 ] [ 0 ]
-[ X ] [ _ ] [ O ] 
+[ X ] [ O ] [ _ ] 
 [ X ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  4)
-Random goes to [ 0 ] [ 1 ]
-[ X ] [ O ] [ O ] 
-[ X ] [ _ ] [ _ ] 
+Random goes to [ 1 ] [ 1 ]
+[ X ] [ O ] [ _ ] 
+[ X ] [ O ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  5)
 Minimax goes to [ 2 ] [ 0 ]
-[ X ] [ O ] [ O ] 
-[ X ] [ _ ] [ _ ] 
+[ X ] [ O ] [ _ ] 
+[ X ] [ O ] [ _ ] 
 [ X ] [ _ ] [ _ ] 
 
 
@@ -863,55 +849,48 @@ X wins!
 
 ////////////// TEST NUMBER 18 //////////////
 Step  1)
-Random goes to [ 1 ] [ 1 ]
+Random goes to [ 2 ] [ 0 ]
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
 [ O ] [ _ ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 
 
 Step  3)
-Random goes to [ 2 ] [ 2 ]
+Random goes to [ 2 ] [ 1 ]
 [ O ] [ _ ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
+[ X ] [ X ] [ _ ] 
 
 
 Step  4)
-Minimax goes to [ 0 ] [ 1 ]
-[ O ] [ O ] [ _ ] 
-[ _ ] [ X ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+Minimax goes to [ 2 ] [ 2 ]
+[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
+[ X ] [ X ] [ O ] 
 
 
 Step  5)
 Random goes to [ 0 ] [ 2 ]
-[ O ] [ O ] [ X ] 
-[ _ ] [ X ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ O ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
+[ X ] [ X ] [ O ] 
 
 
 Step  6)
-Minimax goes to [ 2 ] [ 0 ]
-[ O ] [ O ] [ X ] 
-[ _ ] [ X ] [ _ ] 
+Minimax goes to [ 1 ] [ 1 ]
 [ O ] [ _ ] [ X ] 
+[ _ ] [ O ] [ _ ] 
+[ X ] [ X ] [ O ] 
 
 
-Step  7)
-Random goes to [ 1 ] [ 2 ]
-[ O ] [ O ] [ X ] 
-[ _ ] [ X ] [ X ] 
-[ O ] [ _ ] [ X ] 
-
-
-X wins!
+O wins!
 
 
 ////////////// TEST NUMBER 19 //////////////
@@ -937,17 +916,17 @@ Minimax goes to [ 1 ] [ 0 ]
 
 
 Step  4)
-Random goes to [ 2 ] [ 2 ]
-[ X ] [ _ ] [ O ] 
+Random goes to [ 0 ] [ 1 ]
+[ X ] [ O ] [ O ] 
 [ X ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ O ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  5)
 Minimax goes to [ 2 ] [ 0 ]
-[ X ] [ _ ] [ O ] 
+[ X ] [ O ] [ O ] 
 [ X ] [ _ ] [ _ ] 
-[ X ] [ _ ] [ O ] 
+[ X ] [ _ ] [ _ ] 
 
 
 X wins!
@@ -955,45 +934,59 @@ X wins!
 
 ////////////// TEST NUMBER 20 //////////////
 Step  1)
-Random goes to [ 2 ] [ 1 ]
-[ _ ] [ _ ] [ _ ] 
+Random goes to [ 1 ] [ 1 ]
 [ _ ] [ _ ] [ _ ] 
 [ _ ] [ X ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
 [ O ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
 [ _ ] [ X ] [ _ ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  3)
-Random goes to [ 1 ] [ 2 ]
+Random goes to [ 2 ] [ 1 ]
 [ O ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 [ _ ] [ X ] [ _ ] 
 
 
 Step  4)
 Minimax goes to [ 0 ] [ 1 ]
 [ O ] [ O ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 [ _ ] [ X ] [ _ ] 
 
 
 Step  5)
-Random goes to [ 1 ] [ 1 ]
-[ O ] [ O ] [ _ ] 
-[ _ ] [ X ] [ X ] 
+Random goes to [ 0 ] [ 2 ]
+[ O ] [ O ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 [ _ ] [ X ] [ _ ] 
 
 
 Step  6)
-Minimax goes to [ 0 ] [ 2 ]
-[ O ] [ O ] [ O ] 
-[ _ ] [ X ] [ X ] 
+Minimax goes to [ 2 ] [ 0 ]
+[ O ] [ O ] [ X ] 
 [ _ ] [ X ] [ _ ] 
+[ O ] [ X ] [ _ ] 
+
+
+Step  7)
+Random goes to [ 2 ] [ 2 ]
+[ O ] [ O ] [ X ] 
+[ _ ] [ X ] [ _ ] 
+[ O ] [ X ] [ X ] 
+
+
+Step  8)
+Minimax goes to [ 1 ] [ 0 ]
+[ O ] [ O ] [ X ] 
+[ O ] [ X ] [ _ ] 
+[ O ] [ X ] [ X ] 
 
 
 O wins!
@@ -1008,31 +1001,45 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  2)
-Random goes to [ 1 ] [ 1 ]
+Random goes to [ 1 ] [ 2 ]
 [ X ] [ _ ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  3)
 Minimax goes to [ 0 ] [ 1 ]
 [ X ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  4)
-Random goes to [ 2 ] [ 0 ]
-[ X ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
-[ O ] [ _ ] [ _ ] 
+Random goes to [ 0 ] [ 2 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ _ ] [ O ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  5)
-Minimax goes to [ 0 ] [ 2 ]
-[ X ] [ X ] [ X ] 
-[ _ ] [ O ] [ _ ] 
-[ O ] [ _ ] [ _ ] 
+Minimax goes to [ 2 ] [ 2 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ _ ] [ O ] 
+[ _ ] [ _ ] [ X ] 
+
+
+Step  6)
+Random goes to [ 2 ] [ 0 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ _ ] [ O ] 
+[ O ] [ _ ] [ X ] 
+
+
+Step  7)
+Minimax goes to [ 1 ] [ 1 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ X ] [ O ] 
+[ O ] [ _ ] [ X ] 
 
 
 X wins!
@@ -1040,59 +1047,45 @@ X wins!
 
 ////////////// TEST NUMBER 22 //////////////
 Step  1)
-Random goes to [ 2 ] [ 2 ]
+Random goes to [ 2 ] [ 1 ]
 [ _ ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
 [ O ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  3)
-Random goes to [ 0 ] [ 2 ]
-[ O ] [ _ ] [ X ] 
-[ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ X ] 
+Random goes to [ 1 ] [ 0 ]
+[ O ] [ _ ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  4)
-Minimax goes to [ 1 ] [ 2 ]
-[ O ] [ _ ] [ X ] 
-[ _ ] [ _ ] [ O ] 
-[ _ ] [ _ ] [ X ] 
+Minimax goes to [ 0 ] [ 1 ]
+[ O ] [ O ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
+[ _ ] [ X ] [ _ ] 
 
 
 Step  5)
-Random goes to [ 2 ] [ 1 ]
-[ O ] [ _ ] [ X ] 
-[ _ ] [ _ ] [ O ] 
+Random goes to [ 2 ] [ 2 ]
+[ O ] [ O ] [ _ ] 
+[ X ] [ _ ] [ _ ] 
 [ _ ] [ X ] [ X ] 
 
 
 Step  6)
-Minimax goes to [ 2 ] [ 0 ]
-[ O ] [ _ ] [ X ] 
-[ _ ] [ _ ] [ O ] 
-[ O ] [ X ] [ X ] 
-
-
-Step  7)
-Random goes to [ 1 ] [ 1 ]
-[ O ] [ _ ] [ X ] 
-[ _ ] [ X ] [ O ] 
-[ O ] [ X ] [ X ] 
-
-
-Step  8)
-Minimax goes to [ 1 ] [ 0 ]
-[ O ] [ _ ] [ X ] 
-[ O ] [ X ] [ O ] 
-[ O ] [ X ] [ X ] 
+Minimax goes to [ 0 ] [ 2 ]
+[ O ] [ O ] [ O ] 
+[ X ] [ _ ] [ _ ] 
+[ _ ] [ X ] [ X ] 
 
 
 O wins!
@@ -1107,77 +1100,105 @@ Minimax goes to [ 0 ] [ 0 ]
 
 
 Step  2)
-Random goes to [ 0 ] [ 1 ]
-[ X ] [ O ] [ _ ] 
+Random goes to [ 2 ] [ 2 ]
+[ X ] [ _ ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 
 
 Step  3)
-Minimax goes to [ 1 ] [ 0 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
+Minimax goes to [ 0 ] [ 1 ]
+[ X ] [ X ] [ _ ] 
 [ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 
 
 Step  4)
-Random goes to [ 1 ] [ 2 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ _ ] [ O ] 
+Random goes to [ 0 ] [ 2 ]
+[ X ] [ X ] [ O ] 
 [ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ O ] 
 
 
 Step  5)
+Minimax goes to [ 1 ] [ 2 ]
+[ X ] [ X ] [ O ] 
+[ _ ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ O ] 
+
+
+Step  6)
+Random goes to [ 1 ] [ 0 ]
+[ X ] [ X ] [ O ] 
+[ O ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ O ] 
+
+
+Step  7)
+Minimax goes to [ 1 ] [ 1 ]
+[ X ] [ X ] [ O ] 
+[ O ] [ X ] [ X ] 
+[ _ ] [ _ ] [ O ] 
+
+
+Step  8)
+Random goes to [ 2 ] [ 1 ]
+[ X ] [ X ] [ O ] 
+[ O ] [ X ] [ X ] 
+[ _ ] [ O ] [ O ] 
+
+
+Step  9)
 Minimax goes to [ 2 ] [ 0 ]
-[ X ] [ O ] [ _ ] 
-[ X ] [ _ ] [ O ] 
-[ X ] [ _ ] [ _ ] 
+[ X ] [ X ] [ O ] 
+[ O ] [ X ] [ X ] 
+[ X ] [ O ] [ O ] 
 
 
-X wins!
+D wins!
 
 
 ////////////// TEST NUMBER 24 //////////////
 Step  1)
-Random goes to [ 0 ] [ 1 ]
-[ _ ] [ X ] [ _ ] 
+Random goes to [ 1 ] [ 2 ]
 [ _ ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ X ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  2)
 Minimax goes to [ 0 ] [ 0 ]
-[ O ] [ X ] [ _ ] 
-[ _ ] [ _ ] [ _ ] 
+[ O ] [ _ ] [ _ ] 
+[ _ ] [ _ ] [ X ] 
 [ _ ] [ _ ] [ _ ] 
 
 
 Step  3)
-Random goes to [ 2 ] [ 0 ]
+Random goes to [ 0 ] [ 1 ]
 [ O ] [ X ] [ _ ] 
+[ _ ] [ _ ] [ X ] 
 [ _ ] [ _ ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
 
 
 Step  4)
-Minimax goes to [ 1 ] [ 1 ]
+Minimax goes to [ 1 ] [ 0 ]
 [ O ] [ X ] [ _ ] 
-[ _ ] [ O ] [ _ ] 
-[ X ] [ _ ] [ _ ] 
+[ O ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ _ ] 
 
 
 Step  5)
-Random goes to [ 1 ] [ 2 ]
+Random goes to [ 2 ] [ 2 ]
 [ O ] [ X ] [ _ ] 
-[ _ ] [ O ] [ X ] 
-[ X ] [ _ ] [ _ ] 
+[ O ] [ _ ] [ X ] 
+[ _ ] [ _ ] [ X ] 
 
 
 Step  6)
-Minimax goes to [ 2 ] [ 2 ]
+Minimax goes to [ 2 ] [ 0 ]
 [ O ] [ X ] [ _ ] 
-[ _ ] [ O ] [ X ] 
-[ X ] [ _ ] [ O ] 
+[ O ] [ _ ] [ X ] 
+[ O ] [ _ ] [ X ] 
 
 
 O wins!
