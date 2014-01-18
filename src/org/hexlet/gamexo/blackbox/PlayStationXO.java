@@ -130,7 +130,6 @@ public class PlayStationXO {
         return GameField.FIELD_SIZE;
     }
 
-
     private static int setGameOptionNumChecked(String enter) {
 
         int numChecked;
@@ -155,7 +154,6 @@ public class PlayStationXO {
             return numChecked;
         }
     }
-
 
     private static boolean isEnterGameOptionValid(String strEnter) {
         return (strEnter.matches("[0-9]+"));
@@ -187,8 +185,12 @@ public class PlayStationXO {
         }
     }
 
-//    private static Game insertGame() {
-public static Game insertGame() {
+//<<<<<<< HEAD
+////    private static Game insertGame() {
+//public static Game insertGame() {
+//=======
+    private static Game insertGame() {
+//>>>>>>> 88fa866accd7c04f50fdc2f20cf1a36a01b9856c
         return Game.getInstance();
 
     }

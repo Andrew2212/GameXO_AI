@@ -1,198 +1,110 @@
 package org.hexlet.gamexo.ai.minimaxway;
 
-import org.hexlet.gamexo.ai.CoreGame;
 import org.hexlet.gamexo.ai.IBrainAI;
-import org.hexlet.gamexo.ai.utils.GetterLastEnemyMove;
-import org.hexlet.gamexo.blackbox.game.GameField;
+import org.hexlet.gamexo.ai.brutforceway.GameOptions;
+//import org.hexlet.gamexo.ai.utils.GetterLastEnemyMove;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.InputMismatchException;
+import java.util.Random;
+import java.util.Scanner;
 
-/**
- * Here it's necessary to add 'implements IBrainAI'
- */
-public class Minimax {
+    /* ***** ОПИСАНИЕ *******
+            Программа строит дерево рекурсий на основе максиминной стратегии на глубину, задаваемую при вызове функции в
+         параметре depth. Процедура осуществляет поиск в глубину. Она не отлажена, не протестирована, должна работать
+         пока только для Х. Но зато должна работать для любого поля, на любую глубину. Еще она будет работать довольно
+         медленно, сложность O(2^n), и использовать много памяти для стека вызовов.
 
-    // массив смещений адресов ячеек по направлениям
-    private static final int[][] OFFSET = {
-            {-1, 0},  // up
-            {-1, 1},  // up-right
-            {0, 1},   // right
-            {1, 1},   // right - down
-            {1, 0},   // down
-            {1, -1},  // left - down
-            {0, -1},  // left
-            {-1, -1}  // left-up
-    };
+         Идея: на каждой итерации проходимся по всему массиву в поисках пустой ячейки. При нахождении проверяем, какую
+         фигуру надо поставить. Соответственно ставим ее. Если мы на самой вершине дерева, то мы запоминаем позицию,
+         куда поставили Х, так как, возможно, это лучший ход. Оцениваем эвристику данного хода, записываем в deltaWeight.
+         Далее идет рекурсивный вызов, при котором глубина уменьшается на 1, передается поле с установленной на нее
+         фигурой (в первом случае Х), передается текущий вес ходов по пути от вершины до листа (на глубину depth),
+         увеличенный на deltaWeight, и запомненный лучший ход.
 
-
-    private final int LENGTH; //длинна линии, необходимая для победы
-    private final int X_SIZE; // количество строк поля
-    private final int Y_SIZE; // количество столбцов поля
-
-    private int[][] field; //используется для хранения поля
-
-    //*************REMAKE************************************
-    private final int[] MOVE = new int[2];
-    private static final int X = 0;
-    private static final int Y = 1;
-    private GetterLastEnemyMove getterLastEnemyMove;
-    private char signBot;
-
-    public Minimax(int fieldSize, int numChecked) {
-        this.LENGTH = numChecked;
-        this.X_SIZE = fieldSize;
-        this.Y_SIZE = fieldSize;
-//        Set 'CoreGame options' where we'll get them from
-        CoreGame.initCoreGame(fieldSize, numChecked);
-        getterLastEnemyMove = new GetterLastEnemyMove();
-
-    }
-
-    /**
-     * @param fieldMatrix char[][]
-     * @return MOVE i.e. int[2] - coordinates of cell
+         Когда добираемся до 0 глубины, оцениваем вес проделанного пути. Соответственно запоминаем максимальный вес и
+         лучший ход. Здесь проиходит завершение рекурсивной функции, делается следующая итерация, поле и все веса
+         возвращаются на шаг назад.
      */
-    public int[] findMove(Character[][] fieldMatrix) {
 
-        signBot = GameField.getSignForNextMove();
-        //        This is what you calculate
-        MOVE[X] = (int) Math.floor(Math.random() * fieldMatrix.length);
-        MOVE[Y] = (int) Math.floor(Math.random() * fieldMatrix.length);
+public class Minimax implements IBrainAI {
 
-        //        checkout for random - it isn't needed for real AI
-        if (GameField.isCellValid(MOVE[X], MOVE[Y])) {
-            int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrix);
-            if (null != lastEnemyMove) {
-                //do something
-            }
+    public static final char DEFAULT_CELL_VALUE = '_';
 
-            System.out.println("Minimax::findMove MOVE[X] = " + MOVE[X] + " findMove MOVE[Y] = " + MOVE[Y] + " signBot = " + signBot);
-            getterLastEnemyMove.setMyOwnMove(MOVE[X], MOVE[Y], signBot);
+    public static final char VALUE_X = 'X';
+
+    public static final char VALUE_O = 'O';
+
+    public static final char VALUE_DRAW = 'D';
+
+    public static final int ROW_COORD = 0;
+
+    public static final int COL_COORD = 1;
+
+    private int[] bestStep = {-1, -1};
+
+    //    ==============It might be something like that=)===================
+
+    private boolean isFirstMoveDone = false;//  Crutch for giving signBot
+    private org.hexlet.gamexo.ai.utils.GetterLastEnemyMove getterLastEnemyMove;
+    private org.hexlet.gamexo.ai.utils.FieldMatrixConverter converter;
+
+    @Override
+    public int[] findMove(Object[][] fieldMatrixObject, Object figure) {
+
+        /*
+        There are some crutches for Hexlet architecture - they use 'Enum[][] fieldMatrixEnum'
+         */
+
+//      Getting 'char[][] fieldMatrixChar' from 'T[][] fieldMatrixObject'
+        converter = new org.hexlet.gamexo.ai.utils.FieldMatrixConverter();
+        Character[][] fieldMatrixCharacter = converter.convertFieldMatrixToCharacter(fieldMatrixObject);
+        char[][] fieldMatrixChar = org.hexlet.gamexo.ai.gardnerway.CoordinateConverter.characterToChar(fieldMatrixCharacter);
+
+        //Executes only one time  - if it's necessary
+        if (!isFirstMoveDone) {
+//            Getting 'Character signBot' - if it's necessary
+            Character signBot = converter.convertSignToCharacter(figure);
+            System.out.println("isFirstMoveDone*****************signBot = " + GameOptions.getSignBot());
+            isFirstMoveDone = true;
         }
-        return MOVE;
+
+        //Get lastEnemyMove (if it exists) - if it's necessary
+        getterLastEnemyMove = new org.hexlet.gamexo.ai.utils.GetterLastEnemyMove();
+        int[] lastEnemyMove = getterLastEnemyMove.getLastEnemyMove(fieldMatrixCharacter);
+
+        return findMoveLocal(fieldMatrixChar);
     }
 
+//===================================================================================
 
-//    ****************************************************
-
+    private boolean isAIFigureX = true;
     /**
-     * конструктор, инициализирует все клетки нулями
+     * Constructs minimax AI instance with a given figure
      *
-     * @param len длинна линии, необходимая для победы
-     * @param x   количество строк поля
-     * @param y   количество столбцов на поле
+     * @param isAIFigureX boolean - true if AI figure = X
+     *                    =========================================
+     *                    !!!It's ALWAYS TRUE within constructor!!!
+     *                    It might be cause of some problems
+     *                    =========================================
      */
-    public Minimax(int len, int x, int y) {
-        this.LENGTH = len;
-        this.X_SIZE = x;
-        this.Y_SIZE = y;
-        this.field = new int[X_SIZE][Y_SIZE];
-        for (int i = 0; i < X_SIZE; i++) {
-            for (int j = 0; j < Y_SIZE; j++) {
-                this.field[i][j] = 0;
-            }
-        }
-    }
-
-
-    /**
-     * метод для оценки ситуации на поле
-     *
-     * @param x    номер стоки
-     * @param y    номер столбца
-     * @param sign знак хода: -1 - нолик, 1 - крестик
-     * @return возвращаем -5 при победе ноликов, 5 - крестиков, 2 - ничья, 0 - есть еще ходы
-     */
-    public int heuristic(int x, int y, int sign) {
-        this.field[x][y] = sign;
-        for (int j = 0; j < OFFSET.length; j++) {   //последовательно перебираем все направления по часой стрелке,
-            try {                                   // начиная с верха, на достижение требуемой длинны
-                if (isEnoughLength(x, y, sign, j)) {
-                    switch (sign) {
-                        case -1:
-                            return -5;
-                        case 1:
-                            return 5;
-                    }
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                continue;                                  //хитрый план для контроля выхода за границы поля при проверке
-            }
-        }
-        if (hasEmptyCell()) {
-            return 0;
-        }
-        return 2;
+    public Minimax(boolean isAIFigureX) {
+        this.isAIFigureX = isAIFigureX;
     }
 
     /**
-     * проверяем , достигнута ли требуемая длинна линии в заданном направлении
+     * Returns computer step using MaxMin strategy
      *
-     * @param x         номер строки
-     * @param y         номер столбца
-     * @param sign      знак игрока
-     * @param direction номер направления
-     * @return true, если длинна достигнута, иначе - false
-     * @throws ArrayIndexOutOfBoundsException кидаем исключение при попытке вылезти за пределы поля
+     * @param fieldMatrix char[][] - current field.
+     * @return int[] with coords of computer step {row coordinate, column coordinate}.
      */
-    //TODO люто, бешенно рефакторить!
-    private boolean isEnoughLength(int x, int y, int sign, int direction) throws ArrayIndexOutOfBoundsException {
-        int cntLine = 1;
-        int a = x;
-        int b = y;
-        try {
-            while (cntLine < LENGTH) {                                 //здесь может вылетить   ArrayIndexOutOfBoundsException
-                a += OFFSET[direction][0];                            // что помешает нам проверить противополжное направление
-                b += OFFSET[direction][1];
-                if (this.field[a][b] != sign) {
-                    break;
-                }
-                cntLine++;
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
-            // мы его перехватываем, и тупо ничего не делаем
-        }
 
-        a = x;
-        b = y;
-        while (cntLine < LENGTH) {
-            a += OFFSET[(direction + 4) % 8][0];
-            b += OFFSET[(direction + 4) % 8][1];
-            if (this.field[a][b] != sign) {
-                break;
-            }
-            cntLine++;
-        }
-        if (cntLine == LENGTH) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    public int[] findMoveLocal(char[][] fieldMatrix) {
 
-    //TODO проверяем наличие пустых ячеек тупо перебором, что не есть хорошо
-    private boolean hasEmptyCell() {
-        for (int i = 0; i < X_SIZE; i++) {
-            for (int j = 0; j < Y_SIZE; j++) {
-                if (field[i][j] == 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    //метод используется в клиенте тестирования, в дальнейшем не нужен
-    public void showField() {
-        for (int i = 0; i < X_SIZE; i++) {
-            for (int j = 0; j < Y_SIZE; j++) {
-                if (j == Y_SIZE - 1) {
-                    System.out.println(field[i][j]);
-                } else {
-                    System.out.print(field[i][j] + " ");
-                }
-            }
-        }
-
+        return bestStep;
     }
 
 }

@@ -35,7 +35,9 @@ public class PlayerBot implements IPlayer, IPlayerBot{
                 break;
 
             case MINIMAX:
+
 //                iBrainAI = new Minimax(fieldSize, numChecked);
+
                 break;
 
             case SPARE:

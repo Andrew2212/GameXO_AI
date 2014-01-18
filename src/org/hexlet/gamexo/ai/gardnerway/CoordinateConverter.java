@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Date: 15.09.13
  * Time: 0:42
  */
-class CoordinateConverter {
+public class CoordinateConverter {
 
     private final static int X = 0;
     private final static int Y = 1;
@@ -26,7 +26,7 @@ class CoordinateConverter {
         return cBoard;
     }
 
-	static char[][] characterToChar(Character[][] board) {
+	public static char[][] characterToChar(Character[][] board) {
 		char[][] cBoard = new char[board.length][board[X].length];
 		for (int y = 0; y < board.length; y++) {
 			for (int x = 0; x < board.length; x++) {
