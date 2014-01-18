@@ -2,7 +2,7 @@ package org.hexlet.gamexo.ai.gardnerway;
 
 import org.hexlet.gamexo.ai.IBrainAI;
 import org.hexlet.gamexo.ai.utils.FieldMatrixConverter;
-
+import org.hexlet.gamexo.ai.utils.LoggerAI;
 import java.util.*;
 
 
@@ -24,6 +24,7 @@ import java.util.*;
  */
 public class Gardner implements IBrainAI{
 
+    private WriterComparator writerComparator;
     private GameStatusChecker checker;
     private char[][] oldFieldMatrix;
     private ArrayList<Integer> history;
@@ -33,12 +34,11 @@ public class Gardner implements IBrainAI{
 	private final char[][] GAME_BOARD;
 	private final int BOARD_SIZE;
     private final int NUM_IN_THE_ROW;
-	private final char EMPTY = '_';
 	private final String FILE_NAME;
 	private final String BASE_DIR;
     private static final int X = 0;
     private static final int Y = 1;
-
+	private static final char EMPTY = '_';
 
     public Gardner(int fieldSize, int numInTheRow) {
         GAME_BOARD = new char[fieldSize][fieldSize];
@@ -53,33 +53,9 @@ public class Gardner implements IBrainAI{
 	    FILE_NAME = "(" + BOARD_SIZE + "x" + BOARD_SIZE + ")[" + NUM_IN_THE_ROW + "].xog";
 	    BASE_DIR = BOARD_SIZE + " x " + BOARD_SIZE + " [" + NUM_IN_THE_ROW + "]/";
         checker = new GameStatusChecker(EMPTY, NUM_IN_THE_ROW, BOARD_SIZE);
+	    writerComparator = new WriterComparator(BASE_DIR, FILE_NAME, BOARD_SIZE);
     }
 
-    /*
-    Этот конструктор комментить не надо.
-    Пусть будет просто перегрузка конструкторов и
-    методов.
-    Don't used in this game implementation.
-     */
-    public Gardner(int columnAmount, int rowAmount,
-                   int numInTheRow, boolean isFirst) {
-
-        GAME_BOARD = new char[columnAmount][rowAmount];
-        NUM_IN_THE_ROW = numInTheRow;
-        /*
-        ****Maybe it needs to get sign from rest part of 'Game' ? ****
-        *
-        * It's will be inner representation of game signs.
-        * Needs for memorization identical positions whatever sign
-        * moves first.
-        */
-        aiChip = isFirst ? 'X' : 'O';
-        enemyChip = isFirst ? 'O' : 'X';
-	    BOARD_SIZE = columnAmount;
-        FILE_NAME = "(" + BOARD_SIZE + "x" + BOARD_SIZE + ")[" + NUM_IN_THE_ROW + "].xog";
-	    BASE_DIR = BOARD_SIZE + " x " + BOARD_SIZE + " [" + NUM_IN_THE_ROW + "]/";
-        checker = new GameStatusChecker(EMPTY, NUM_IN_THE_ROW, BOARD_SIZE);
-    }
     /*
     Constructor for tests
      */
@@ -147,8 +123,8 @@ public class Gardner implements IBrainAI{
 				*/
 
                 if (checker.isWin(GAME_BOARD, myMove[X], myMove[Y], aiChip)) {
-					writePosition(history);
-					System.out.println("I win");
+					writerComparator.writePosition(history);
+					LoggerAI.p("I win");
                 }
                 System.arraycopy(checker.getMove(), 0, move, 0, move.length);
             }
@@ -158,19 +134,19 @@ public class Gardner implements IBrainAI{
                     /*
                     write last AI position before enemy had to move.
                      */
-                    ArrayList<Integer> temp = rewindHistoryBack(history, 1);
-                    writePosition(temp);
+                    ArrayList<Integer> temp = HistoryMaster.rewindHistoryBack(history, 1);
+                    writerComparator.writePosition(temp);
                 }
                 System.arraycopy(checker.getMove(), 0, move, 0, move.length);
 
                 if (move[X] != 25 || move[Y] != 25) {
                     setChipOnBoard(move[X], move[Y], aiChip);
-                    if (comparePos(history)){
+                    if (writerComparator.comparePos(history)){
 						/*
 						write prior AI position
 						 */
-                        ArrayList<Integer> temp = rewindHistoryBack(history, 2);
-						writePosition(temp);
+                        ArrayList<Integer> temp = HistoryMaster.rewindHistoryBack(history, 2);
+						writerComparator.writePosition(temp);
                     }
                     return move;
                 }
@@ -194,8 +170,12 @@ public class Gardner implements IBrainAI{
 			    свою фишку.
 			     */
                 if (move[X] == 25 || move[Y] == 25) {
-                    move[X] = (int) Math.floor(Math.random() * BOARD_SIZE);
-                    move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
+
+                    ArrayList<Integer> moveList = MoveAdviser.preferableMoves(GAME_BOARD);
+
+                    int index = (int) Math.floor(Math.random() * moveList.size());
+                    move = CoordinateConverter.getCoordinateFromIndex(moveList.get(index), BOARD_SIZE);
+//                    move[Y] = (int) Math.floor(Math.random() * BOARD_SIZE);
                 }
 
                 for (Integer i : deniedCells) {
@@ -215,14 +195,14 @@ public class Gardner implements IBrainAI{
             /*
             If there is all cells lead to defeat, AI marks his previous position as illegal.
              */
-            if (!comparePos(tempHistory)) break;
+            if (!writerComparator.comparePos(tempHistory)) break;
 
             deniedCells.add(CoordinateConverter.getIndexOfCell(move[X], move[Y], BOARD_SIZE));
 
             if (deniedCells.size() == BOARD_SIZE * BOARD_SIZE - history.size()) {
 
-	            ArrayList<Integer> temporaryHistory = rewindHistoryBack(tempHistory, 2);
-	            writePosition(temporaryHistory);
+	            ArrayList<Integer> temporaryHistory = HistoryMaster.rewindHistoryBack(tempHistory, 2);
+	            writerComparator.writePosition(temporaryHistory);
 
                 break;
             }
@@ -324,92 +304,7 @@ public class Gardner implements IBrainAI{
         return GAME_BOARD[x][y] == EMPTY;
     }
 
-    /**
-     * String position got from history and sorted with TreeSet.
-     * It need for write history in the base,and make comparison with
-     * positions already stored in the base.
-     * @param history got from moves.
-     * @return position in String
-     */
-    private String sortHistory(ArrayList<Integer> history) {
-        TreeSet<String> historySet = new TreeSet<String>();
-        String sortedHistory = "";
-        String cell;
-        for (int i = 0; i < history.size(); i++) {
-            if(i % 2 == 0){
-               cell = "X_";
-            } else {
-               cell = "O_";
-            }
-            historySet.add(cell + history.get(i) + " ");
-        }
-
-        for (String s : historySet) {
-            sortedHistory += s;
-        }
-
-        return sortedHistory;
-    }
-	
-	private ArrayList<Integer> rewindHistoryBack(ArrayList<Integer> history, int step)
-	{   int tempHistorySize = history.size() - step;
-		ArrayList<Integer> temporaryHistory = new ArrayList<Integer>(tempHistorySize);
-		for (int i = 0; i < tempHistorySize; i++) {
-			temporaryHistory.add(history.get(i));
-		}
-		return temporaryHistory;
-	}
-	
-	public void	writePosition(ArrayList<Integer> history) {
-		String sortedPosition = sortHistory(history);
-		FileMaster file = new FileMaster(BASE_DIR, history.size() + "." + FILE_NAME);
-        file.writeFile(sortedPosition);
-	}
-	
-
-	public boolean comparePos(ArrayList<Integer> history) {
-		String basePosition;
-        String tempPosition;
-        FileMaster file;
-		ArrayList<Integer> tempHistory = new ArrayList<Integer>(history.size());
-
-		for (int i = 0; i <= 22; i += 11) {
-
-			tempHistory.clear();
-			tempHistory.addAll(history);
-
-			if (i != 0) {
-				tempHistory = CoordinateConverter.rotateHistory(tempHistory, BOARD_SIZE, i);
-			}
-
-			for (int j = 0; j <= 270; j += 90) {
-
-				if (j != 0) {
-					tempHistory = CoordinateConverter.rotateHistory(tempHistory, BOARD_SIZE, j);
-				}
-
-                tempPosition = sortHistory(tempHistory);
-                file = new FileMaster(BASE_DIR, tempHistory.size() + "." + FILE_NAME);
-        		while (true) {
-            		basePosition = file.readFile();
-            		if (basePosition == null){
-                		file.closeReading();
-                		break;
-            		}
-		            if (basePosition.equals(tempPosition)){
-		                file.closeReading();
-		                return true;
-		            }
-
-        		}
-				file.closeReading();
-			}
-		}
-
-        return false;
-	}
-
-    void setChipOnBoard(int x, int y, char chip) {
+    private void setChipOnBoard(int x, int y, char chip) {
         GAME_BOARD[x][y] = chip;
         history.add(CoordinateConverter.getIndexOfCell(x, y, BOARD_SIZE));
     }
